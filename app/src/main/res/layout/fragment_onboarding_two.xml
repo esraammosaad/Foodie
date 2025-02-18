@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onboarding.OnboardingFragmentTwo">
+    tools:context=".onboarding.view.OnboardingFragmentTwo">
     <ImageView
         android:id="@+id/onboardingImgThree"
         android:layout_width="match_parent"

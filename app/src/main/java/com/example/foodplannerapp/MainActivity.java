@@ -3,30 +3,20 @@ package com.example.foodplannerapp;
 import android.os.Bundle;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.foodplannerapp.models.AllCategoriesResponse;
-import com.example.foodplannerapp.models.Meal;
-import com.example.foodplannerapp.models.MealModel;
+import com.example.foodplannerapp.data.models.AllCategoriesResponse;
+import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.models.MealModel;
 import com.example.foodplannerapp.view_model.HomeViewModel;
 import com.example.foodplannerapp.view_model.MealDetailsViewModel;
 import com.example.foodplannerapp.view_model.SearchViewModel;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 

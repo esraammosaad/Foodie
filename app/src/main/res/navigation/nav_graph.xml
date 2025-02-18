@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.foodplannerapp.SplashFragment"
+        android:name="com.example.foodplannerapp.onboarding.view.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -23,7 +23,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.foodplannerapp.onboarding.ViewPagerFragment"
+        android:name="com.example.foodplannerapp.onboarding.view.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
         <action
@@ -34,7 +34,7 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.foodplannerapp.LoginFragment"
+        android:name="com.example.foodplannerapp.authentication.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="com.example.foodplannerapp.RegisterFragment"
+        android:name="com.example.foodplannerapp.authentication.view.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -60,27 +60,27 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.foodplannerapp.HomeFragment"
+        android:name="com.example.foodplannerapp.home.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="com.example.foodplannerapp.SearchFragment"
+        android:name="com.example.foodplannerapp.search.view.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/calenderFragment"
-        android:name="com.example.foodplannerapp.CalenderFragment"
+        android:name="com.example.foodplannerapp.calender.view.CalenderFragment"
         android:label="fragment_calender"
         tools:layout="@layout/fragment_calender" />
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.foodplannerapp.FavoriteFragment"
+        android:name="com.example.foodplannerapp.favorite.view.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.foodplannerapp.ProfileFragment"
+        android:name="com.example.foodplannerapp.profile.view.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

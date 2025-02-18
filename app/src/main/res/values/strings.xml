@@ -40,8 +40,13 @@
     <string name="homeTextDesc">Get the best Network recipes</string>
     <string name="homeDescTextTwo">everyday of the week with our daily dish picks.</string>
     <string name="viewRecipe">View Recipe</string>
-    <string name="sempol">|</string>
+    <string name="symbol">|</string>
     <string name="refresh">Refresh</string>
     <string name="bestDishes">Best Dishes</string>
     <string name="seeAll">See All</string>
+    <string name="addToCalendar">Add To Calendar</string>
+    <string name="video">Video</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="m" />
+    <string name="instructions">Instructions</string>
 </resources>
