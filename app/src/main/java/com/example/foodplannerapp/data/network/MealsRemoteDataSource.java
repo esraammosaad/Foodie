@@ -7,14 +7,14 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitFactory {
+public class MealsRemoteDataSource {
 
    static public Retrofit retrofit;
    public static ApiServices apiServices;
    public static final String baseUrl = "https://www.themealdb.com/api/json/v1/1/";
 
 
-  public RetrofitFactory() {
+  public MealsRemoteDataSource() {
 
 
         retrofit = new Retrofit.Builder().
