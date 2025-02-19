@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/registerLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -110,18 +111,6 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="@string/username"
-                android:textColor="#101010"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressRegister" />
-
             <EditText
                 android:id="@+id/editTextTextPasswordRegister"
                 style="@style/text_field"
@@ -141,33 +130,19 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="18dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/password"
                 android:textColor="#101010"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextUsernameRegister" />
-
-            <EditText
-                android:id="@+id/editTextTextUsernameRegister"
-                style="@style/text_field"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="3dp"
-                android:ems="10"
-                android:inputType="textPassword"
-                app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintHorizontal_bias="0.0"
-
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressRegister" />
 
             <TextView
                 android:id="@+id/forgotPassText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/iAgreeWith"
                 android:textColor="@color/black"
@@ -196,7 +171,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
-                android:layout_marginTop="13dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/register"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -282,10 +257,36 @@
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_marginLeft="12dp"
+                android:layout_marginStart="9dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/signInText3"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordRegister" />
+
+            <TextView
+                android:id="@+id/emailError2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/pleaseEnterYourEmail"
+                android:textColor="#950606"
+                android:textColorLink="#950606"
+                android:textSize="12dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddressRegister" />
+
+            <TextView
+                android:id="@+id/passwordError2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="2dp"
+                android:text="@string/pleaseEnterYourPassword"
+                android:textColor="#950606"
+                android:textColorLink="#950606"
+                android:textSize="12dp"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordRegister" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

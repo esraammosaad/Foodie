@@ -49,4 +49,6 @@
     <string name="ingredients">Ingredients</string>
     <string name="m" />
     <string name="instructions">Instructions</string>
+    <string name="pleaseEnterYourEmail">Please Enter Your Email</string>
+    <string name="pleaseEnterYourPassword">Please Enter Your Password</string>
 </resources>

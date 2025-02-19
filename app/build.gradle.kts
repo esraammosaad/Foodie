@@ -35,6 +35,8 @@ android {
 
 dependencies {
 
+
+    implementation("com.google.firebase:firebase-auth")
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
