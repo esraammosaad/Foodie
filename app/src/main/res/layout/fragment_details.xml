@@ -25,6 +25,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="#59878787"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/imageView6"
                 android:layout_width="35dp"
@@ -139,8 +149,10 @@
                 android:layout_marginEnd="12dp"
                 android:background="@drawable/main_button_layout"
                 android:paddingLeft="30dp"
-                android:text="@string/calender"
-                android:textSize="15dp"
+                android:paddingEnd="10dp"
+                android:paddingRight="30dp"
+                android:text="@string/calendar"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/view" />
 

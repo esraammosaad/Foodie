@@ -75,13 +75,18 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
                 passwordError.setVisibility(View.VISIBLE);
             }
+            if(!emailEditText.getText().toString().isEmpty()){
+                emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                emailError.setVisibility(View.GONE);
+            }
+
+            if(!passwordEditText.getText().toString().isEmpty()){
+                passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                passwordError.setVisibility(View.GONE);
+            }
 
             if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()) {
 
-                emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                emailError.setVisibility(View.GONE);
-                passwordError.setVisibility(View.GONE);
                 presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString());
 
 

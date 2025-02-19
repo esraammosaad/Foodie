@@ -16,11 +16,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.Strings;
 
 public class OnboardingFragmentThree extends Fragment {
 
     Button getStartedBtn;
+    PresenterImpl presenter;
 
 
 
@@ -46,13 +50,11 @@ public class OnboardingFragmentThree extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getStartedBtn=view.findViewById(R.id.getStartedButton);
+        presenter=PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
         getStartedBtn.setOnClickListener((v)->{
 
             Navigation.findNavController(view).navigate(R.id.action_viewPagerFragment_to_loginFragment2);
-            SharedPreferences prefs= getActivity().getSharedPreferences(Strings.SHARED_PREF_NAME, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor=prefs.edit();
-            editor.putBoolean(Strings.SEEN_ONBOARDING,true);
-            editor.apply();
+            presenter.setOnOnBoardingState();
 
         });
     }

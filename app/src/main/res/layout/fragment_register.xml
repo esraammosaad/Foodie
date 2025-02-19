@@ -8,16 +8,40 @@
     android:background="@color/white"
     tools:context=".authentication.view.RegisterFragment">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/scrollView2"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/guideline3"
+                app:layout_constraintStart_toStartOf="@+id/guideline2"
+                app:layout_constraintTop_toBottomOf="@+id/textView6"
+                app:passwordToggleDrawable="@drawable/baseline_visibility_off_24"
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/editTextTextPasswordRegister"
+                    style="@style/text_field"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:inputType="textPassword"
+                    app:layout_constraintStart_toStartOf="@+id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@+id/textView6"
+                    app:passwordToggleEnabled="true" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/signInText3"
@@ -104,27 +128,13 @@
                 style="@style/text_field"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginTop="4dp"
                 android:ems="10"
                 android:inputType="textEmailAddress"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
-            <EditText
-                android:id="@+id/editTextTextPasswordRegister"
-                style="@style/text_field"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:layout_marginTop="3dp"
-                android:drawableRight="@drawable/baseline_visibility_off_24"
-                android:ems="10"
-                android:inputType="textPassword"
-                app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline2"
-
-                app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
             <TextView
                 android:id="@+id/textView6"
@@ -142,14 +152,14 @@
                 android:id="@+id/forgotPassText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/iAgreeWith"
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/registerText"
                 app:layout_constraintStart_toEndOf="@+id/checkBox"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordRegister" />
+                app:layout_constraintTop_toBottomOf="@+id/passwordError2" />
 
             <TextView
                 android:id="@+id/forgotPassText2"
@@ -258,10 +268,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="9dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/signInText3"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordRegister" />
+                app:layout_constraintTop_toBottomOf="@+id/passwordError2" />
 
             <TextView
                 android:id="@+id/emailError2"
@@ -281,15 +291,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="2dp"
                 android:text="@string/pleaseEnterYourPassword"
                 android:textColor="#950606"
                 android:textColorLink="#950606"
                 android:textSize="12dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordRegister" />
+                app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

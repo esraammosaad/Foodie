@@ -11,9 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 
 
 public class SplashFragment extends Fragment {
+
+    PresenterImpl presenter;
 
 
     public SplashFragment() {
@@ -35,6 +40,11 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new Handler().postDelayed(()-> Navigation.findNavController(view).navigate(R.id.action_splashFragment_to_viewPagerFragment), 5000);
+        presenter=PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
+        new Handler().postDelayed(()-> Navigation.findNavController(view).navigate(
+
+               presenter.getOnBoardingState()?R.id.action_splashFragment_to_loginFragment: R.id.action_splashFragment_to_viewPagerFragment
+
+        ), 5000);
     }
 }

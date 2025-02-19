@@ -27,7 +27,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp">
+            android:paddingBottom="8dp">
 
             <ImageView
                 android:id="@+id/ingredientImg"
@@ -46,8 +46,11 @@
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
+                android:ellipsize="end"
                 android:fontFamily="@font/inter_medium"
+                android:forceHasOverlappingRendering="true"
                 android:gravity="center"
+                android:maxEms="13"
                 android:maxLength="14"
                 android:maxLines="1"
                 android:textColor="#000000"
@@ -73,7 +76,7 @@
                 android:id="@+id/mealArea"
                 android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
+                android:layout_marginEnd="36dp"
                 android:fontFamily="@font/inter_light"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
@@ -88,10 +91,14 @@
                 android:id="@+id/mealCountryFlagIcon"
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="2dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/mealArea"
                 app:layout_constraintEnd_toStartOf="@+id/mealArea"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientMeasure"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/mealArea"
+                app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@drawable/flag" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

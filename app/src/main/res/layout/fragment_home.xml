@@ -185,6 +185,7 @@
                 android:maxLines="1"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toStartOf="@+id/refreshButton"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/randomMealCategoryText"
                 tools:text="Pancakes" />
