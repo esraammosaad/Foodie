@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,12 +15,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.network.NetworkCallBack;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;
@@ -29,7 +29,7 @@ import java.util.List;
 
 
 
-public class HomeFragment extends Fragment implements ViewInterface {
+public class HomeFragment extends Fragment implements ViewInterface , Listener {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;
@@ -39,8 +39,10 @@ public class HomeFragment extends Fragment implements ViewInterface {
     TextView randomMealArea;
     Button viewRecipeButton;
     Button refreshButton;
+    Button viewRecipe;
     ProgressBar progressBar;
     PresenterImpl presenter;
+    Meal randomMeal;
 
     public HomeFragment() {
     }
@@ -74,7 +76,7 @@ public class HomeFragment extends Fragment implements ViewInterface {
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        myAdapter=new RecyclerViewAdapter(getContext(), Arrays.asList());
+        myAdapter=new RecyclerViewAdapter(getContext(), Arrays.asList(),this);
         recyclerView.setAdapter(myAdapter);
         randomMealImg.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
@@ -91,12 +93,23 @@ public class HomeFragment extends Fragment implements ViewInterface {
 
         });
 
+        viewRecipeButton.setOnClickListener((v)->{
+         if(randomMeal!=null){
+
+             HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
+                     HomeFragmentDirections.actionHomeFragmentToDetailsFragment(randomMeal);
+             Navigation.findNavController(getView()).navigate(action);
+         }
+
+        });
+
 
     }
 
 
     @Override
     public void getRandomMeal(Meal meal) {
+        randomMeal=meal;
         randomMealName.setText(meal.getStrMeal());
         randomMealCategory.setText(meal.getStrCategory());
         randomMealArea.setText(meal.getStrArea());
@@ -119,6 +132,13 @@ public class HomeFragment extends Fragment implements ViewInterface {
     }
 
 
+    @Override
+    public void onClickListener(Meal meal) {
+
+        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
+                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal);
+        Navigation.findNavController(getView()).navigate(action);
 
 
+    }
 }

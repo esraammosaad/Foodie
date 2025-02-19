@@ -1,7 +1,6 @@
 package com.example.foodplannerapp.home.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,10 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "MyAdapter";
 
     Context context;
     List<Meal> mealsList;
+    Listener listener;
 
     public void setMealsList(List<Meal> mealsList) {
         this.mealsList = mealsList;
@@ -41,18 +40,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        public ViewHolder(@NonNull View itemView) {
            super(itemView);
            this.itemView=itemView;
-           mealName=itemView.findViewById(R.id.mealName);
+           mealName=itemView.findViewById(R.id.ingredientName);
            mealArea=itemView.findViewById(R.id.mealArea);
-           mealImage=itemView.findViewById(R.id.mealImg);
-           mealCategory=itemView.findViewById(R.id.mealCategory);
+           mealImage=itemView.findViewById(R.id.ingredientImg);
+           mealCategory=itemView.findViewById(R.id.ingredientMeasure);
 
        }
    }
 
-   RecyclerViewAdapter(Context context , List<Meal>mealsList){
+   public RecyclerViewAdapter(Context context, List<Meal> mealsList, Listener listener){
 
        this.context=context;
        this.mealsList=mealsList;
+       this.listener=listener;
 
    }
 
@@ -64,7 +64,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
         View view = layoutInflater.inflate(R.layout.item_layout,recyclerview,false);
         ViewHolder viewHolder=new ViewHolder(view);
-        Log.i(TAG, "onCreateViewHolder: ");
 
 
         return viewHolder;
@@ -77,8 +76,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.mealArea.setText(meal.getStrArea());
         holder.mealCategory.setText(meal.getStrCategory());
         Glide.with(context).load(meal.getStrMealThumb()).into(holder.mealImage);
+        holder.mealImage.setOnClickListener((v)->{
 
-        Log.i(TAG, "onBindViewHolder: ");
+            listener.onClickListener(mealsList.get(position));
+        });
 
     }
 
