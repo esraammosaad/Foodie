@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +42,7 @@ public class DetailsFragment extends Fragment {
     List<Ingredient> ingredientsList;
     RecyclerViewAdapter myAdapter;
     PresenterImpl presenter;
+    ImageView backIcon;
 
 
     public DetailsFragment() {
@@ -69,6 +71,7 @@ public class DetailsFragment extends Fragment {
         mealVideo = view.findViewById(R.id.webView);
         recyclerView = view.findViewById(R.id.detailsRecyclerView);
         instructions = view.findViewById(R.id.instructions);
+        backIcon=view.findViewById(R.id.backIcon);
         presenter=PresenterImpl.getInstance(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource()));
 
         Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
@@ -96,6 +99,10 @@ public class DetailsFragment extends Fragment {
         mealVideo.loadData(video, "text/html", "utf-8");
         mealVideo.getSettings().setJavaScriptEnabled(true);
         mealVideo.setWebChromeClient(new WebChromeClient());
+        backIcon.setOnClickListener((v)->{
+
+            Navigation.findNavController(view).navigateUp();
+        });
 
 
     }

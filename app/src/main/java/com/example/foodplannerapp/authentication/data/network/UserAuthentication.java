@@ -1,27 +1,63 @@
 package com.example.foodplannerapp.authentication.data.network;
 
+import static android.app.Activity.RESULT_OK;
+import static android.provider.Settings.System.getString;
+
+import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
+
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.navigation.Navigation;
 
+import com.example.foodplannerapp.R;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class UserAuthentication {
-    private final FirebaseAuth firebaseAuth;
+    public final FirebaseAuth firebaseAuth;
     private static UserAuthentication instance;
-    FirebaseUser currentUser;
+    public FirebaseUser currentUser;
+    GoogleSignInClient googleSignInClient;
 
 
     private UserAuthentication() {
+
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            //ToDo
+            System.out.println(currentUser.getEmail()+"Auth");
+                currentUser.getIdToken(true)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("Auth", "Token refreshed");
+                            } else {
+                                Log.e("Auth", "Token refresh failed: " + task.getException());
+                            }
+                        });
+
         }
 
 
@@ -33,7 +69,6 @@ public class UserAuthentication {
 
             instance = new UserAuthentication();
         }
-
         return instance;
 
     }
@@ -45,12 +80,11 @@ public class UserAuthentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "createUserWithEmail:success");
                             authenticationCallBack.onSuccess("Register Done Successfully");
                             currentUser = firebaseAuth.getCurrentUser();
                         } else {
 
-                            authenticationCallBack.onFailure("There is a problem try again later");
+                            authenticationCallBack.onFailure(task.getException().getMessage());
 
                         }
 
@@ -66,16 +100,59 @@ public class UserAuthentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Log.d("TAG", "signInWithEmail:success");
                             authenticationCallBack.onSuccess("Login Done Successfully");
                             currentUser = firebaseAuth.getCurrentUser();
                         } else {
-                            authenticationCallBack.onFailure("There is a problem try again later");
+                            authenticationCallBack.onFailure(task.getException().getMessage());
 
 
                         }
                     }
                 });
+
+
+    }
+
+    public GoogleSignInClient getGoogleSignInClient(){
+
+        return googleSignInClient;
+    }
+
+    public GoogleSignInClient initGoogleSignIn(Context context){
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(String.valueOf(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        return GoogleSignIn.getClient(context, options);
+
+
+    }
+
+    public void loginWithGoogle(ActivityResult result, AuthenticationCallBack authenticationCallBack) throws ApiException {
+
+        if (result.getResultCode() == RESULT_OK) {
+            Task<GoogleSignInAccount> accountTask = GoogleSignIn.getSignedInAccountFromIntent(result.getData());
+            try {
+                GoogleSignInAccount signInAccount = accountTask.getResult(ApiException.class);
+                AuthCredential authCredential = GoogleAuthProvider.getCredential(signInAccount.getIdToken(), null);
+                firebaseAuth.signInWithCredential(authCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            authenticationCallBack.onSuccess("Login Done Successfully");
+                            currentUser=firebaseAuth.getCurrentUser();
+                            Log.i("TAG", "onComplete: ");
+
+                        } else {
+                            Log.i("TAG", "fail: ");
+                            authenticationCallBack.onFailure(task.getException().getMessage());
+                        }
+                    }
+                });
+            } catch (ApiException e) {
+                e.printStackTrace();
+            }
+        }
 
 
     }

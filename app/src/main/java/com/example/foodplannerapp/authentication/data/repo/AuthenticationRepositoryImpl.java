@@ -1,9 +1,15 @@
 package com.example.foodplannerapp.authentication.data.repo;
 
 import android.content.Context;
+import android.content.Intent;
+
+import androidx.activity.result.ActivityResult;
+import androidx.annotation.Nullable;
 
 import com.example.foodplannerapp.authentication.data.network.AuthenticationCallBack;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.common.api.ApiException;
 
 public class AuthenticationRepositoryImpl {
 
@@ -34,6 +40,27 @@ public class AuthenticationRepositoryImpl {
         userAuthentication.login(email, password, authenticationCallBack);
 
     }
+    public void loginWithGoogle(ActivityResult result, AuthenticationCallBack authenticationCallBack) throws ApiException {
 
 
-}
+
+        userAuthentication.loginWithGoogle(result, authenticationCallBack);
+
+
+    }
+
+    public GoogleSignInClient initGoogleSignIn(Context context){
+
+        return userAuthentication.initGoogleSignIn(context);
+    }
+
+    public GoogleSignInClient getGoogleSignInClient(){
+
+        return userAuthentication.getGoogleSignInClient();
+    }
+
+
+
+
+
+    }

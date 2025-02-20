@@ -52,4 +52,5 @@
     <string name="pleaseEnterYourEmail">Please Enter Your Email</string>
     <string name="pleaseEnterYourPassword">Please Enter Your Password</string>
     <string name="calendar">Calendar</string>
+    <string name="default_web_client_id">120353183461-7b5og0eabkfsb3nf920djpsmvj6lmthi.apps.googleusercontent.com</string>
 </resources>

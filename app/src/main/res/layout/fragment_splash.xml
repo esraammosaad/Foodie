@@ -5,16 +5,16 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:foregroundGravity="center"
     tools:context=".onboarding.view.SplashFragment">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
-        android:foregroundGravity="center_vertical"
+        android:foregroundGravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
@@ -28,6 +28,7 @@
         android:layout_marginStart="119dp"
         android:layout_marginEnd="119dp"
         android:fontFamily="@font/inter_semibold"
+        android:foregroundGravity="center"
         android:gravity="center"
         android:text="@string/appName"
         android:textColor="@color/primaryColor"

@@ -9,6 +9,7 @@
     tools:context=".authentication.view.LoginFragment">
 
     <ScrollView
+        android:id="@+id/loginScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -205,19 +206,19 @@
                 android:src="@drawable/travelling"
                 app:layout_constraintBottom_toBottomOf="@+id/visitAsAGuestButton"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toTopOf="@+id/visitAsAGuestButton"
-                app:layout_constraintVertical_bias="0.45" />
+                app:layout_constraintTop_toTopOf="@+id/visitAsAGuestButton" />
 
             <TextView
                 android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="80dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="50dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/donotHaveAnAccount"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/visitAsAGuestButton" />
 
@@ -225,13 +226,17 @@
                 android:id="@+id/registerText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
+                android:layout_marginStart="3dp"
                 android:fontFamily="@font/inter_medium"
                 android:text="@string/register"
                 android:textColor="@color/primaryColor"
                 android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView7"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/textView7"
-                app:layout_constraintTop_toTopOf="@+id/textView7" />
+                app:layout_constraintTop_toTopOf="@+id/textView7"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/emailError"

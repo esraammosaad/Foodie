@@ -6,16 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".authentication.view.RegisterFragment">
+    tools:context=".authentication.view.RegisterFragment"
+    android:tag="@string/register"
+    >
 
     <ScrollView
+        android:id="@+id/registerScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -189,7 +192,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/signInText3" />
 
             <Button
-                android:id="@+id/googleSignInButton"
+                android:id="@+id/googleSignInButtonRegister"
                 style="@style/secondary_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -208,9 +211,9 @@
                 android:layout_height="26dp"
                 android:layout_marginEnd="248dp"
                 android:src="@drawable/googleicon"
-                app:layout_constraintBottom_toBottomOf="@+id/googleSignInButton"
+                app:layout_constraintBottom_toBottomOf="@+id/googleSignInButtonRegister"
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
-                app:layout_constraintTop_toTopOf="@+id/googleSignInButton" />
+                app:layout_constraintTop_toTopOf="@+id/googleSignInButtonRegister" />
 
             <Button
                 android:id="@+id/visitAsAGuestButton"
@@ -225,7 +228,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline3"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
-                app:layout_constraintTop_toBottomOf="@+id/googleSignInButton" />
+                app:layout_constraintTop_toBottomOf="@+id/googleSignInButtonRegister" />
 
             <ImageView
                 android:id="@+id/imageView2"

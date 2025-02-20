@@ -1,7 +1,13 @@
 package com.example.foodplannerapp.authentication.view;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +25,11 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class RegisterFragment extends Fragment implements ViewInterface {
@@ -30,6 +41,24 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     EditText passwordEditText;
     TextView emailError;
     TextView passwordError;
+    Button signInWithGoogle;
+    GoogleSignInClient googleSignInClient;
+
+
+    private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+
+                @Override
+                public void onActivityResult(ActivityResult result) {
+
+                    try {
+                        presenter.loginWithGoogle(result);
+                    } catch (ApiException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                }
+            });
 
 
     public RegisterFragment() {
@@ -60,7 +89,13 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
-        presenter = PresenterImpl.getInstance(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()), this);
+        signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()), this);
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(getContext(), options);
         registerButton.setOnClickListener((v) -> {
             if (emailEditText.getText().toString().isEmpty()) {
 
@@ -99,20 +134,32 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         signInText.setOnClickListener((v) -> {
             Navigation.findNavController(view).navigateUp();
         });
+
+        signInWithGoogle.setOnClickListener((v) -> {
+            Intent intent = googleSignInClient.getSignInIntent();
+            activityResultLauncher.launch(intent);
+
+        });
     }
 
     @Override
     public void onSuccess(String message) {
 
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
 
         Navigation.findNavController(getView()).navigate(R.id.action_registerFragment_to_homeFragment);
+        Snackbar snackbar = Snackbar
+                .make(registerButton, message, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+        snackbar.show();
 
     }
 
     @Override
     public void onFailure(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        Snackbar snackbar = Snackbar
+                .make(registerButton, message, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(Color.RED);
+        snackbar.show();
 
 
     }
