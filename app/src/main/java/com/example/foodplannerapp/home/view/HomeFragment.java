@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
@@ -28,6 +29,8 @@ import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +71,10 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
+
+        System.out.println(UserAuthentication.getInstance().getCurrentUser().getDisplayName()+"+========");
         Log.i("TAG", "onCreate hiiiiiiiiii Home");
         recyclerView=view.findViewById(R.id.recyclerView);
         randomMealImg=view.findViewById(R.id.randomMealImg);

@@ -3,8 +3,9 @@
     <style name="Base.Theme.FoodPlannerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/primaryColor</item>
     </style>
-    <style name="text_field" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="text_field" parent="Theme.Material3.DayNight">
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_marginLeft">20dp</item>
         <item name="android:layout_marginTop">3dp</item>
@@ -13,7 +14,7 @@
         <item name="android:padding">10dp</item>
     </style>
 
-    <style name="button" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="button" parent="Theme.Material3.DayNight">
         <item name="android:background">@drawable/main_button_layout</item>
         <item name="android:layout_height">58dp</item>
         <item name="android:layout_marginLeft">20dp</item>
@@ -23,7 +24,7 @@
 
 
     </style>
-    <style name="secondary_button" parent="Theme.Material3.DayNight.NoActionBar" >
+    <style name="secondary_button" parent="Theme.Material3.DayNight" >
         <item name="android:background">@drawable/secondary_button_layout</item>
         <item name="android:layout_height">58dp</item>
         <item name="android:layout_marginLeft">20dp</item>
@@ -33,7 +34,7 @@
         <item name="android:textSize">16sp</item>
 
     </style>
-    <style name="home_button" parent="Theme.Material3.DayNight.NoActionBar" >
+    <style name="home_button" parent="Theme.Material3.DayNight" >
         <item name="android:background">@drawable/secondary_button_layout</item>
         <item name="android:layout_height">58dp</item>
         <item name="backgroundTint">@color/white</item>
@@ -42,7 +43,7 @@
 
     </style>
 
-    <style name="Theme.BottomNavigationView.ActiveIndicator" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.BottomNavigationView.ActiveIndicator" parent="Theme.Material3.DayNight">
         <item name="android:color">@android:color/transparent</item>
     </style>
 

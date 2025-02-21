@@ -11,6 +11,7 @@ import com.example.foodplannerapp.authentication.data.repo.AuthenticationReposit
 import com.example.foodplannerapp.authentication.view.ViewInterface;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class PresenterImpl implements AuthenticationCallBack {
     AuthenticationRepositoryImpl authenticationRepository;
@@ -32,34 +33,41 @@ public class PresenterImpl implements AuthenticationCallBack {
 //
 //    }
 
-    public void register(String email , String password){
+    public void register(String email,  String password,String name) {
 
-        authenticationRepository.register(email, password, this);
+        authenticationRepository.register(email, password, name, this);
 
     }
 
-    public void login(String email , String password){
+    public void login(String email, String password) {
 
         authenticationRepository.login(email, password, this);
     }
 
     public void loginWithGoogle(ActivityResult result) throws ApiException {
 
-        authenticationRepository.loginWithGoogle(result ,this);
+        authenticationRepository.loginWithGoogle(result, this);
 
 
     }
-    public GoogleSignInClient initGoogleSignIn(Context context){
 
-         return  authenticationRepository.initGoogleSignIn(context);
+    public GoogleSignInClient initGoogleSignIn(Context context) {
+
+        return authenticationRepository.initGoogleSignIn(context);
     }
 
-    public GoogleSignInClient getGoogleSignInClient(){
+    public GoogleSignInClient getGoogleSignInClient() {
 
         return authenticationRepository.getGoogleSignInClient();
     }
 
-        @Override
+    public FirebaseUser getCurrentUser(){
+
+        return authenticationRepository.getCurrentUser();
+
+    }
+
+    @Override
     public void onSuccess(String message) {
         viewInterface.onSuccess(message);
 

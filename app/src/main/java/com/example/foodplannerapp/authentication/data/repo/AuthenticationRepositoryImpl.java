@@ -10,6 +10,7 @@ import com.example.foodplannerapp.authentication.data.network.AuthenticationCall
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AuthenticationRepositoryImpl {
 
@@ -30,8 +31,8 @@ public class AuthenticationRepositoryImpl {
 
     }
 
-    public void register(String email , String password, AuthenticationCallBack authenticationCallBack){
-        userAuthentication.register(email, password, authenticationCallBack );
+    public void register(String email , String password, String name,AuthenticationCallBack authenticationCallBack){
+        userAuthentication.register(email, password, name,authenticationCallBack );
 
     }
 
@@ -60,6 +61,17 @@ public class AuthenticationRepositoryImpl {
     }
 
 
+    public FirebaseUser getCurrentUser(){
+
+        return userAuthentication.getCurrentUser();
+    }
+
+    public void signOut(){
+
+        userAuthentication.signOut();
+
+
+    }
 
 
 

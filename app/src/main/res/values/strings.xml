@@ -55,4 +55,6 @@
     <string name="default_web_client_id">120353183461-7b5og0eabkfsb3nf920djpsmvj6lmthi.apps.googleusercontent.com</string>
     <string name="showMore">Show more</string>
     <string name="show">Show More</string>
+    <string name="pleaseEnterYourUsername">Please Enter Your Username</string>
+    <string name="signOut">Sign Out</string>
 </resources>

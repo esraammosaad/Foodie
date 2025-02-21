@@ -18,52 +18,52 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+
 
 public class UserAuthentication {
-    public final FirebaseAuth firebaseAuth;
+    private static FirebaseAuth firebaseAuth;
     private static UserAuthentication instance;
-    public FirebaseUser currentUser;
+    private static FirebaseUser currentUser;
     GoogleSignInClient googleSignInClient;
 
 
     private UserAuthentication() {
 
         firebaseAuth = FirebaseAuth.getInstance();
-        currentUser = firebaseAuth.getCurrentUser();
-        if (currentUser != null) {
-//                currentUser.getIdToken(true)
-//                        .addOnCompleteListener(task -> {
-//                            if (task.isSuccessful()) {
-//                                Log.d("Auth", "Token refreshed");
-//                            } else {
-//                                Log.e("Auth", "Token refresh failed: " + task.getException());
-//                            }
-//                        });
-
-        }
 
 
     }
 
+    public FirebaseUser getCurrentUser() {
+
+        return firebaseAuth.getCurrentUser();
+    }
+
     public static UserAuthentication getInstance() {
+
         if (instance == null) {
-
-
             instance = new UserAuthentication();
+        }
+        if (currentUser == null) {
+            currentUser = firebaseAuth.getCurrentUser();
         }
         return instance;
 
     }
 
-    public void register(String email, String password, AuthenticationCallBack authenticationCallBack) {
+    public void register(String email, String password, String name, AuthenticationCallBack authenticationCallBack) {
 
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            authenticationCallBack.onSuccess("Register Done Successfully");
                             currentUser = firebaseAuth.getCurrentUser();
+                            authenticationCallBack.onSuccess("Register Done Successfully");
+                            if (currentUser != null)
+                                currentUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).build());
+
                         } else {
 
                             authenticationCallBack.onFailure(task.getException().getMessage());
@@ -82,8 +82,8 @@ public class UserAuthentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            authenticationCallBack.onSuccess("Login Done Successfully");
                             currentUser = firebaseAuth.getCurrentUser();
+                            authenticationCallBack.onSuccess("Login Done Successfully");
                         } else {
                             authenticationCallBack.onFailure(task.getException().getMessage());
 
@@ -95,12 +95,12 @@ public class UserAuthentication {
 
     }
 
-    public GoogleSignInClient getGoogleSignInClient(){
+    public GoogleSignInClient getGoogleSignInClient() {
 
         return googleSignInClient;
     }
 
-    public GoogleSignInClient initGoogleSignIn(Context context){
+    public GoogleSignInClient initGoogleSignIn(Context context) {
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(String.valueOf(R.string.default_web_client_id))
                 .requestEmail()
@@ -121,8 +121,8 @@ public class UserAuthentication {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            currentUser = firebaseAuth.getCurrentUser();
                             authenticationCallBack.onSuccess("Login Done Successfully");
-                            currentUser=firebaseAuth.getCurrentUser();
                             Log.i("TAG", "onComplete: ");
 
                         } else {
@@ -139,6 +139,13 @@ public class UserAuthentication {
 
     }
 
+    public void signOut(){
+
+            firebaseAuth.signOut();
+            currentUser=null;
+
+        }
+    }
 
 
-}
+

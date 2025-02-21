@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-
 import com.example.foodplannerapp.data.models.Ingredient;
 import java.util.ArrayList;
 
@@ -14,6 +13,7 @@ public class MealLocalModel {
     @PrimaryKey
     @NonNull
     private String idMeal;
+    private String userUID;
     private String strMeal;
     private String strCategory;
     private String strArea;
@@ -25,8 +25,9 @@ public class MealLocalModel {
 
 
 
-    public MealLocalModel(String idMeal, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
+    public MealLocalModel(String idMeal, String userUID,String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
         this.idMeal = idMeal;
+        this.userUID=userUID;
         this.strMeal = strMeal;
         this.strCategory = strCategory;
         this.strArea = strArea;
@@ -98,5 +99,13 @@ public class MealLocalModel {
 
     public void setIngredients(ArrayList<Ingredient> ingredients) {
         this.ingredients = ingredients;
+    }
+
+    public String getUserUID() {
+        return userUID;
+    }
+
+    public void setUserUID(String userUID) {
+        this.userUID = userUID;
     }
 }

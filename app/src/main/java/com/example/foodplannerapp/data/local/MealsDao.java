@@ -19,6 +19,6 @@ public interface MealsDao {
     @Delete
     void deleteMeal(MealLocalModel mealLocalModel);
 
-    @Query("select * from meal_table")
-    LiveData<List<MealLocalModel>> getAllMeals();
+    @Query("select * from meal_table where userUID= :userUID")
+    LiveData<List<MealLocalModel>> getAllMeals(String userUID);
 }

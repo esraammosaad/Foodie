@@ -10,7 +10,6 @@ import java.util.List;
 public class PresenterImpl {
     MealsRepositoryImpl mealsRepository;
 
-    private static PresenterImpl instance = null;
 
     public PresenterImpl(MealsRepositoryImpl mealsRepository) {
 
@@ -19,8 +18,8 @@ public class PresenterImpl {
 
 
 
-    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(){
-        return mealsRepository.getAllFavoriteMeals();
+    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(String userUID){
+        return mealsRepository.getAllFavoriteMeals(userUID);
     }
 
     public void deleteMealFromFavorite(MealLocalModel meal){

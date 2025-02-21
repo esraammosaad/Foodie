@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.MealLocalModel;
 import com.example.foodplannerapp.data.models.Ingredient;
@@ -86,7 +88,7 @@ public class DetailsFragment extends Fragment {
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
 
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), AuthenticationRepositoryImpl.getInstance( UserAuthentication.getInstance()));
 
         Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
         ingredientsList = presenter.getIngredients(meal);
@@ -94,17 +96,28 @@ public class DetailsFragment extends Fragment {
         mealName.setText(meal.getStrMeal());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
+        if(meal.getStrInstructions().length()>150){
         instructions.setText(meal.getStrInstructions().substring(0, 150) + " ....");
-        showMore.setOnClickListener((v) -> {
+            showMore.setOnClickListener((v) -> {
 
-            if (instructions.getText().length() < 160) {
+                if (instructions.getText().length() < 160) {
 
-                instructions.setText(meal.getStrInstructions());
-            } else {
-                instructions.setText(meal.getStrInstructions().substring(0, 150) + "....");
+                    instructions.setText(meal.getStrInstructions());
+                } else {
+                    instructions.setText(meal.getStrInstructions().substring(0, 150) + "....");
 
-            }
-        });
+                }
+            });
+
+        }
+        else{
+            instructions.setText(meal.getStrInstructions());
+            showMore.setVisibility(View.GONE);
+
+        }
+
+
+
 
         Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
 
@@ -133,8 +146,8 @@ public class DetailsFragment extends Fragment {
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
-        favMeal = new MealLocalModel(meal.getIdMeal(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-        presenter.getAllFavoriteMeals().observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
+        favMeal = new MealLocalModel(meal.getIdMeal(),presenter.getCurrentUser().getUid(),meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+        presenter.getAllFavoriteMeals(UserAuthentication.getInstance().getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
             @Override
             public void onChanged(List<MealLocalModel> mealLocalModels) {
                 isFav = mealLocalModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));

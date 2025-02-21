@@ -120,8 +120,8 @@ public class MealsRepositoryImpl {
         mealsLocalDataSource.deleteMealFromDB(meal);
     }
 
-    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(){
-        return mealsLocalDataSource.getAllMeals();
+    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(String userUID){
+        return mealsLocalDataSource.getAllMeals(userUID);
     }
 
 

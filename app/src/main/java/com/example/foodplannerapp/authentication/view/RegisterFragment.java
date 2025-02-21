@@ -35,8 +35,10 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     PresenterImpl presenter;
     EditText emailEditText;
     EditText passwordEditText;
+    EditText usernameEditText;
     TextView emailError;
     TextView passwordError;
+    TextView usernameError;
     Button signInWithGoogle;
     GoogleSignInClient googleSignInClient;
 
@@ -82,8 +84,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         emailEditText = view.findViewById(R.id.editTextTextEmailAddressRegister);
         emailError=view.findViewById(R.id.emailError2);
         passwordError=view.findViewById(R.id.passwordError2);
+        usernameEditText=view.findViewById(R.id.editTextUsername);
+        usernameError=view.findViewById(R.id.usernameError);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
+        usernameError.setVisibility(View.GONE);
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
         signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()), this);
@@ -106,6 +111,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
                 passwordError.setVisibility(View.VISIBLE);
             }
+            if (usernameEditText.getText().toString().isEmpty()) {
+
+                usernameEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                usernameError.setVisibility(View.VISIBLE);
+            }
             if(!emailEditText.getText().toString().isEmpty()){
                 emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
                 emailError.setVisibility(View.GONE);
@@ -115,10 +125,14 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
                 passwordError.setVisibility(View.GONE);
             }
+            if(!usernameEditText.getText().toString().isEmpty()){
+                usernameEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                usernameError.setVisibility(View.GONE);
+            }
 
-            if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()) {
+            if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty() && !usernameEditText.getText().toString().isEmpty()) {
 
-                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString());
+                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), usernameEditText.getText().toString());
 
 
             }

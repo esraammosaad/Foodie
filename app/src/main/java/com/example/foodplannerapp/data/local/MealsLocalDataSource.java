@@ -15,7 +15,7 @@ public class MealsLocalDataSource {
     public MealsLocalDataSource(Context context) {
         MyDataBase myDataBase = MyDataBase.getInstance(context);
         mealsDao = myDataBase.getDAO();
-        mealsList = mealsDao.getAllMeals();
+
 
 
     }
@@ -42,7 +42,8 @@ public class MealsLocalDataSource {
 
     }
 
-    public LiveData<List<MealLocalModel>> getAllMeals() {
+    public LiveData<List<MealLocalModel>> getAllMeals(String userUID) {
+        mealsList = mealsDao.getAllMeals(userUID);
         return mealsList;
     }
 

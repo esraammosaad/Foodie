@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.MealLocalModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
@@ -65,7 +66,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(myAdapter);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
-        mealList = presenter.getAllFavoriteMeals();
+        mealList = presenter.getAllFavoriteMeals(UserAuthentication.getInstance().getCurrentUser().getUid());
         mealList.observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
             @Override
             public void onChanged(List<MealLocalModel> mealLocalModels) {

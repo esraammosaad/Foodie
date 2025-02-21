@@ -142,11 +142,14 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
     @Override
     public void onSuccess(String message) {
+
+       if(presenter.getCurrentUser()!=null){
         Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment);
         Snackbar snackbar = Snackbar
                 .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
+        }
 
     }
 
