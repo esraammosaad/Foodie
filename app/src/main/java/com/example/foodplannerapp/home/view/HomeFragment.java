@@ -25,7 +25,6 @@ import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
-import com.example.foodplannerapp.favorite.view.Listener;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import com.google.android.material.snackbar.Snackbar;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HomeFragment extends Fragment implements ViewInterface , Listener {
+public class HomeFragment extends Fragment implements ViewInterface , HomeListener {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;

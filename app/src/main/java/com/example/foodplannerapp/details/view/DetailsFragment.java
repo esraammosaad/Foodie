@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
@@ -27,6 +29,8 @@ import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,8 +53,6 @@ public class DetailsFragment extends Fragment {
     boolean isFav = false;
     MealLocalModel favMeal;
     TextView showMore;
-
-
 
 
     public DetailsFragment() {
@@ -82,9 +84,9 @@ public class DetailsFragment extends Fragment {
         backIcon = view.findViewById(R.id.backIcon);
         flagIcon = view.findViewById(R.id.flagIconDetails);
         favIcon = view.findViewById(R.id.favIcon);
-        showMore=view.findViewById(R.id.showMore);
+        showMore = view.findViewById(R.id.showMore);
 
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource(getContext())));
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
 
         Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
         ingredientsList = presenter.getIngredients(meal);
@@ -92,14 +94,14 @@ public class DetailsFragment extends Fragment {
         mealName.setText(meal.getStrMeal());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
-        instructions.setText(meal.getStrInstructions().substring(0,150)+" ....");
-        showMore.setOnClickListener((v)->{
+        instructions.setText(meal.getStrInstructions().substring(0, 150) + " ....");
+        showMore.setOnClickListener((v) -> {
 
-            if (instructions.getText().length()<160){
+            if (instructions.getText().length() < 160) {
 
-            instructions.setText(meal.getStrInstructions());
-            }else{
-                instructions.setText(meal.getStrInstructions().substring(0,150)+"....");
+                instructions.setText(meal.getStrInstructions());
+            } else {
+                instructions.setText(meal.getStrInstructions().substring(0, 150) + "....");
 
             }
         });
@@ -135,7 +137,7 @@ public class DetailsFragment extends Fragment {
         presenter.getAllFavoriteMeals().observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
             @Override
             public void onChanged(List<MealLocalModel> mealLocalModels) {
-                isFav= mealLocalModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
+                isFav = mealLocalModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
                 if (isFav) {
                     favIcon.setImageResource(R.drawable.baseline_favorite_24);
 
@@ -148,12 +150,15 @@ public class DetailsFragment extends Fragment {
             if (!isFav) {
                 favIcon.setImageResource(R.drawable.baseline_favorite_24);
                 presenter.addMealToFav(favMeal);
-                isFav=true;
+                Snackbar snackbar = Snackbar
+                        .make(requireView(), "Meal is added to favorite", Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
+                snackbar.show();
+                isFav = true;
 
             } else {
                 favIcon.setImageResource(R.drawable.baseline_favorite_border_24);
                 presenter.deleteMealFromFav(favMeal);
-                isFav=false;
+                isFav = false;
             }
         });
 

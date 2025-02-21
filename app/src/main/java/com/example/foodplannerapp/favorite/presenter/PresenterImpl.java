@@ -23,6 +23,21 @@ public class PresenterImpl {
         return mealsRepository.getAllFavoriteMeals();
     }
 
+    public void deleteMealFromFavorite(MealLocalModel meal){
+
+        mealsRepository.deleteMealFromFavorite(meal);
+
+    }
+    public void addMealToFavorite(MealLocalModel meal){
+
+        mealsRepository.addMealToFavorite(meal);
+
+    }
+
+
+
+
+
 
 
 

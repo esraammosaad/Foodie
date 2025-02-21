@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.favorite.view.Listener;
+import com.example.foodplannerapp.favorite.view.FavoriteListener;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.List;
@@ -24,7 +24,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     Context context;
     List<Meal> mealsList;
-    Listener listener;
+    HomeListener listener;
 
     public void setMealsList(List<Meal> mealsList) {
         this.mealsList = mealsList;
@@ -52,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        }
    }
 
-   public RecyclerViewAdapter(Context context, List<Meal> mealsList, Listener listener){
+   public RecyclerViewAdapter(Context context, List<Meal> mealsList, HomeListener listener){
 
        this.context=context;
        this.mealsList=mealsList;

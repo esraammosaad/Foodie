@@ -1,8 +1,8 @@
-package com.example.foodplannerapp.favorite.view;
+package com.example.foodplannerapp.home.view;
 
 import com.example.foodplannerapp.data.models.Meal;
 
-public interface Listener {
+public interface HomeListener {
 
     void onClickListener(Meal meal);
 }

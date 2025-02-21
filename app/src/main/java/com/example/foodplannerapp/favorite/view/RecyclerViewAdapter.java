@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.model.MealLocalModel;
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.List;
@@ -24,7 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     Context context;
     List<MealLocalModel> mealsList;
-    Listener listener;
+    FavoriteListener listener;
 
     public void setMealsList(List<MealLocalModel> mealsList) {
         this.mealsList = mealsList;
@@ -37,7 +36,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        ImageView mealImage;
        TextView mealCategory;
        ImageView mealCountryFlagIcon;
+       ImageView favoriteIcon;
        View itemView;
+
 
 
        public ViewHolder(@NonNull View itemView) {
@@ -48,11 +49,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
            mealImage=itemView.findViewById(R.id.ingredientImg);
            mealCategory=itemView.findViewById(R.id.ingredientMeasure);
            mealCountryFlagIcon=itemView.findViewById(R.id.mealCountryFlagIcon);
+           favoriteIcon=itemView.findViewById(R.id.favoriteIcon);
 
        }
    }
 
-   public RecyclerViewAdapter(Context context, List<MealLocalModel> mealsList, Listener listener){
+   public RecyclerViewAdapter(Context context, List<MealLocalModel> mealsList, FavoriteListener listener){
 
        this.context=context;
        this.mealsList=mealsList;
@@ -83,9 +85,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(context).load("https://flagsapi.com/"+countryCode.toUpperCase()+"/flat/64.png").into(holder.mealCountryFlagIcon);
-        holder.mealImage.setOnClickListener((v)->{
+        holder.favoriteIcon.setOnClickListener((v)->{
 
-//            listener.onClickListener(mealsList.get(position));
+            listener.onClickListener(mealsList.get(position));
+
         });
 
     }
