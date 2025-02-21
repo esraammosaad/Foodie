@@ -1,52 +1,31 @@
 package com.example.foodplannerapp.authentication.view;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
-import android.text.method.PasswordTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GoogleAuthProvider;
-
-import java.util.Objects;
 
 
 public class LoginFragment extends Fragment implements ViewInterface {
@@ -163,9 +142,9 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
     @Override
     public void onSuccess(String message) {
-        Navigation.findNavController(getView()).navigate(R.id.action_loginFragment_to_homeFragment);
+        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment);
         Snackbar snackbar = Snackbar
-                .make(loginButton, message, Snackbar.LENGTH_LONG);
+                .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
 
@@ -174,7 +153,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
     @Override
     public void onFailure(String message) {
         Snackbar snackbar = Snackbar
-                .make(loginButton, message, Snackbar.LENGTH_LONG);
+                .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
 

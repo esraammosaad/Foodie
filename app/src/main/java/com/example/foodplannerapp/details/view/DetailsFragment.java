@@ -5,30 +5,31 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.VideoView;
-
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.local.model.MealLocalModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
-
+import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class DetailsFragment extends Fragment {
 
@@ -39,10 +40,17 @@ public class DetailsFragment extends Fragment {
     WebView mealVideo;
     RecyclerView recyclerView;
     TextView instructions;
-    List<Ingredient> ingredientsList;
+    ArrayList<Ingredient> ingredientsList;
     RecyclerViewAdapter myAdapter;
     PresenterImpl presenter;
     ImageView backIcon;
+    ImageView flagIcon;
+    ImageView favIcon;
+    boolean isFav = false;
+    MealLocalModel favMeal;
+    TextView showMore;
+
+
 
 
     public DetailsFragment() {
@@ -71,17 +79,32 @@ public class DetailsFragment extends Fragment {
         mealVideo = view.findViewById(R.id.webView);
         recyclerView = view.findViewById(R.id.detailsRecyclerView);
         instructions = view.findViewById(R.id.instructions);
-        backIcon=view.findViewById(R.id.backIcon);
-        presenter=PresenterImpl.getInstance(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource()));
+        backIcon = view.findViewById(R.id.backIcon);
+        flagIcon = view.findViewById(R.id.flagIconDetails);
+        favIcon = view.findViewById(R.id.favIcon);
+        showMore=view.findViewById(R.id.showMore);
+
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource(getContext())));
 
         Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
-        ingredientsList= presenter.getIngredients(meal);
+        ingredientsList = presenter.getIngredients(meal);
 
         mealName.setText(meal.getStrMeal());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
-        instructions.setText(meal.getStrInstructions());
-        Glide.with(this).load(meal.getStrMealThumb()).into(imageView);
+        instructions.setText(meal.getStrInstructions().substring(0,150)+" ....");
+        showMore.setOnClickListener((v)->{
+
+            if (instructions.getText().length()<160){
+
+            instructions.setText(meal.getStrInstructions());
+            }else{
+                instructions.setText(meal.getStrInstructions().substring(0,150)+"....");
+
+            }
+        });
+
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -92,18 +115,50 @@ public class DetailsFragment extends Fragment {
         String youtubeUrl = meal.getStrYoutube();
         String videoId = youtubeUrl.substring(youtubeUrl.lastIndexOf("=") + 1);
 
+
         String video = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
                 + videoId + "\" title=\"YouTube video player\" frameborder=\"0\" "
                 + "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
                 + "allowfullscreen></iframe>";
         mealVideo.loadData(video, "text/html", "utf-8");
+        mealVideo.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         mealVideo.getSettings().setJavaScriptEnabled(true);
         mealVideo.setWebChromeClient(new WebChromeClient());
-        backIcon.setOnClickListener((v)->{
+        backIcon.setOnClickListener((v) -> {
 
             Navigation.findNavController(view).navigateUp();
+        });
+        Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
+        String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
+        Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
+        favMeal = new MealLocalModel(meal.getIdMeal(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+        presenter.getAllFavoriteMeals().observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
+            @Override
+            public void onChanged(List<MealLocalModel> mealLocalModels) {
+                isFav= mealLocalModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
+                if (isFav) {
+                    favIcon.setImageResource(R.drawable.baseline_favorite_24);
+
+                }
+
+            }
+        });
+        favIcon.setOnClickListener((v) -> {
+
+            if (!isFav) {
+                favIcon.setImageResource(R.drawable.baseline_favorite_24);
+                presenter.addMealToFav(favMeal);
+                isFav=true;
+
+            } else {
+                favIcon.setImageResource(R.drawable.baseline_favorite_border_24);
+                presenter.deleteMealFromFav(favMeal);
+                isFav=false;
+            }
         });
 
 
     }
+
+
 }

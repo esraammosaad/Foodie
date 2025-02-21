@@ -39,7 +39,7 @@
                 android:id="@+id/favIcon"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:src="@drawable/baseline_favorite_24"
+                android:src="@drawable/baseline_favorite_border_24"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintTop_toTopOf="@+id/backIcon" />
 
@@ -131,12 +131,11 @@
                 app:layout_constraintTop_toTopOf="@+id/mealAreaDetails" />
 
             <ImageView
-                android:id="@+id/imageView8"
+                android:id="@+id/flagIconDetails"
                 android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="3dp"
-                android:src="@drawable/flag"
                 app:layout_constraintEnd_toStartOf="@+id/mealAreaDetails"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toTopOf="@+id/mealAreaDetails" />
@@ -175,7 +174,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/video"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/detailsMealImage" />
 
@@ -186,7 +185,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/ingredients"
-                android:textSize="20sp"
+                android:textSize="22sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/webView" />
 
@@ -197,7 +196,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/instructions"
-                android:textSize="20sp"
+                android:textSize="22dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView" />
 
@@ -234,11 +233,25 @@
                 android:fontFamily="sans-serif"
                 android:paddingBottom="24dp"
                 android:textColor="@color/textColor"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/textView14"
                 tools:text="Put the flour, eggs, milk, 1 tbsp oil and a pinch of salt into a bowl or large jug, then whisk to a smooth batter. Set aside for 30 mins to rest if you have time, or start cooking straight away. Set a medium frying pan or crêpe pan over a medium heat and carefully wipe it with some oiled kitchen paper. When hot, cook your pancakes for 1 min on each side until golden, keeping them warm in a low oven as you go. Serve with lemon wedges and sugar, or your favourite filling. Once cold, you can layer the pancakes between baking parchment, then wrap in cling film and freeze for up to 2 months." />
+
+            <TextView
+                android:id="@+id/showMore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="2dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/show"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView14"
+                app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

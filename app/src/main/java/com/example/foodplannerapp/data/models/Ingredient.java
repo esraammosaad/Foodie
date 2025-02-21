@@ -1,5 +1,10 @@
 package com.example.foodplannerapp.data.models;
 
+import androidx.room.TypeConverters;
+
+import com.example.foodplannerapp.data.local.model.IngredientDataTypeConverter;
+
+@TypeConverters(IngredientDataTypeConverter.class)
 public class Ingredient {
 
     private String image;

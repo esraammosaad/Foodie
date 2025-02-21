@@ -3,7 +3,6 @@ package com.example.foodplannerapp.authentication.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -12,15 +11,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
@@ -146,9 +142,9 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     public void onSuccess(String message) {
 
 
-        Navigation.findNavController(getView()).navigate(R.id.action_registerFragment_to_homeFragment);
+        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
         Snackbar snackbar = Snackbar
-                .make(registerButton, message, Snackbar.LENGTH_LONG);
+                .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
 
@@ -157,7 +153,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     @Override
     public void onFailure(String message) {
         Snackbar snackbar = Snackbar
-                .make(registerButton, message, Snackbar.LENGTH_LONG);
+                .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
 

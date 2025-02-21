@@ -1,5 +1,6 @@
 package com.example.foodplannerapp.home.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +25,14 @@ import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.favorite.view.Listener;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;
+import com.example.foodplannerapp.utilis.CountryCodeMapper;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Map;
 
 
 public class HomeFragment extends Fragment implements ViewInterface , Listener {
@@ -39,10 +45,10 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
     TextView randomMealArea;
     Button viewRecipeButton;
     Button refreshButton;
-    Button viewRecipe;
     ProgressBar progressBar;
     PresenterImpl presenter;
     Meal randomMeal;
+    ImageView flagIcon;
 
     public HomeFragment() {
     }
@@ -64,6 +70,7 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.i("TAG", "onCreate hiiiiiiiiii Home");
         recyclerView=view.findViewById(R.id.recyclerView);
         randomMealImg=view.findViewById(R.id.randomMealImg);
         randomMealName=view.findViewById(R.id.randomMealNameText);
@@ -71,6 +78,7 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
         randomMealArea=view.findViewById(R.id.randomMealAreaText);
         refreshButton=view.findViewById(R.id.refreshButton);
         viewRecipeButton=view.findViewById(R.id.viewRecipeButton);
+        flagIcon=view.findViewById(R.id.randomMealFlagIcon);
         progressBar=view.findViewById(R.id.progressBar);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
@@ -80,12 +88,9 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
         recyclerView.setAdapter(myAdapter);
         randomMealImg.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        presenter=PresenterImpl.getInstance( MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource()),this);
+        presenter=new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())),this);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
-
-
-
 
         refreshButton.setOnClickListener((v)->{
 
@@ -98,7 +103,7 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
 
              HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
                      HomeFragmentDirections.actionHomeFragmentToDetailsFragment(randomMeal);
-             Navigation.findNavController(getView()).navigate(action);
+             Navigation.findNavController(requireView()).navigate(action);
          }
 
         });
@@ -106,6 +111,17 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("TAG", "onResume: hiiiii Home" );
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("TAG", "onDestroy: hiiiii Home");
+    }
 
     @Override
     public void getRandomMeal(Meal meal) {
@@ -115,7 +131,10 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
         randomMealArea.setText(meal.getStrArea());
         progressBar.setVisibility(View.GONE);
         randomMealImg.setVisibility(View.VISIBLE);
-        Glide.with(this).load(meal.getStrMealThumb()).into(randomMealImg);
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(randomMealImg);
+        Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
+        String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
+        Glide.with(requireContext()).load("https://flagsapi.com/"+countryCode.toUpperCase()+"/flat/64.png").into(flagIcon);
 
     }
 
@@ -128,6 +147,12 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
 
     @Override
     public void onFailure(String errorMessage) {
+        Snackbar snackbar = Snackbar
+                .make( requireView(),errorMessage, Snackbar.LENGTH_LONG);
+        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+        snackbar.show();
+
+
 
     }
 
@@ -137,7 +162,7 @@ public class HomeFragment extends Fragment implements ViewInterface , Listener {
 
         HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
                 HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal);
-        Navigation.findNavController(getView()).navigate(action);
+        Navigation.findNavController(requireView()).navigate(action);
 
 
     }

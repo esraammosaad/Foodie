@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.home.view;
+package com.example.foodplannerapp.favorite.view;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.data.local.model.MealLocalModel;
 import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.favorite.view.Listener;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     Context context;
-    List<Meal> mealsList;
+    List<MealLocalModel> mealsList;
     Listener listener;
 
-    public void setMealsList(List<Meal> mealsList) {
+    public void setMealsList(List<MealLocalModel> mealsList) {
         this.mealsList = mealsList;
     }
 
@@ -52,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        }
    }
 
-   public RecyclerViewAdapter(Context context, List<Meal> mealsList, Listener listener){
+   public RecyclerViewAdapter(Context context, List<MealLocalModel> mealsList, Listener listener){
 
        this.context=context;
        this.mealsList=mealsList;
@@ -66,7 +66,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerview, int viewType) {
 
         LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
-        View view = layoutInflater.inflate(R.layout.item_layout,recyclerview,false);
+        View view = layoutInflater.inflate(R.layout.fav_item_layout,recyclerview,false);
         ViewHolder viewHolder=new ViewHolder(view);
 
 
@@ -75,7 +75,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Meal meal=mealsList.get(position);
+        MealLocalModel meal=mealsList.get(position);
         holder.mealName.setText(meal.getStrMeal());
         holder.mealArea.setText(meal.getStrArea());
         holder.mealCategory.setText(meal.getStrCategory());
@@ -85,7 +85,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Glide.with(context).load("https://flagsapi.com/"+countryCode.toUpperCase()+"/flat/64.png").into(holder.mealCountryFlagIcon);
         holder.mealImage.setOnClickListener((v)->{
 
-            listener.onClickListener(mealsList.get(position));
+//            listener.onClickListener(mealsList.get(position));
         });
 
     }

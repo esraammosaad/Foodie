@@ -2,17 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#FFFFFF"
     android:backgroundTint="#FFFFFF"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="9dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/mealCardView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="4dp"
         android:foregroundGravity="center"
@@ -26,7 +24,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:foregroundGravity="center"
             android:padding="8dp"
@@ -34,10 +32,11 @@
 
             <ImageView
                 android:id="@+id/ingredientImg"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
                 android:backgroundTint="#FFFFFF"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.036"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/pancakes" />
@@ -46,62 +45,86 @@
                 android:id="@+id/ingredientName"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
+                android:layout_gravity="top|left"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/inter_medium"
+                android:fontFamily="@font/inter_bold"
                 android:forceHasOverlappingRendering="true"
-                android:gravity="center"
+                android:gravity="left"
                 android:maxEms="10"
                 android:maxLines="1"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="@+id/ingredientImg"
-                app:layout_constraintStart_toStartOf="@+id/ingredientImg"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientImg"
+                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="PancakesPancakesPancakesPancakesPancakes" />
 
             <TextView
                 android:id="@+id/ingredientMeasure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_light"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/inter_medium"
                 android:textColor="@color/textColor"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/ingredientName"
-                app:layout_constraintStart_toStartOf="@+id/ingredientName"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientName"
+                app:layout_constraintStart_toEndOf="@+id/ingredientMeasure2"
+                app:layout_constraintTop_toTopOf="@+id/ingredientMeasure2"
                 tools:text="Dessert" />
+
+            <TextView
+                android:id="@+id/ingredientMeasure2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="@string/symbol"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/mealArea"
+                app:layout_constraintTop_toTopOf="@+id/mealArea" />
 
             <TextView
                 android:id="@+id/mealArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/inter_light"
+                android:fontFamily="@font/inter_medium"
                 android:maxEms="14"
                 android:maxLines="1"
                 android:paddingLeft="18dp"
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientMeasure"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintTop_toBottomOf="@+id/ingredientName"
                 tools:text="American" />
 
             <ImageView
                 android:id="@+id/mealCountryFlagIcon"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/mealArea"
                 app:layout_constraintEnd_toEndOf="@+id/mealArea"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/mealArea"
-                app:layout_constraintTop_toTopOf="@+id/mealArea" />
+                app:layout_constraintTop_toTopOf="@+id/mealArea"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.976"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_favorite_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

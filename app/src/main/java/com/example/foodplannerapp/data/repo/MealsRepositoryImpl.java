@@ -1,6 +1,10 @@
 package com.example.foodplannerapp.data.repo;
 
+
+import androidx.lifecycle.LiveData;
+
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.local.model.MealLocalModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
@@ -15,16 +19,18 @@ public class MealsRepositoryImpl {
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
 
-   private static MealsRepositoryImpl instance;
+
+    private static MealsRepositoryImpl instance;
+
 
     private MealsRepositoryImpl(MealsRemoteDataSource mealsRemoteDataSource, MealsLocalDataSource mealsLocalDataSource) {
         this.mealsRemoteDataSource = mealsRemoteDataSource;
-        this.mealsLocalDataSource = mealsLocalDataSource;
+        this.mealsLocalDataSource=mealsLocalDataSource;
     }
     public static MealsRepositoryImpl getInstance(MealsRemoteDataSource mealsRemoteDataSource, MealsLocalDataSource mealsLocalDataSource){
         if(instance==null){
 
-            instance = new MealsRepositoryImpl(mealsRemoteDataSource, mealsLocalDataSource);
+            instance = new MealsRepositoryImpl(mealsRemoteDataSource,mealsLocalDataSource);
         }
 
         return instance;
@@ -47,7 +53,7 @@ public class MealsRepositoryImpl {
 
     }
 
-    public List<Ingredient> getIngredientsList(Meal meal){
+    public ArrayList<Ingredient> getIngredientsList(Meal meal){
         ArrayList<String>ingredients=new ArrayList<>();
         ArrayList<String>measures=new ArrayList<>();
         ArrayList<Ingredient>ingredientsList=new ArrayList<>();
@@ -104,6 +110,20 @@ public class MealsRepositoryImpl {
 
         return ingredientsList;
     }
+
+    public void addMealToFavorite(MealLocalModel meal){
+
+        mealsLocalDataSource.addMealToDB(meal);
+    }
+    public void deleteMealFromFavorite(MealLocalModel meal){
+
+        mealsLocalDataSource.deleteMealFromDB(meal);
+    }
+
+    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(){
+        return mealsLocalDataSource.getAllMeals();
+    }
+
 
 
 }

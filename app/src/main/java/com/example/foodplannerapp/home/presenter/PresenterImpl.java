@@ -13,25 +13,15 @@ import java.util.List;
 public class PresenterImpl implements NetworkCallBack {
 
     MealsRepositoryImpl mealsRepository;
-    private static PresenterImpl instance = null;
     ViewInterface viewInterface;
 
-    private PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
+    public PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
 
         this.mealsRepository = mealsRepository;
         this.viewInterface=viewInterface;
     }
 
-    public static PresenterImpl getInstance(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
 
-        if (instance == null) {
-
-            instance = new PresenterImpl(mealsRepository,viewInterface);
-        }
-
-        return instance;
-
-    }
 
     public void getRandomMeal(){
 

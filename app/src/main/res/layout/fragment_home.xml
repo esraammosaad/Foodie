@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".home.view.HomeFragment" >
+    tools:context=".home.view.HomeFragment"
+    >
 
     <ScrollView
         android:layout_width="match_parent"
@@ -167,11 +168,10 @@
 
             <ImageView
                 android:id="@+id/randomMealFlagIcon"
-                android:layout_width="17dp"
-                android:layout_height="17dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:layout_marginTop="11dp"
                 android:layout_marginEnd="2dp"
-                android:src="@drawable/flag"
                 app:layout_constraintEnd_toStartOf="@+id/randomMealAreaText"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -268,6 +268,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginBottom="100dp"
+                android:isScrollContainer="false"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintHorizontal_bias="0.0"

@@ -1,31 +1,14 @@
 package com.example.foodplannerapp;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
-
-import com.example.foodplannerapp.data.models.AllCategoriesResponse;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.models.MealModel;
-import com.example.foodplannerapp.view_model.HomeViewModel;
-import com.example.foodplannerapp.view_model.MealDetailsViewModel;
-import com.example.foodplannerapp.view_model.SearchViewModel;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.ApiException;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.GoogleAuthProvider;
 
-import retrofit2.Call;
 
 public class MainActivity extends AppCompatActivity {
 

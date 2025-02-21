@@ -35,7 +35,8 @@ android {
 
 dependencies {
 
-
+    implementation ("androidx.room:room-runtime:2.6.1")
+    annotationProcessor ("androidx.room:room-compiler:2.6.1")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
@@ -45,7 +46,6 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation ("com.airbnb.android:lottie:5.2.0")
-    implementation("com.ramotion.paperonboarding:paper-onboarding:1.1.3")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)

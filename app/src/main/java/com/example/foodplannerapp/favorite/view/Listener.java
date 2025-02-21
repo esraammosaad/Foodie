@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.home.view;
+package com.example.foodplannerapp.favorite.view;
 
 import com.example.foodplannerapp.data.models.Meal;
 

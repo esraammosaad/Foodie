@@ -1,28 +1,11 @@
 package com.example.foodplannerapp.authentication.data.network;
 
 import static android.app.Activity.RESULT_OK;
-import static android.provider.Settings.System.getString;
-
-import static androidx.activity.result.ActivityResultCallerKt.registerForActivityResult;
-
 import android.content.Context;
-import android.content.Intent;
 import android.util.Log;
-import android.widget.Toast;
-
 import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.navigation.Navigation;
-
 import com.example.foodplannerapp.R;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -48,15 +31,14 @@ public class UserAuthentication {
         firebaseAuth = FirebaseAuth.getInstance();
         currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            System.out.println(currentUser.getEmail()+"Auth");
-                currentUser.getIdToken(true)
-                        .addOnCompleteListener(task -> {
-                            if (task.isSuccessful()) {
-                                Log.d("Auth", "Token refreshed");
-                            } else {
-                                Log.e("Auth", "Token refresh failed: " + task.getException());
-                            }
-                        });
+//                currentUser.getIdToken(true)
+//                        .addOnCompleteListener(task -> {
+//                            if (task.isSuccessful()) {
+//                                Log.d("Auth", "Token refreshed");
+//                            } else {
+//                                Log.e("Auth", "Token refresh failed: " + task.getException());
+//                            }
+//                        });
 
         }
 
