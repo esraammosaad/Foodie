@@ -1,6 +1,5 @@
 package com.example.foodplannerapp.favorite.view;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,7 +17,7 @@ import android.view.ViewGroup;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
-import com.example.foodplannerapp.data.local.model.MealLocalModel;
+import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
@@ -33,7 +32,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
     RecyclerViewAdapter myAdapter;
     RecyclerView recyclerView;
     PresenterImpl presenter;
-    LiveData<List<MealLocalModel>> mealList;
+    LiveData<List<FavoriteMealModel>> mealList;
 
 
     public FavoriteFragment() {
@@ -67,11 +66,11 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
         recyclerView.setAdapter(myAdapter);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
         mealList = presenter.getAllFavoriteMeals(UserAuthentication.getInstance().getCurrentUser().getUid());
-        mealList.observe(getViewLifecycleOwner(), new Observer<List<MealLocalModel>>() {
+        mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
             @Override
-            public void onChanged(List<MealLocalModel> mealLocalModels) {
+            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
 
-                myAdapter.setMealsList(mealLocalModels);
+                myAdapter.setMealsList(favoriteMealModels);
                 myAdapter.notifyDataSetChanged();
 
 
@@ -83,7 +82,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
 
 
     @Override
-    public void onClickListener(MealLocalModel meal) {
+    public void onClickListener(FavoriteMealModel meal) {
         presenter.deleteMealFromFavorite(meal);
         Snackbar snackbar = Snackbar
                 .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setActionTextColor(

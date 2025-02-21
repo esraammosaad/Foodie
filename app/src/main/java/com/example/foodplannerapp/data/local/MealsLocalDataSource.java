@@ -4,13 +4,13 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodplannerapp.data.local.model.MealLocalModel;
+import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 import java.util.List;
 
 public class MealsLocalDataSource {
     MealsDao mealsDao;
-    LiveData<List<MealLocalModel>> mealsList;
+    LiveData<List<FavoriteMealModel>> mealsList;
 
     public MealsLocalDataSource(Context context) {
         MyDataBase myDataBase = MyDataBase.getInstance(context);
@@ -20,29 +20,29 @@ public class MealsLocalDataSource {
 
     }
 
-    public void addMealToDB(MealLocalModel mealLocalModel) {
+    public void addMealToDB(FavoriteMealModel favoriteMealModel) {
         new Thread(
 
                 () -> {
-                    mealsDao.insertMeal(mealLocalModel);
+                    mealsDao.insertMeal(favoriteMealModel);
                 }
         ).start();
 
 
     }
 
-    public void deleteMealFromDB(MealLocalModel mealLocalModel) {
+    public void deleteMealFromDB(FavoriteMealModel favoriteMealModel) {
         new Thread(
 
                 () -> {
-                    mealsDao.deleteMeal(mealLocalModel);
+                    mealsDao.deleteMeal(favoriteMealModel);
                 }
         ).start();
 
 
     }
 
-    public LiveData<List<MealLocalModel>> getAllMeals(String userUID) {
+    public LiveData<List<FavoriteMealModel>> getAllMeals(String userUID) {
         mealsList = mealsDao.getAllMeals(userUID);
         return mealsList;
     }

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 
 @Entity(tableName = "meal_table")
-public class MealLocalModel {
+public class FavoriteMealModel {
     @PrimaryKey
     @NonNull
     private String idMeal;
@@ -25,7 +25,7 @@ public class MealLocalModel {
 
 
 
-    public MealLocalModel(String idMeal, String userUID,String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
+    public FavoriteMealModel(String idMeal, String userUID, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
         this.idMeal = idMeal;
         this.userUID=userUID;
         this.strMeal = strMeal;

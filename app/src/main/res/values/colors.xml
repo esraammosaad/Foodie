@@ -3,6 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primaryColor">#F8D76F</color>
+    <color name="secondaryColor">#CCF8D76F</color>
     <color name="textSecondaryColor">#F4EFEF</color>
     <color name="buttonColor">#4B4122</color>
     <color name="textColor">#606060</color>

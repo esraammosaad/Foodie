@@ -4,7 +4,8 @@ package com.example.foodplannerapp.data.repo;
 import androidx.lifecycle.LiveData;
 
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
-import com.example.foodplannerapp.data.local.model.MealLocalModel;
+import com.example.foodplannerapp.data.local.model.CalenderMealModel;
+import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
@@ -111,17 +112,22 @@ public class MealsRepositoryImpl {
         return ingredientsList;
     }
 
-    public void addMealToFavorite(MealLocalModel meal){
+    public void addMealToFavorite(FavoriteMealModel meal){
 
         mealsLocalDataSource.addMealToDB(meal);
     }
-    public void deleteMealFromFavorite(MealLocalModel meal){
+    public void deleteMealFromFavorite(FavoriteMealModel meal){
 
         mealsLocalDataSource.deleteMealFromDB(meal);
     }
 
-    public LiveData<List<MealLocalModel>> getAllFavoriteMeals(String userUID){
+    public LiveData<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID){
         return mealsLocalDataSource.getAllMeals(userUID);
+    }
+
+    public void addMealToCalender(CalenderMealModel meal){
+
+
     }
 
 

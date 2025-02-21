@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.data.local.model.MealLocalModel;
+import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.List;
@@ -22,10 +22,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     Context context;
-    List<MealLocalModel> mealsList;
+    List<FavoriteMealModel> mealsList;
     FavoriteListener listener;
 
-    public void setMealsList(List<MealLocalModel> mealsList) {
+    public void setMealsList(List<FavoriteMealModel> mealsList) {
         this.mealsList = mealsList;
     }
 
@@ -54,7 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        }
    }
 
-   public RecyclerViewAdapter(Context context, List<MealLocalModel> mealsList, FavoriteListener listener){
+   public RecyclerViewAdapter(Context context, List<FavoriteMealModel> mealsList, FavoriteListener listener){
 
        this.context=context;
        this.mealsList=mealsList;
@@ -77,7 +77,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MealLocalModel meal=mealsList.get(position);
+        FavoriteMealModel meal=mealsList.get(position);
         holder.mealName.setText(meal.getStrMeal());
         holder.mealArea.setText(meal.getStrArea());
         holder.mealCategory.setText(meal.getStrCategory());

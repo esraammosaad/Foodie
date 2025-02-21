@@ -4,10 +4,12 @@ import android.content.Context;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import com.example.foodplannerapp.data.local.model.MealLocalModel;
+
+import com.example.foodplannerapp.data.local.model.CalenderMealModel;
+import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 
-@Database(entities = {MealLocalModel.class}, version = 1, exportSchema = false)
+@Database(entities = {FavoriteMealModel.class, CalenderMealModel.class}, version = 1, exportSchema = false)
 public abstract class MyDataBase extends RoomDatabase {
     private static MyDataBase instance = null;
 

@@ -2,10 +2,11 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.FoodPlannerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimary">@color/primaryColor</item>
 
 
     </style>
+
     <style name="text_field">
         <item name="android:layout_height">60dp</item>
         <item name="android:layout_marginLeft">20dp</item>
@@ -14,6 +15,7 @@
         <item name="android:background">@drawable/rounded_edit_text</item>
         <item name="android:padding">10dp</item>
     </style>
+
     <style name="button">
         <item name="android:background">@drawable/main_button_layout</item>
         <item name="android:layout_height">58dp</item>
@@ -24,6 +26,7 @@
 
 
     </style>
+
     <style name="secondary_button" parent="Widget.Material3.Button">
         <item name="android:background">@drawable/secondary_button_layout</item>
         <item name="android:layout_height">58dp</item>
@@ -34,6 +37,7 @@
         <item name="android:textSize">16sp</item>
 
     </style>
+
     <style name="home_button" parent="Widget.Material3.Button">
         <item name="android:background">@drawable/secondary_button_layout</item>
         <item name="android:layout_height">58dp</item>
@@ -48,6 +52,22 @@
     </style>
 
 
+    <style name="dialog_theme" parent="Theme.Material3.DayNight.Dialog">
+        <item name="colorAccent">@color/secondaryColor</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:background">@color/textSecondaryColor</item>
+        <item name="android:dateTextAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:theme">@style/CalenderViewDateCustomText</item>
+        <item name="android:datePickerMode">spinner</item>
+        <item name="android:weekDayTextAppearance">@style/TextAppearance.AppCompat.Body2</item>
+    </style>
+
+    <style name="CalenderViewDateCustomText">
+        <item name="colorControlNormal">@color/secondaryColor</item>
+        <item name="colorControlActivated">@color/secondaryColor</item>
+        <item name="colorControlHighlight">@color/secondaryColor</item>
+        <item name="android:textColor">@drawable/calender_view</item>
+    </style>
 
 
     <style name="Theme.FoodPlannerApp" parent="Base.Theme.FoodPlannerApp" />
