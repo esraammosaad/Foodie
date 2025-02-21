@@ -20,7 +20,7 @@ public interface MealsDao {
     @Delete
     void deleteMeal(FavoriteMealModel favoriteMealModel);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMealToCalendar(CalenderMealModel calenderMealModel);
 
     @Delete
@@ -29,6 +29,6 @@ public interface MealsDao {
     @Query("select * from meal_table where userUID= :userUID")
     LiveData<List<FavoriteMealModel>> getAllMeals(String userUID);
 
-    @Query("select * from calendar_meal_table where userUID= :userUID")
-    LiveData<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID);
+    @Query("select * from calendar_meal_table where userUID= :userUID AND day= :day AND month= :month AND year= :year")
+    LiveData<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID,int day , int month , int year);
 }

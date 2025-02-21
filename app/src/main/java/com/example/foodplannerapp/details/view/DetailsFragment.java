@@ -27,6 +27,7 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
@@ -160,15 +161,15 @@ public class DetailsFragment extends Fragment {
 
             DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
                     (view1, selectedYear, selectedMonth, selectedDay) -> {
-                        String date = selectedYear + "/" + (selectedMonth + 1) + "/" + selectedDay;
-                        Toast.makeText(requireContext(), date, Toast.LENGTH_SHORT).show();
+                        CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+                        presenter.addMealToCalendar(calenderMeal);
                     },
                     year, month, day);
 
 
             dialog.setOnShowListener(d -> {
-                dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R. color. black));
-                dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R. color. black));
+                dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
+                dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.black));
             });
 
             dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);

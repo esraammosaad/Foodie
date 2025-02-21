@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 import java.util.List;
@@ -15,7 +16,6 @@ public class MealsLocalDataSource {
     public MealsLocalDataSource(Context context) {
         MyDataBase myDataBase = MyDataBase.getInstance(context);
         mealsDao = myDataBase.getDAO();
-
 
 
     }
@@ -45,6 +45,32 @@ public class MealsLocalDataSource {
     public LiveData<List<FavoriteMealModel>> getAllMeals(String userUID) {
         mealsList = mealsDao.getAllMeals(userUID);
         return mealsList;
+    }
+
+    public void addMealToCalendar(CalenderMealModel meal) {
+
+        new Thread(
+                () -> {
+
+                    mealsDao.insertMealToCalendar(meal);
+                }
+
+        ).start();
+    }
+
+    public void deleteMealFromCalendar(CalenderMealModel meal) {
+
+        new Thread(
+                () -> {
+
+                    mealsDao.deleteMeal(meal);
+                }
+
+        ).start();
+    }
+
+    public LiveData<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID, int day, int month, int year) {
+        return mealsDao.getAllMealsFromCalendar(userUID, day, month, year);
     }
 
 }

@@ -26,38 +26,38 @@ public class MealsRepositoryImpl {
 
     private MealsRepositoryImpl(MealsRemoteDataSource mealsRemoteDataSource, MealsLocalDataSource mealsLocalDataSource) {
         this.mealsRemoteDataSource = mealsRemoteDataSource;
-        this.mealsLocalDataSource=mealsLocalDataSource;
+        this.mealsLocalDataSource = mealsLocalDataSource;
     }
-    public static MealsRepositoryImpl getInstance(MealsRemoteDataSource mealsRemoteDataSource, MealsLocalDataSource mealsLocalDataSource){
-        if(instance==null){
 
-            instance = new MealsRepositoryImpl(mealsRemoteDataSource,mealsLocalDataSource);
+    public static MealsRepositoryImpl getInstance(MealsRemoteDataSource mealsRemoteDataSource, MealsLocalDataSource mealsLocalDataSource) {
+        if (instance == null) {
+
+            instance = new MealsRepositoryImpl(mealsRemoteDataSource, mealsLocalDataSource);
         }
 
         return instance;
 
     }
 
-    public void getRandomMeal(NetworkCallBack networkCallBack){
+    public void getRandomMeal(NetworkCallBack networkCallBack) {
 
 
         mealsRemoteDataSource.getRandomMeal(networkCallBack);
 
 
-
     }
 
-    public void getMealsByFirstLetter(NetworkCallBack networkCallBack){
+    public void getMealsByFirstLetter(NetworkCallBack networkCallBack) {
 
         mealsRemoteDataSource.getMealsByFirstLetter(networkCallBack);
 
 
     }
 
-    public ArrayList<Ingredient> getIngredientsList(Meal meal){
-        ArrayList<String>ingredients=new ArrayList<>();
-        ArrayList<String>measures=new ArrayList<>();
-        ArrayList<Ingredient>ingredientsList=new ArrayList<>();
+    public ArrayList<Ingredient> getIngredientsList(Meal meal) {
+        ArrayList<String> ingredients = new ArrayList<>();
+        ArrayList<String> measures = new ArrayList<>();
+        ArrayList<Ingredient> ingredientsList = new ArrayList<>();
         ingredients.add(meal.getStrIngredient1());
         measures.add(meal.getStrMeasure1());
         ingredients.add(meal.getStrIngredient2());
@@ -102,8 +102,8 @@ public class MealsRepositoryImpl {
 
             if (ingredients.get(i) != null && measures.get(i) != null && !ingredients.get(i).isEmpty() && !measures.get(i).isEmpty()) {
 
-                ingredientsList.add(new Ingredient("https://www.themealdb.com/images/ingredients/"+ingredients.get(i)+".png",ingredients.get(i),measures.get(i)));
-                System.out.println(ingredientsList.get(i).getIngredient()+"=======================");
+                ingredientsList.add(new Ingredient("https://www.themealdb.com/images/ingredients/" + ingredients.get(i) + ".png", ingredients.get(i), measures.get(i)));
+                System.out.println(ingredientsList.get(i).getIngredient() + "=======================");
 
             }
         }
@@ -112,24 +112,40 @@ public class MealsRepositoryImpl {
         return ingredientsList;
     }
 
-    public void addMealToFavorite(FavoriteMealModel meal){
+    public void addMealToFavorite(FavoriteMealModel meal) {
 
         mealsLocalDataSource.addMealToDB(meal);
     }
-    public void deleteMealFromFavorite(FavoriteMealModel meal){
+
+    public void deleteMealFromFavorite(FavoriteMealModel meal) {
 
         mealsLocalDataSource.deleteMealFromDB(meal);
     }
 
-    public LiveData<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID){
+    public LiveData<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID) {
         return mealsLocalDataSource.getAllMeals(userUID);
     }
 
-    public void addMealToCalender(CalenderMealModel meal){
+    public void addMealToCalender(CalenderMealModel meal) {
+
+
+        mealsLocalDataSource.addMealToCalendar(meal);
 
 
     }
 
+    public void deleteMealFromCalender(CalenderMealModel meal) {
+
+
+        mealsLocalDataSource.deleteMealFromCalendar(meal);
+
+
+    }
+
+    public LiveData<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day , int month , int year) {
+
+        return mealsLocalDataSource.getAllMealsFromCalendar(userUID,day , month, year);
+    }
 
 
 }
