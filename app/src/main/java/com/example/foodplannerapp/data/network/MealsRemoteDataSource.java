@@ -126,6 +126,7 @@ public class MealsRemoteDataSource {
         call.enqueue(new Callback<AllAreasResponse>() {
             @Override
             public void onResponse(Call<AllAreasResponse> call, Response<AllAreasResponse> response) {
+
                 if (response.isSuccessful())
                     networkCallBack.onSuccess(null, response.body().getAreas());
                 else

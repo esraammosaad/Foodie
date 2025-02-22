@@ -35,6 +35,8 @@ public class PresenterImpl implements NetworkCallBack {
     @Override
     public void onSuccess(Meal meal, List list) {
 
+        if(list!=null)
+
         viewInterface.onSuccess(list);
 
     }

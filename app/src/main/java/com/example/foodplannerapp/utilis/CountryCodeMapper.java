@@ -37,9 +37,10 @@ public class CountryCodeMapper {
         countryCodeMap.put("Algerian", "dz");
         countryCodeMap.put("Tunisian", "tn");
         countryCodeMap.put("Polish", "pl");
-        countryCodeMap.put("Philippines", "ph");
+        countryCodeMap.put("Filipino", "ph");
         countryCodeMap.put("Ukrainian", "ua");
         countryCodeMap.put("Uruguayan", "uy");
+        countryCodeMap.put("Kenyan", "kn");
         return countryCodeMap;
     }
 }

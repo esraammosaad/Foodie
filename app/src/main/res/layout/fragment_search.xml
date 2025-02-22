@@ -91,7 +91,7 @@
             <View
                 android:id="@+id/filterIcon"
                 style="@style/text_field"
-                android:layout_width="58dp"
+                android:layout_width="60dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginTop="40dp"
@@ -115,9 +115,10 @@
                 android:id="@+id/searchRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginRight="20dp"
+                android:isScrollContainer="false"
                 android:paddingBottom="100dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
@@ -133,6 +134,18 @@
                 android:textSize="24dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toBottomOf="@+id/searchTextField" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="45dp"
+                android:layout_height="49dp"
+                android:backgroundTint="#00000000"
+                app:layout_constraintBottom_toTopOf="@+id/searchRecyclerView"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintHorizontal_bias="0.708"
+                app:layout_constraintStart_toEndOf="@+id/searchTextField"
+                app:layout_constraintTop_toTopOf="@+id/filterIcon"
+                app:layout_constraintVertical_bias="0.145" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

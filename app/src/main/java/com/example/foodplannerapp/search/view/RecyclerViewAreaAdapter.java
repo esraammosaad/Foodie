@@ -41,7 +41,7 @@ public class RecyclerViewAreaAdapter extends RecyclerView.Adapter<RecyclerViewAr
             super(itemView);
             this.itemView=itemView;
             areaImage =itemView.findViewById(R.id.searchImg);
-             areaName=itemView.findViewById(R.id.searchName);
+            areaName=itemView.findViewById(R.id.searchName);
 
 
         }
