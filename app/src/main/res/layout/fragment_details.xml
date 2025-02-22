@@ -71,7 +71,7 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="125dp"
+                android:layout_height="135dp"
                 android:background="#59878787"
                 app:layout_constraintBottom_toBottomOf="@+id/detailsMealImage"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -82,11 +82,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="8dp"
                 android:fontFamily="@font/inter_bold"
                 android:textColor="#FFFFFF"
                 android:textSize="26sp"
-                app:layout_constraintEnd_toStartOf="@+id/addToCalendarBtn"
-                app:layout_constraintHorizontal_bias="0.011"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toTopOf="@+id/view"
                 tools:text="Pancakes" />
@@ -133,12 +134,13 @@
             <ImageView
                 android:id="@+id/flagIconDetails"
                 android:layout_width="20dp"
-                android:layout_height="22dp"
-                android:layout_marginTop="5dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="4dp"
                 android:layout_marginEnd="3dp"
                 app:layout_constraintEnd_toStartOf="@+id/mealAreaDetails"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
-                app:layout_constraintTop_toTopOf="@+id/mealAreaDetails" />
+                app:layout_constraintTop_toTopOf="@+id/mealAreaDetails"
+                tools:srcCompat="@drawable/f" />
 
             <Button
                 android:id="@+id/addToCalendarBtn"

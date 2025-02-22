@@ -3,6 +3,7 @@ package com.example.foodplannerapp.data.repo;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
@@ -10,6 +11,7 @@ import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.network.NetworkCallBack;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class MealsRepositoryImpl {
 
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
+
 
 
     private static MealsRepositoryImpl instance;
@@ -103,7 +106,6 @@ public class MealsRepositoryImpl {
             if (ingredients.get(i) != null && measures.get(i) != null && !ingredients.get(i).isEmpty() && !measures.get(i).isEmpty()) {
 
                 ingredientsList.add(new Ingredient("https://www.themealdb.com/images/ingredients/" + ingredients.get(i) + ".png", ingredients.get(i), measures.get(i)));
-                System.out.println(ingredientsList.get(i).getIngredient() + "=======================");
 
             }
         }
@@ -146,6 +148,13 @@ public class MealsRepositoryImpl {
 
         return mealsLocalDataSource.getAllMealsFromCalendar(userUID,day , month, year);
     }
+
+
+    public FirebaseUser getCurrentUser(){
+
+        return UserAuthentication.getInstance().getCurrentUser();
+    }
+
 
 
 }

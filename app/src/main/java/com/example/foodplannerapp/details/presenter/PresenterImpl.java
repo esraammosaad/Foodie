@@ -16,13 +16,11 @@ import java.util.List;
 public class PresenterImpl {
 
     MealsRepositoryImpl mealsRepository;
-    AuthenticationRepositoryImpl authenticationRepository;
 
 
-    public PresenterImpl(MealsRepositoryImpl mealsRepository, AuthenticationRepositoryImpl authenticationRepository) {
+    public PresenterImpl(MealsRepositoryImpl mealsRepository) {
 
         this.mealsRepository = mealsRepository;
-        this.authenticationRepository=authenticationRepository;
     }
 
 
@@ -44,10 +42,7 @@ public class PresenterImpl {
         return mealsRepository.getAllFavoriteMeals(userUID);
     }
 
-    public FirebaseUser getCurrentUser(){
 
-        return authenticationRepository.getCurrentUser();
-    }
 
     public void addMealToCalendar(CalenderMealModel meal){
 
@@ -60,6 +55,11 @@ public class PresenterImpl {
     public LiveData<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day , int month , int year){
 
         return mealsRepository.getAllCalendarMeals(userUID, day, month, year);
+    }
+
+    public FirebaseUser getCurrentUser(){
+
+        return mealsRepository.getCurrentUser();
     }
 
 

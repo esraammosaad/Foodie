@@ -4,17 +4,21 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+
 import com.example.foodplannerapp.data.models.Ingredient;
+
 import java.util.ArrayList;
 
-@Entity(tableName = "calendar_meal_table")
+@Entity(tableName = "calendar_meal_table", primaryKeys = {"idMeal", "day", "month", "year"})
 public class CalenderMealModel {
 
-    @PrimaryKey
     @NonNull
     private String idMeal;
+    @NonNull
     private int day;
+    @NonNull
     private int month;
+    @NonNull
     private int year;
     private String userUID;
     private String strMeal;

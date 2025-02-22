@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -31,6 +32,11 @@ public class PresenterImpl {
 
         mealsRepository.addMealToFavorite(meal);
 
+    }
+
+    public FirebaseUser getCurrentUser(){
+
+        return mealsRepository.getCurrentUser();
     }
 
 

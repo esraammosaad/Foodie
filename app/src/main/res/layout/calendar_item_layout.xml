@@ -1,6 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:backgroundTint="#FFFFFF"
+    android:paddingBottom="8dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/mealCardView"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:elevation="4dp"
+        android:foregroundGravity="center"
+        app:cardBackgroundColor="#F5F5F5"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:layout_gravity="center"
+            android:foregroundGravity="center">
+
+            <ImageView
+                android:id="@+id/ingredientImg"
+                android:layout_width="130dp"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/pancakes" />
+
+            <TextView
+                android:id="@+id/ingredientName"
+                android:layout_width="140dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|left"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_medium"
+                android:forceHasOverlappingRendering="true"
+                android:gravity="left"
+                android:maxEms="10"
+                android:maxLines="1"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="PancakesPancakesPancakesPancakesPancakes" />
+
+            <TextView
+                android:id="@+id/instructionsText"
+                android:layout_width="0dp"
+                android:layout_height="51dp"
+                android:layout_gravity="top|left"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="16dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_light"
+                android:forceHasOverlappingRendering="true"
+                android:gravity="left"
+                android:maxEms="80"
+                android:maxLines="3"
+                android:textColor="@color/textColor"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintTop_toBottomOf="@+id/ingredientName"
+                tools:text="Bring a large pot of water to a boil. Add kosher salt to the boiling water, then add the pasta. Cook according to the package instructions, about 9 minutes.\r\nIn a large skillet over medium-high heat, add the olive oil and heat until the oil starts to shimmer. Add the garlic and cook, stirring, until fragrant, 1 to 2 minutes. Add the chopped tomatoes, red chile flakes, Italian seasoning and salt and pepper to taste. Bring to a boil and cook for 5 minutes. Remove from the heat and add the chopped basil.\r\nDrain the pasta and add it to the sauce. Garnish with Parmigiano-Reggiano flakes and more basil and serve warm.&quot;" />
+
+            <TextView
+                android:id="@+id/ingredientMeasure"
+                android:layout_width="57dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/inter_semibold"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/ingredientMeasure3"
+                app:layout_constraintTop_toTopOf="@+id/ingredientMeasure3"
+                tools:text="Dessert" />
+
+            <TextView
+                android:id="@+id/ingredientMeasure3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/symbol"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/mealArea"
+                app:layout_constraintTop_toTopOf="@+id/mealArea" />
+
+            <TextView
+                android:id="@+id/mealArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_semibold"
+                android:maxEms="14"
+                android:maxLines="1"
+                android:paddingLeft="18dp"
+                android:textAlignment="center"
+                android:textColor="@color/textColor"
+                android:textSize="14sp"
+                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintTop_toBottomOf="@+id/instructionsText"
+                tools:text="American" />
+
+            <ImageView
+                android:id="@+id/mealCountryFlagIcon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/mealArea"
+                app:layout_constraintEnd_toEndOf="@+id/mealArea"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/mealArea"
+                app:layout_constraintTop_toTopOf="@+id/mealArea" />
+
+            <ImageView
+                android:id="@+id/removeIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/baseline_remove_24" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

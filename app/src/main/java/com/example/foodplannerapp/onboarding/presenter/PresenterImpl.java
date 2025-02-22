@@ -1,6 +1,7 @@
 package com.example.foodplannerapp.onboarding.presenter;
 
 import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
+import com.google.firebase.auth.FirebaseUser;
 
 public class PresenterImpl {
 
@@ -27,4 +28,6 @@ public class PresenterImpl {
 
         return onBoardingRepository.getOnBoardingState();
     }
+
+
 }

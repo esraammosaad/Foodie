@@ -9,20 +9,16 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
 import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +61,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(myAdapter);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
-        mealList = presenter.getAllFavoriteMeals(UserAuthentication.getInstance().getCurrentUser().getUid());
+        mealList = presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
         mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
             @Override
             public void onChanged(List<FavoriteMealModel> favoriteMealModels) {

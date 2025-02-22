@@ -20,12 +20,9 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
-import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
@@ -94,7 +91,7 @@ public class DetailsFragment extends Fragment {
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()));
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
         Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
         ingredientsList = presenter.getIngredients(meal);
         loadVideo(meal);
@@ -138,7 +135,7 @@ public class DetailsFragment extends Fragment {
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
         favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-        presenter.getAllFavoriteMeals(UserAuthentication.getInstance().getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
+        presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
             @Override
             public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
                 isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
@@ -161,8 +158,19 @@ public class DetailsFragment extends Fragment {
 
             DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
                     (view1, selectedYear, selectedMonth, selectedDay) -> {
-                        CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+                        CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth+1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
                         presenter.addMealToCalendar(calenderMeal);
+                        Snackbar snackbar = Snackbar
+                                .make(requireView(), "Meal is added to calendar", Snackbar.LENGTH_LONG).setActionTextColor(
+                                        getResources().getColor(R.color.primaryColor)
+                                ).setTextColor(getResources().getColor(R.color.white))
+                                .setAction("UNDO", view2 -> {
+                                    presenter.deleteMealFromCalendar(calenderMeal);
+
+                                });
+
+
+                        snackbar.show();
                     },
                     year, month, day);
 

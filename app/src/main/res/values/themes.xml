@@ -3,8 +3,6 @@
     <style name="Base.Theme.FoodPlannerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
-
-
     </style>
 
     <style name="text_field">
