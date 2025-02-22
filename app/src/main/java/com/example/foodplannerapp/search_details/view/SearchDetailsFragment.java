@@ -30,7 +30,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface{
+public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface {
 
     ImageView imageView;
     TextView textView;
@@ -65,31 +65,31 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         textView = view.findViewById(R.id.mealNameDetails);
         resultsCount = view.findViewById(R.id.countOfResults);
         searchEditText = view.findViewById(R.id.searchTextFieldDetails);
-        backIcon=view.findViewById(R.id.backIconSearch);
-        backIcon.setOnClickListener((v)->{
+        backIcon = view.findViewById(R.id.backIconSearch);
+        backIcon.setOnClickListener((v) -> {
 
             Navigation.findNavController(view).navigateUp();
         });
         recyclerView = view.findViewById(R.id.searchDetailsRecyclerView);
         textView.setText(SearchDetailsFragmentArgs.fromBundle(getArguments()).getName());
         Glide.with(getContext()).load(SearchDetailsFragmentArgs.fromBundle(getArguments()).getImage()).into(imageView);
-        selectedItem=SearchDetailsFragmentArgs.fromBundle(getArguments()).getFilter();
+        selectedItem = SearchDetailsFragmentArgs.fromBundle(getArguments()).getFilter();
 
-        myAdapter=new RecyclerViewAdapter(getContext() , List.of(),this);
+        myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(myAdapter);
-        presenter=new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(),new MealsLocalDataSource(getContext())),this);
-        if(selectedItem.equals(getString(R.string.categories))){
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        if (selectedItem.equals(getString(R.string.categories))) {
             presenter.getMealsByCategory(textView.getText().toString());
 
-        }else if(selectedItem.equals(getString(R.string.areas))){
+        } else if (selectedItem.equals(getString(R.string.areas))) {
             presenter.getMealsByArea(textView.getText().toString());
 
 
-        }else{
+        } else {
 
             presenter.getMealsByIngredient(textView.getText().toString());
         }
@@ -106,7 +106,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     public void onSuccess(List<MealByFilter> list) {
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
-        resultsCount.setText(myAdapter.getItemCount()+getString(R.string.results));
+        resultsCount.setText(myAdapter.getItemCount() + getString(R.string.results));
 
     }
 

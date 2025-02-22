@@ -81,7 +81,7 @@ public class MealsRemoteDataSource {
             @Override
             public void onResponse(Call<MealModel> call, Response<MealModel> response) {
                 if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
+                    networkCallBack.onSuccess(response.body().getMeals().get(0), null);
                 else
                     networkCallBack.onFailure(response.message());
 

@@ -24,6 +24,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     Context context;
     List<Ingredient> ingredientList;
 
+    public void setIngredientList(List<Ingredient> ingredientList) {
+        this.ingredientList = ingredientList;
+    }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -50,6 +53,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        this.ingredientList=ingredientList;
 
    }
+
+
 
 
     @NonNull

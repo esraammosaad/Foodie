@@ -120,8 +120,8 @@
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <argument
-            android:name="meal"
-            app:argType="com.example.foodplannerapp.data.models.Meal" />
+            android:name="mealID"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/searchDetailsFragment"

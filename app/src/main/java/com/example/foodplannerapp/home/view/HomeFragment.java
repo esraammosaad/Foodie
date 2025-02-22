@@ -100,7 +100,7 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
          if(randomMeal!=null){
 
              HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
-                     HomeFragmentDirections.actionHomeFragmentToDetailsFragment(randomMeal);
+                     HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
              Navigation.findNavController(requireView()).navigate(action);
          }
 
@@ -148,7 +148,7 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
     public void onClickListener(Meal meal) {
 
         HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
-                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(meal);
+                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 
 

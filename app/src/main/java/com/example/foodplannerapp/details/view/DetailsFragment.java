@@ -39,7 +39,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class DetailsFragment extends Fragment {
+public class DetailsFragment extends Fragment implements ViewInterface {
 
     ImageView imageView;
     TextView mealName;
@@ -58,6 +58,7 @@ public class DetailsFragment extends Fragment {
     FavoriteMealModel favMeal;
     TextView showMore;
     Button addToCalendarButton;
+    Meal meal;
 
 
     public DetailsFragment() {
@@ -91,102 +92,69 @@ public class DetailsFragment extends Fragment {
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
-        Meal meal = DetailsFragmentArgs.fromBundle(getArguments()).getMeal();
-        ingredientsList = presenter.getIngredients(meal);
-        loadVideo(meal);
-        mealName.setText(meal.getStrMeal());
-        mealArea.setText(meal.getStrArea());
-        mealCategory.setText(meal.getStrCategory());
-        if (meal.getStrInstructions().length() > 150) {
-            instructions.setText(String.format("%s ....", meal.getStrInstructions().substring(0, 150)));
-            showMore.setOnClickListener((v) -> {
-
-                if (instructions.getText().length() < 160) {
-
-                    instructions.setText(meal.getStrInstructions());
-                    showMore.setText(R.string.show_less);
-                } else {
-                    instructions.setText(String.format("%s....", meal.getStrInstructions().substring(0, 150)));
-                    showMore.setText(R.string.show_more);
-
-                }
-            });
-
-        } else {
-            instructions.setText(meal.getStrInstructions());
-            showMore.setVisibility(View.GONE);
-        }
-
-
-        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
-        recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        myAdapter = new RecyclerViewAdapter(getContext(), ingredientsList);
-        recyclerView.setAdapter(myAdapter);
-
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        int mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
+        presenter.getMealByID(mealID);
         backIcon.setOnClickListener((v) -> {
 
             Navigation.findNavController(view).navigateUp();
         });
-        Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
-        String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
-        Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
-        favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-        presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
-            @Override
-            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
-                isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
-                if (isFav) {
-                    favIcon.setImageResource(R.drawable.baseline_favorite_24);
-
-                }
-
-            }
-        });
+        recyclerView.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        myAdapter = new RecyclerViewAdapter(getContext(), List.of());
+        recyclerView.setAdapter(myAdapter);
         favIcon.setOnClickListener((v) -> {
-            addToFavorite();
+
+            if (meal != null)
+                addToFavorite();
 
         });
         addToCalendarButton.setOnClickListener(v -> {
-            Calendar calendar = Calendar.getInstance();
-            int year = calendar.get(Calendar.YEAR);
-            int month = calendar.get(Calendar.MONTH);
-            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
-                    (view1, selectedYear, selectedMonth, selectedDay) -> {
-                        CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth+1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-                        presenter.addMealToCalendar(calenderMeal);
-                        Snackbar snackbar = Snackbar
-                                .make(requireView(), "Meal is added to calendar", Snackbar.LENGTH_LONG).setActionTextColor(
-                                        getResources().getColor(R.color.primaryColor)
-                                ).setTextColor(getResources().getColor(R.color.white))
-                                .setAction("UNDO", view2 -> {
-                                    presenter.deleteMealFromCalendar(calenderMeal);
+            if (meal != null)
+                addToCalendar(meal);
 
-                                });
-
-
-                        snackbar.show();
-                    },
-                    year, month, day);
-
-
-            dialog.setOnShowListener(d -> {
-                dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
-                dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.black));
-            });
-
-            dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
-            dialog.show();
         });
-
 
     }
 
+    public void addToCalendar(Meal meal) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
+                (view1, selectedYear, selectedMonth, selectedDay) -> {
+                    CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+                    presenter.addMealToCalendar(calenderMeal);
+                    Snackbar snackbar = Snackbar
+                            .make(requireView(), "Meal is added to calendar", Snackbar.LENGTH_LONG).setActionTextColor(
+                                    getResources().getColor(R.color.primaryColor)
+                            ).setTextColor(getResources().getColor(R.color.white))
+                            .setAction("UNDO", view2 -> {
+                                presenter.deleteMealFromCalendar(calenderMeal);
+
+                            });
+
+
+                    snackbar.show();
+                },
+                year, month, day);
+
+
+        dialog.setOnShowListener(d -> {
+            dialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(getResources().getColor(R.color.black));
+            dialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(getResources().getColor(R.color.black));
+        });
+
+        dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        dialog.show();
+
+
+    }
 
     public void addToFavorite() {
 
@@ -224,4 +192,59 @@ public class DetailsFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSuccess(Meal meal) {
+        this.meal = meal;
+        ingredientsList = presenter.getIngredients(meal);
+        loadVideo(meal);
+        mealName.setText(meal.getStrMeal());
+        mealArea.setText(meal.getStrArea());
+        mealCategory.setText(meal.getStrCategory());
+        if (meal.getStrInstructions().length() > 150) {
+            instructions.setText(String.format("%s ....", meal.getStrInstructions().substring(0, 150)));
+            showMore.setOnClickListener((v) -> {
+
+                if (instructions.getText().length() < 160) {
+
+                    instructions.setText(meal.getStrInstructions());
+                    showMore.setText(R.string.show_less);
+                } else {
+                    instructions.setText(String.format("%s....", meal.getStrInstructions().substring(0, 150)));
+                    showMore.setText(R.string.show_more);
+
+                }
+            });
+
+        } else {
+            instructions.setText(meal.getStrInstructions());
+            showMore.setVisibility(View.GONE);
+        }
+
+
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
+        myAdapter.setIngredientList(ingredientsList);
+        myAdapter.notifyDataSetChanged();
+        Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
+        String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
+        Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
+        favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+        presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
+            @Override
+            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
+                isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
+                if (isFav) {
+                    favIcon.setImageResource(R.drawable.baseline_favorite_24);
+
+                }
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+
+    }
 }
