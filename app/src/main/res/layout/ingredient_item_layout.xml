@@ -24,7 +24,7 @@
             android:background="#45F8D76F">
 
             <ImageView
-                android:id="@+id/ingredientImg"
+                android:id="@+id/searchImg"
                 android:layout_width="70dp"
                 android:layout_height="65dp"
                 android:backgroundTint="#FFFFFF"
@@ -36,7 +36,7 @@
                 app:srcCompat="@drawable/pancakes" />
 
             <TextView
-                android:id="@+id/ingredientName"
+                android:id="@+id/searchName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
@@ -48,9 +48,9 @@
                 android:paddingRight="5dp"
                 android:textColor="@color/textColor"
                 android:textSize="14dp"
-                app:layout_constraintEnd_toEndOf="@+id/ingredientImg"
-                app:layout_constraintStart_toStartOf="@+id/ingredientImg"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientImg"
+                app:layout_constraintEnd_toEndOf="@+id/searchImg"
+                app:layout_constraintStart_toStartOf="@+id/searchImg"
+                app:layout_constraintTop_toBottomOf="@+id/searchImg"
                 tools:text="Flour" />
 
             <TextView
@@ -63,9 +63,9 @@
                 android:paddingBottom="8dp"
                 android:textColor="#69878787"
                 android:textSize="12dp"
-                app:layout_constraintEnd_toEndOf="@+id/ingredientName"
-                app:layout_constraintStart_toStartOf="@+id/ingredientName"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientName"
+                app:layout_constraintEnd_toEndOf="@+id/searchName"
+                app:layout_constraintStart_toStartOf="@+id/searchName"
+                app:layout_constraintTop_toBottomOf="@+id/searchName"
                 tools:text="Dessert" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

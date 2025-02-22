@@ -4,8 +4,8 @@ import com.example.foodplannerapp.data.models.Meal;
 
 import java.util.List;
 
-public interface NetworkCallBack {
+public interface NetworkCallBack<T> {
 
-    void onSuccess(Meal meal, List<Meal> mealList);
+    void onSuccess(Meal meal, List<T> list);
     void onFailure(String errorMessage);
 }

@@ -29,7 +29,7 @@
             android:foregroundGravity="center">
 
             <ImageView
-                android:id="@+id/ingredientImg"
+                android:id="@+id/searchImg"
                 android:layout_width="130dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="#FFFFFF"
@@ -40,7 +40,7 @@
                 app:srcCompat="@drawable/pancakes" />
 
             <TextView
-                android:id="@+id/ingredientName"
+                android:id="@+id/searchName"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="top|left"
@@ -54,7 +54,7 @@
                 android:maxLines="1"
                 android:textColor="#000000"
                 android:textSize="16sp"
-                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintStart_toEndOf="@+id/searchImg"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="PancakesPancakesPancakesPancakesPancakes" />
 
@@ -76,8 +76,8 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
-                app:layout_constraintTop_toBottomOf="@+id/ingredientName"
+                app:layout_constraintStart_toEndOf="@+id/searchImg"
+                app:layout_constraintTop_toBottomOf="@+id/searchName"
                 tools:text="Bring a large pot of water to a boil. Add kosher salt to the boiling water, then add the pasta. Cook according to the package instructions, about 9 minutes.\r\nIn a large skillet over medium-high heat, add the olive oil and heat until the oil starts to shimmer. Add the garlic and cook, stirring, until fragrant, 1 to 2 minutes. Add the chopped tomatoes, red chile flakes, Italian seasoning and salt and pepper to taste. Bring to a boil and cook for 5 minutes. Remove from the heat and add the chopped basil.\r\nDrain the pasta and add it to the sauce. Garnish with Parmigiano-Reggiano flakes and more basil and serve warm.&quot;" />
 
             <TextView
@@ -118,7 +118,7 @@
                 android:textAlignment="center"
                 android:textColor="@color/textColor"
                 android:textSize="14sp"
-                app:layout_constraintStart_toEndOf="@+id/ingredientImg"
+                app:layout_constraintStart_toEndOf="@+id/searchImg"
                 app:layout_constraintTop_toBottomOf="@+id/instructionsText"
                 tools:text="American" />
 

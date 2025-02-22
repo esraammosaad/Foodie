@@ -121,7 +121,6 @@
                     style="@style/text_field"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:cursorVisible="false"
                     android:drawableEnd="@drawable/baseline_visibility_off_24"
                     android:ems="10"
                     android:inputType="textPassword"

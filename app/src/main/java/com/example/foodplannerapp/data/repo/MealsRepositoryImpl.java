@@ -23,7 +23,6 @@ public class MealsRepositoryImpl {
     MealsLocalDataSource mealsLocalDataSource;
 
 
-
     private static MealsRepositoryImpl instance;
 
 
@@ -50,11 +49,47 @@ public class MealsRepositoryImpl {
 
     }
 
+    public void getMealByID(NetworkCallBack networkCallBack, int id) {
+
+
+        mealsRemoteDataSource.getMealByID(networkCallBack, id);
+
+
+    }
+
     public void getMealsByFirstLetter(NetworkCallBack networkCallBack) {
 
         mealsRemoteDataSource.getMealsByFirstLetter(networkCallBack);
 
 
+    }
+
+    public void getAllCategories(NetworkCallBack networkCallBack) {
+
+        mealsRemoteDataSource.getAllCategories(networkCallBack);
+
+    }
+
+    public void getAllAreas(NetworkCallBack networkCallBack) {
+
+        mealsRemoteDataSource.getAllAreas(networkCallBack);
+    }
+
+    public void getAllIngredients(NetworkCallBack networkCallBack) {
+
+        mealsRemoteDataSource.getAllIngredients(networkCallBack);
+    }
+
+    public void getAllMealsByCategory(NetworkCallBack networkCallBack, String categoryName) {
+        mealsRemoteDataSource.getAllMealsByCategory(networkCallBack, categoryName);
+    }
+
+    public void getAllMealsByArea(NetworkCallBack networkCallBack, String areaName) {
+        mealsRemoteDataSource.getAllMealsByArea(networkCallBack, areaName);
+    }
+
+    public void getAllMealsByIngredient(NetworkCallBack networkCallBack, String ingredientName) {
+        mealsRemoteDataSource.getAllMealsByIngredient(networkCallBack, ingredientName);
     }
 
     public ArrayList<Ingredient> getIngredientsList(Meal meal) {
@@ -144,17 +179,16 @@ public class MealsRepositoryImpl {
 
     }
 
-    public LiveData<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day , int month , int year) {
+    public LiveData<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day, int month, int year) {
 
-        return mealsLocalDataSource.getAllMealsFromCalendar(userUID,day , month, year);
+        return mealsLocalDataSource.getAllMealsFromCalendar(userUID, day, month, year);
     }
 
 
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
 
         return UserAuthentication.getInstance().getCurrentUser();
     }
-
 
 
 }

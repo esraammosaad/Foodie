@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.home.view.HomeListener;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.List;
@@ -46,9 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.itemView = itemView;
-            mealName = itemView.findViewById(R.id.ingredientName);
+            mealName = itemView.findViewById(R.id.searchName);
             mealArea = itemView.findViewById(R.id.mealArea);
-            mealImage = itemView.findViewById(R.id.ingredientImg);
+            mealImage = itemView.findViewById(R.id.searchImg);
             mealCategory = itemView.findViewById(R.id.ingredientMeasure);
             instructions = itemView.findViewById(R.id.instructionsText);
             mealCountryFlagIcon = itemView.findViewById(R.id.mealCountryFlagIcon);

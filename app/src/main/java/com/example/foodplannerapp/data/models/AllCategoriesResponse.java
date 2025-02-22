@@ -7,7 +7,6 @@ public class AllCategoriesResponse {
     private List<MealCategoriesResponse> meals;
 
     public List<MealCategoriesResponse> getMeals() { return meals; }
-    public void setMeals(List<MealCategoriesResponse> value) { this.meals = value; }
 }
 
 

@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.details.view;
+package com.example.foodplannerapp.search.view;
 
 import android.content.Context;
 import android.util.Log;
@@ -13,41 +13,48 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.data.models.Ingredient;
+import com.example.foodplannerapp.data.models.Category;
 
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewCategoryAdapter extends RecyclerView.Adapter<RecyclerViewCategoryAdapter.ViewHolder> {
 
     private static final String TAG = "MyAdapter";
 
     Context context;
-    List<Ingredient> ingredientList;
+    List<Category> categoryList;
+    SearchListener listener;
+
 
 
     static class ViewHolder extends RecyclerView.ViewHolder{
 
-       ImageView ingredientImage;
-       TextView ingredientName;
-       TextView ingredientMeasure;
+       ImageView categoryImage;
+       TextView categoryName;
        View itemView;
+
+
 
 
        public ViewHolder(@NonNull View itemView) {
            super(itemView);
            this.itemView=itemView;
-           ingredientImage=itemView.findViewById(R.id.searchImg);
-           ingredientName=itemView.findViewById(R.id.searchName);
-           ingredientMeasure=itemView.findViewById(R.id.ingredientMeasure);
+           categoryImage =itemView.findViewById(R.id.searchImg);
+           categoryName =itemView.findViewById(R.id.searchName);
 
 
        }
    }
 
-   RecyclerViewAdapter(Context context , List<Ingredient>ingredientList){
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
+    }
+
+    RecyclerViewCategoryAdapter(Context context , List<Category> categoryList, SearchListener listener){
 
        this.context=context;
-       this.ingredientList=ingredientList;
+       this.categoryList=categoryList;
+       this.listener=listener;
 
    }
 
@@ -57,7 +64,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerview, int viewType) {
 
         LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
-        View view = layoutInflater.inflate(R.layout.ingredient_item_layout,recyclerview,false);
+        View view = layoutInflater.inflate(R.layout.search_item_layout,recyclerview,false);
         ViewHolder viewHolder=new ViewHolder(view);
         Log.i(TAG, "onCreateViewHolder: ");
 
@@ -67,10 +74,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Ingredient ingredient=ingredientList.get(position);
-        holder.ingredientName.setText(ingredient.getIngredient());
-        holder.ingredientMeasure.setText(ingredient.getMeasure());
-        Glide.with(context).load(ingredient.getImage()).into(holder.ingredientImage);
+        Category category=categoryList.get(position);
+        holder.categoryName.setText(category.getStrCategory());
+        Glide.with(context).load(category.getStrCategoryThumb()).into(holder.categoryImage);
+        holder.categoryImage.setOnClickListener((v)->{
+
+            listener.onClickListener(categoryList.get(position));
+        });
 
 
         Log.i(TAG, "onBindViewHolder: ");
@@ -81,6 +91,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public int getItemCount() {
-        return ingredientList.size();
+        return categoryList.size();
     }
 }

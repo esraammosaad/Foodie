@@ -10,7 +10,7 @@ import com.example.foodplannerapp.home.view.ViewInterface;
 
 import java.util.List;
 
-public class PresenterImpl implements NetworkCallBack {
+public class PresenterImpl implements NetworkCallBack<Meal> {
 
     MealsRepositoryImpl mealsRepository;
     ViewInterface viewInterface;
@@ -34,7 +34,7 @@ public class PresenterImpl implements NetworkCallBack {
     }
 
     @Override
-    public void onSuccess(Meal meal, List<Meal> mealList) {
+    public void onSuccess(Meal meal, List<Meal> list) {
         if (meal != null) {
 
             viewInterface.getRandomMeal(meal);
@@ -42,9 +42,9 @@ public class PresenterImpl implements NetworkCallBack {
 
         }
 
-        if (mealList != null) {
+        if (list != null) {
 
-            viewInterface.getMealsByFirstLetter(mealList);
+            viewInterface.getMealsByFirstLetter(list);
 
 
         }

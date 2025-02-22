@@ -44,9 +44,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
        public ViewHolder(@NonNull View itemView) {
            super(itemView);
            this.itemView=itemView;
-           mealName=itemView.findViewById(R.id.ingredientName);
+           mealName=itemView.findViewById(R.id.searchName);
            mealArea=itemView.findViewById(R.id.mealArea);
-           mealImage=itemView.findViewById(R.id.ingredientImg);
+           mealImage=itemView.findViewById(R.id.searchImg);
            mealCategory=itemView.findViewById(R.id.ingredientMeasure);
            mealCountryFlagIcon=itemView.findViewById(R.id.mealCountryFlagIcon);
            favoriteIcon=itemView.findViewById(R.id.favoriteIcon);
