@@ -9,10 +9,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.TextView;
+
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
@@ -21,28 +24,28 @@ import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 
-public class CalenderFragment extends Fragment implements CalendarListener{
+public class CalenderFragment extends Fragment implements CalendarListener {
 
     CalendarView calendarView;
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;
     PresenterImpl presenter;
     LiveData<List<CalenderMealModel>> calendarMealsList;
-    int mealDay=0;
-    int mealMonth=0;
-    int mealYear=0;
+    TextView textCalendar;
+    int mealDay = 0;
+    int mealMonth = 0;
+    int mealYear = 0;
     Calendar calendar;
-
-
 
 
     public CalenderFragment() {
     }
-
 
 
     @Override
@@ -60,52 +63,64 @@ public class CalenderFragment extends Fragment implements CalendarListener{
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        calendarView=view.findViewById(R.id.calendarView);
-        recyclerView=view.findViewById(R.id.calendarRecyclerView);
+        calendarView = view.findViewById(R.id.calendarView);
+        recyclerView = view.findViewById(R.id.calendarRecyclerView);
+        textCalendar = view.findViewById(R.id.textCalenderView);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
         recyclerView.setHasFixedSize(true);
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        myAdapter=new RecyclerViewAdapter(getContext(), List.of(),this);
+        myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(myAdapter);
-        calendar=Calendar.getInstance();
-        mealDay=calendar.get(Calendar.DAY_OF_MONTH);
-        mealMonth=calendar.get(Calendar.MONTH)+1;
-        mealYear=calendar.get(Calendar.YEAR);
+        calendar = Calendar.getInstance();
+        mealDay = calendar.get(Calendar.DAY_OF_MONTH);
+        mealMonth = calendar.get(Calendar.MONTH) + 1;
+        mealYear = calendar.get(Calendar.YEAR);
 
-            calendarMealsList=presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay,mealMonth,mealYear);
-            calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
-                @Override
-                public void onChanged(List<CalenderMealModel> calenderMealModels) {
+        calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+        calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
+            @Override
+            public void onChanged(List<CalenderMealModel> calenderMealModels) {
 
-                    myAdapter.setMealsList(calenderMealModels);
-                    myAdapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(myAdapter);
-
-
-
-                }
-
-            });
+                myAdapter.setMealsList(calenderMealModels);
+                myAdapter.notifyDataSetChanged();
+                recyclerView.setAdapter(myAdapter);
+                calendar.set(Calendar.MONTH, mealMonth - 1);
+                SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+                String monthName = monthFormat.format(calendar.getTime());
+                textCalendar.setText("Today's Picks: " + monthName + " " + mealDay + ", " + mealYear);
 
 
+            }
 
+        });
 
 
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
-            mealDay=dayOfMonth;
-            mealMonth=month+1;
-            mealYear=year;
+            mealDay = dayOfMonth;
+            mealMonth = month + 1;
+            mealYear = year;
             calendarMealsList.removeObservers(getViewLifecycleOwner());
-            calendarMealsList=presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(),mealDay,mealMonth,mealYear);
+            calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
             calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
                 @Override
                 public void onChanged(List<CalenderMealModel> calenderMealModels) {
 
+
                     myAdapter.setMealsList(calenderMealModels);
                     recyclerView.setAdapter(myAdapter);
+                    calendar.set(Calendar.MONTH, month);
+                    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+                    String monthName = monthFormat.format(calendar.getTime());
+                    if (mealDay == calendar.get(Calendar.DAY_OF_MONTH) && mealMonth == calendar.get(Calendar.MONTH) + 1 && mealYear == calendar.get(Calendar.YEAR)) {
 
+                        textCalendar.setText("Today's Picks: " + monthName + " " + dayOfMonth + ", " + year);
+
+
+                    } else {
+                        textCalendar.setText("Your Meal Plan For " + monthName + " " + dayOfMonth + ", " + year);
+                    }
 
 
                 }
@@ -121,7 +136,7 @@ public class CalenderFragment extends Fragment implements CalendarListener{
     @Override
     public void onClickListener(CalenderMealModel meal) {
 
-        if(meal.getDay()==mealDay && meal.getMonth()==mealMonth&& meal.getYear()==mealYear){
+        if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
             presenter.deleteMealFromCalendar(meal);
 
 
@@ -135,9 +150,6 @@ public class CalenderFragment extends Fragment implements CalendarListener{
                     });
             snackbar.show();
         }
-
-
-
 
 
     }
