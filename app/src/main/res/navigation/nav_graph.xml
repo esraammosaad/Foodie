@@ -80,17 +80,29 @@
         android:id="@+id/searchFragment"
         android:name="com.example.foodplannerapp.search.view.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_searchDetailsFragment"
+            app:destination="@id/searchDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/calenderFragment"
         android:name="com.example.foodplannerapp.calender.view.CalenderFragment"
         android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" />
+        tools:layout="@layout/fragment_calender" >
+        <action
+            android:id="@+id/action_calenderFragment_to_DetailsFragment"
+            app:destination="@id/DetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.foodplannerapp.favorite.view.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_DetailsFragment"
+            app:destination="@id/DetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.foodplannerapp.profile.view.ProfileFragment"
@@ -110,5 +122,23 @@
         <argument
             android:name="meal"
             app:argType="com.example.foodplannerapp.data.models.Meal" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchDetailsFragment"
+        android:name="com.example.foodplannerapp.search_details.view.SearchDetailsFragment"
+        android:label="fragment_search_details"
+        tools:layout="@layout/fragment_search_details" >
+        <action
+            android:id="@+id/action_searchDetailsFragment_to_DetailsFragment"
+            app:destination="@id/DetailsFragment" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="image"
+            app:argType="string" />
+        <argument
+            android:name="filter"
+            app:argType="string" />
     </fragment>
 </navigation>

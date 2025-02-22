@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,12 +24,16 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Area;
 import com.example.foodplannerapp.data.models.Category;
+import com.example.foodplannerapp.data.models.IngredientMeal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.example.foodplannerapp.search.presenter.PresenterImpl;
+import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 public class SearchFragment extends Fragment implements SearchListener, ViewInterface {
@@ -40,6 +45,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     RecyclerView recyclerView;
     RecyclerViewCategoryAdapter categoryAdapter;
     RecyclerViewAreaAdapter areaAdapter;
+    RecyclerViewIngredientAdapter ingredientAdapter;
     PresenterImpl presenter;
     Spinner spinner;
 
@@ -68,11 +74,11 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         filterIcon = view.findViewById(R.id.filterSmallIcon);
         searchField = view.findViewById(R.id.searchTextField);
         recyclerView = view.findViewById(R.id.searchRecyclerView);
-        spinner=view.findViewById(R.id.spinner);
+        spinner = view.findViewById(R.id.spinner);
         String[] items = {getString(R.string.categories), getString(R.string.ingredients), getString(R.string.areas)};
 
-        ArrayAdapter<CharSequence> adapter =new ArrayAdapter<CharSequence>
-                (getContext(), R.layout.spinner_item,items){
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>
+                (getContext(), R.layout.spinner_item, items) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView,
@@ -88,20 +94,16 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                if(item.equals(getString(R.string.categories))){
+                if (item.equals(getString(R.string.categories))) {
                     presenter.getAllCategories();
                     searchField.setHint("Search Category");
                     selectedItem.setText(R.string.categories);
 
-
-
-
-
-                }else if(item.equals(getString(R.string.areas))){
+                } else if (item.equals(getString(R.string.areas))) {
                     presenter.getAllAreas();
                     searchField.setHint("Search Area");
                     selectedItem.setText(R.string.areas);
-                }else{
+                } else {
                     presenter.getAllIngredients();
                     searchField.setHint("Search Ingredient");
                     selectedItem.setText(R.string.ingredients);
@@ -122,7 +124,8 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         categoryAdapter = new RecyclerViewCategoryAdapter(getContext(), List.of(), this);
-        areaAdapter=new RecyclerViewAreaAdapter(getContext(),List.of(), this);
+        areaAdapter = new RecyclerViewAreaAdapter(getContext(), List.of(), this);
+        ingredientAdapter = new RecyclerViewIngredientAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(categoryAdapter);
     }
 
@@ -134,12 +137,17 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             recyclerView.setAdapter(categoryAdapter);
 
 
-
-        }else if (list.get(0) instanceof Area){
+        } else if (list.get(0) instanceof Area) {
 
 
             areaAdapter.setAreaList(list);
             recyclerView.setAdapter(areaAdapter);
+
+        } else {
+
+            ingredientAdapter.setIngredientList(list);
+            recyclerView.setAdapter(ingredientAdapter);
+
 
         }
 
@@ -152,6 +160,30 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
     @Override
     public void onClickListener(Object item) {
+        SearchFragmentDirections.ActionSearchFragmentToSearchDetailsFragment action;
+
+
+        if (item instanceof Category) {
+
+            action =
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Category) item).getStrCategory(), ((Category) item).getStrCategoryThumb(),getString(R.string.categories));
+
+
+        } else if (item instanceof IngredientMeal) {
+            action =
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((IngredientMeal) item).getStrIngredient(), "https://www.themealdb.com/images/ingredients/" + ((IngredientMeal) item).getStrIngredient() + ".png",getString(R.string.ingredients));
+
+
+        } else {
+            Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
+            String countryCode = countryCodeMap.getOrDefault(((Area) item).getStrArea(), "unknown");
+            action =
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Area) item).getStrArea(), "https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png",getString(R.string.areas));
+
+
+        }
+        Navigation.findNavController(requireView()).navigate(action);
+
 
     }
 }

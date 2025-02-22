@@ -6,10 +6,10 @@ package com.example.foodplannerapp.data.models;
 import java.util.List;
 
 public class AllIngredientsResponse {
-    private List<IngredientMeal> ingredientMeals;
+    private List<IngredientMeal> meals;
 
-    public List<IngredientMeal> getMeals() { return ingredientMeals; }
-    public void setMeals(List<IngredientMeal> value) { this.ingredientMeals = value; }
+    public List<IngredientMeal> getMeals() { return meals; }
+    public void setMeals(List<IngredientMeal> value) { this.meals = value; }
 }
 
 // Meal.java

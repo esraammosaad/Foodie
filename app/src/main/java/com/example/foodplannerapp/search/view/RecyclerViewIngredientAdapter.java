@@ -1,4 +1,98 @@
 package com.example.foodplannerapp.search.view;
 
-public class RecyclerViewIngredientAdapter {
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.data.models.Category;
+import com.example.foodplannerapp.data.models.IngredientMeal;
+
+import java.util.List;
+
+public class RecyclerViewIngredientAdapter extends RecyclerView.Adapter<RecyclerViewIngredientAdapter.ViewHolder>{
+
+
+    private static final String TAG = "MyAdapter";
+
+    Context context;
+    List<IngredientMeal> ingredientList;
+    SearchListener listener;
+
+
+
+    static class ViewHolder extends RecyclerView.ViewHolder{
+
+        ImageView ingredientImage;
+        TextView ingredientName;
+        View itemView;
+
+
+
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            this.itemView=itemView;
+            ingredientImage =itemView.findViewById(R.id.searchImg);
+            ingredientName =itemView.findViewById(R.id.searchName);
+
+
+        }
+    }
+
+    public void setIngredientList(List<IngredientMeal> ingredientList) {
+        this.ingredientList = ingredientList;
+    }
+
+    RecyclerViewIngredientAdapter(Context context , List<IngredientMeal> ingredientList, SearchListener listener){
+
+        this.context=context;
+        this.ingredientList =ingredientList;
+        this.listener=listener;
+
+    }
+
+
+    @NonNull
+    @Override
+    public RecyclerViewIngredientAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup recyclerview, int viewType) {
+
+        LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
+        View view = layoutInflater.inflate(R.layout.search_item_layout,recyclerview,false);
+        RecyclerViewIngredientAdapter.ViewHolder viewHolder=new RecyclerViewIngredientAdapter.ViewHolder(view);
+        Log.i(TAG, "onCreateViewHolder: ");
+
+
+        return viewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerViewIngredientAdapter.ViewHolder holder, int position) {
+        IngredientMeal ingredient= ingredientList.get(position);
+        holder.ingredientName.setText(ingredient.getStrIngredient());
+        Glide.with(context).load("https://www.themealdb.com/images/ingredients/" + ingredient.getStrIngredient() + ".png").into(holder.ingredientImage);
+        holder.ingredientImage.setOnClickListener((v)->{
+
+            listener.onClickListener(ingredientList.get(position));
+        });
+
+
+        Log.i(TAG, "onBindViewHolder: ");
+
+    }
+
+
+
+    @Override
+    public int getItemCount() {
+        return ingredientList.size();
+    }
 }

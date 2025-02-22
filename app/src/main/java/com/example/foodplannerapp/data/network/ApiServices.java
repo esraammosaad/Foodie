@@ -4,9 +4,7 @@ import com.example.foodplannerapp.data.models.AllAreasResponse;
 import com.example.foodplannerapp.data.models.AllCategoriesResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
-import com.example.foodplannerapp.data.models.GetMealsByAreaResponse;
-import com.example.foodplannerapp.data.models.GetMealsByCategoryResponse;
-import com.example.foodplannerapp.data.models.GetMealsByIngredientResponse;
+import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
 import com.example.foodplannerapp.data.models.MealModel;
 
 import retrofit2.Call;
@@ -36,11 +34,11 @@ public interface ApiServices {
     Call<AllIngredientsResponse> getAllIngredients(@Query("i") String list);
 
     @GET("filter.php")
-    Call<GetMealsByCategoryResponse> getMealSByCategory(@Query("c") String category);
+    Call<GetMealsByFilterResponse> getMealSByCategory(@Query("c") String category);
     @GET("filter.php")
-    Call<GetMealsByIngredientResponse> getMealSByIngredient(@Query("i") String category);
+    Call<GetMealsByFilterResponse> getMealSByIngredient(@Query("i") String category);
     @GET("filter.php")
-    Call<GetMealsByAreaResponse> getMealSByArea(@Query("a") String category);
+    Call<GetMealsByFilterResponse> getMealSByArea(@Query("a") String category);
 
 
 }

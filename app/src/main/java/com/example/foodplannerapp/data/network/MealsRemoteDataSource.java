@@ -3,9 +3,7 @@ package com.example.foodplannerapp.data.network;
 import com.example.foodplannerapp.data.models.AllAreasResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
-import com.example.foodplannerapp.data.models.GetMealsByAreaResponse;
-import com.example.foodplannerapp.data.models.GetMealsByCategoryResponse;
-import com.example.foodplannerapp.data.models.GetMealsByIngredientResponse;
+import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
 import com.example.foodplannerapp.data.models.MealModel;
 
 import retrofit2.Call;
@@ -149,8 +147,9 @@ public class MealsRemoteDataSource {
         call.enqueue(new Callback<AllIngredientsResponse>() {
             @Override
             public void onResponse(Call<AllIngredientsResponse> call, Response<AllIngredientsResponse> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
+                if (response.isSuccessful()){
+                    System.out.println(response.body().getMeals().get(0).getStrIngredient()+"======================iiii");
+                    networkCallBack.onSuccess(null, response.body().getMeals());}
                 else
                     networkCallBack.onFailure(response.message());
 
@@ -167,10 +166,10 @@ public class MealsRemoteDataSource {
     }
 
     public void getAllMealsByCategory(NetworkCallBack networkCallBack, String categoryName) {
-        Call<GetMealsByCategoryResponse> call = apiServices.getMealSByCategory(categoryName);
-        call.enqueue(new Callback<GetMealsByCategoryResponse>() {
+        Call<GetMealsByFilterResponse> call = apiServices.getMealSByCategory(categoryName);
+        call.enqueue(new Callback<GetMealsByFilterResponse>() {
             @Override
-            public void onResponse(Call<GetMealsByCategoryResponse> call, Response<GetMealsByCategoryResponse> response) {
+            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
                 if (response.isSuccessful())
                     networkCallBack.onSuccess(null, response.body().getMeals());
                 else
@@ -179,7 +178,7 @@ public class MealsRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<GetMealsByCategoryResponse> call, Throwable t) {
+            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
                 networkCallBack.onFailure(t.getMessage());
 
             }
@@ -189,10 +188,10 @@ public class MealsRemoteDataSource {
     }
 
     public void getAllMealsByArea(NetworkCallBack networkCallBack, String areaName) {
-        Call<GetMealsByAreaResponse> call = apiServices.getMealSByArea(areaName);
-        call.enqueue(new Callback<GetMealsByAreaResponse>() {
+        Call<GetMealsByFilterResponse> call = apiServices.getMealSByArea(areaName);
+        call.enqueue(new Callback<GetMealsByFilterResponse>() {
             @Override
-            public void onResponse(Call<GetMealsByAreaResponse> call, Response<GetMealsByAreaResponse> response) {
+            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
                 if (response.isSuccessful())
                     networkCallBack.onSuccess(null, response.body().getMeals());
                 else
@@ -201,7 +200,7 @@ public class MealsRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<GetMealsByAreaResponse> call, Throwable t) {
+            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
                 networkCallBack.onFailure(t.getMessage());
 
             }
@@ -211,10 +210,10 @@ public class MealsRemoteDataSource {
     }
 
     public void getAllMealsByIngredient(NetworkCallBack networkCallBack, String ingredientName) {
-        Call<GetMealsByIngredientResponse> call = apiServices.getMealSByIngredient(ingredientName);
-        call.enqueue(new Callback<GetMealsByIngredientResponse>() {
+        Call<GetMealsByFilterResponse> call = apiServices.getMealSByIngredient(ingredientName);
+        call.enqueue(new Callback<GetMealsByFilterResponse>() {
             @Override
-            public void onResponse(Call<GetMealsByIngredientResponse> call, Response<GetMealsByIngredientResponse> response) {
+            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
                 if (response.isSuccessful())
                     networkCallBack.onSuccess(null, response.body().getMeals());
                 else
@@ -223,7 +222,7 @@ public class MealsRemoteDataSource {
             }
 
             @Override
-            public void onFailure(Call<GetMealsByIngredientResponse> call, Throwable t) {
+            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
                 networkCallBack.onFailure(t.getMessage());
 
             }

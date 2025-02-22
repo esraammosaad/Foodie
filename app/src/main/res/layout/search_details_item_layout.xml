@@ -30,7 +30,7 @@
             android:layout_gravity="center"
             android:foregroundGravity="center"
             android:padding="8dp"
-            android:paddingBottom="10dp">
+            android:paddingBottom="12dp">
 
             <ImageView
                 android:id="@+id/searchImg"
@@ -41,13 +41,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/beef" />
+                tools:srcCompat="@drawable/pancakes" />
 
             <TextView
                 android:id="@+id/searchName"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
+                android:layout_marginTop="8dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/inter_medium"
                 android:forceHasOverlappingRendering="true"

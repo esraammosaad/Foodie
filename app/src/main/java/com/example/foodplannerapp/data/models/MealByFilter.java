@@ -1,6 +1,6 @@
 package com.example.foodplannerapp.data.models;
 
-public class MealByIngredient {
+public class MealByFilter {
     private String strMealThumb;
     private String idMeal;
     private String strMeal;
