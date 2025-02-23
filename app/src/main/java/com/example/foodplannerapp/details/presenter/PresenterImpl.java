@@ -8,6 +8,8 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.NetworkCallBack;
+import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
+import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.view.ViewInterface;
 import com.google.firebase.auth.FirebaseUser;
@@ -15,15 +17,17 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PresenterImpl implements NetworkCallBack {
+public class PresenterImpl implements NetworkCallBack, FireStoreCallBack {
 
     MealsRepositoryImpl mealsRepository;
+    FireStoreRepositoryImpl fireStoreRepository;
     ViewInterface viewInterface;
 
 
-    public PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
+    public PresenterImpl(MealsRepositoryImpl mealsRepository,FireStoreRepositoryImpl fireStoreRepository ,ViewInterface viewInterface) {
 
         this.mealsRepository = mealsRepository;
+        this.fireStoreRepository=fireStoreRepository;
         this.viewInterface=viewInterface;
     }
 
@@ -72,6 +76,26 @@ public class PresenterImpl implements NetworkCallBack {
         return mealsRepository.getCurrentUser();
     }
 
+    public void addFavoriteMealToFireStore(FavoriteMealModel meal){
+
+        fireStoreRepository.insertFavoriteMealToFireStore(meal,this);
+    }
+    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal){
+
+        fireStoreRepository.deleteFavoriteMealFromFireStore(meal,this);
+    }
+
+    public void insertCalendarMealToFireStore(CalenderMealModel meal) {
+
+        fireStoreRepository.insertCalendarMealToFireStore(meal, this);
+
+    }
+    public void deleteCalendarMealFromFireStore(CalenderMealModel meal) {
+
+        fireStoreRepository.deleteCalendarMealFromFireStore(meal, this);
+
+    }
+
 
     @Override
     public void onSuccess(Meal meal, List list) {
@@ -83,6 +107,18 @@ public class PresenterImpl implements NetworkCallBack {
     @Override
     public void onFailure(String errorMessage) {
         viewInterface.onFailure(errorMessage);
+
+
+    }
+
+    @Override
+    public void onFireStoreSuccess(String message) {
+        viewInterface.onFavoriteMealAddedToFireStore(message);
+    }
+
+    @Override
+    public void onFireStoreFailure(String errorMessage) {
+        viewInterface.onFavoriteMealFailedToAddedToFireStore(errorMessage);
 
     }
 }

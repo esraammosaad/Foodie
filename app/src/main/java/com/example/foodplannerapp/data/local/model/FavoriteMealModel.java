@@ -23,7 +23,8 @@ public class FavoriteMealModel {
     @TypeConverters(ArrayListConverter.class)
     private ArrayList<Ingredient> ingredients;
 
-
+    public FavoriteMealModel() {
+    }
 
     public FavoriteMealModel(String idMeal, String userUID, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
         this.idMeal = idMeal;

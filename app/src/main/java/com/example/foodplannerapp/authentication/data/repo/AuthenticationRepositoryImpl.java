@@ -1,30 +1,32 @@
 package com.example.foodplannerapp.authentication.data.repo;
 
 import android.content.Context;
-import android.content.Intent;
 
 import androidx.activity.result.ActivityResult;
-import androidx.annotation.Nullable;
 
 import com.example.foodplannerapp.authentication.data.network.AuthenticationCallBack;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseUser;
 
 public class AuthenticationRepositoryImpl {
 
-    UserAuthentication userAuthentication;
+    AuthenticationServices authenticationServices;
+    FiresStoreServices firesStoreServices;
     static private AuthenticationRepositoryImpl instance;
 
-    private AuthenticationRepositoryImpl(UserAuthentication userAuthentication){
-        this.userAuthentication=userAuthentication;
+    private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices){
+        this.authenticationServices = authenticationServices;
+        this.firesStoreServices=firesStoreServices;
     }
 
-    public static AuthenticationRepositoryImpl getInstance(UserAuthentication userAuthentication){
+    public static AuthenticationRepositoryImpl getInstance(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices){
 
         if(instance==null){
-            instance=new AuthenticationRepositoryImpl(userAuthentication);
+            instance=new AuthenticationRepositoryImpl(authenticationServices, firesStoreServices);
         }
 
         return instance;
@@ -32,45 +34,55 @@ public class AuthenticationRepositoryImpl {
     }
 
     public void register(String email , String password, String name,AuthenticationCallBack authenticationCallBack){
-        userAuthentication.register(email, password, name,authenticationCallBack );
+        authenticationServices.register(email, password, name,authenticationCallBack );
 
     }
 
     public void login(String email , String password, AuthenticationCallBack authenticationCallBack){
 
-        userAuthentication.login(email, password, authenticationCallBack);
+        authenticationServices.login(email, password, authenticationCallBack);
 
     }
     public void loginWithGoogle(ActivityResult result, AuthenticationCallBack authenticationCallBack) throws ApiException {
 
 
 
-        userAuthentication.loginWithGoogle(result, authenticationCallBack);
+        authenticationServices.loginWithGoogle(result, authenticationCallBack);
 
 
     }
 
     public GoogleSignInClient initGoogleSignIn(Context context){
 
-        return userAuthentication.initGoogleSignIn(context);
+        return authenticationServices.initGoogleSignIn(context);
     }
 
     public GoogleSignInClient getGoogleSignInClient(){
 
-        return userAuthentication.getGoogleSignInClient();
+        return authenticationServices.getGoogleSignInClient();
     }
 
 
     public FirebaseUser getCurrentUser(){
 
-        return userAuthentication.getCurrentUser();
+        return authenticationServices.getCurrentUser();
     }
 
     public void signOut(){
 
-        userAuthentication.signOut();
+        authenticationServices.signOut();
 
 
+    }
+
+    public void getFavoriteMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack){
+
+        firesStoreServices.getFavoriteMealsFromFireStore(getCurrentUser().getUid(),getDataFromFirebaseCallBack);
+    }
+
+    public void getCalendarMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack){
+
+        firesStoreServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(),getDataFromFirebaseCallBack);
     }
 
 

@@ -18,9 +18,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
+import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -91,7 +95,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         usernameError.setVisibility(View.GONE);
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
         signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()), this);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()

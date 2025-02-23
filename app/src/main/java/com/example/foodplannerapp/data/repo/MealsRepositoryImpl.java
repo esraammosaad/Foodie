@@ -3,7 +3,7 @@ package com.example.foodplannerapp.data.repo;
 
 import androidx.lifecycle.LiveData;
 
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
@@ -21,6 +21,7 @@ public class MealsRepositoryImpl {
 
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
+
 
 
     private static MealsRepositoryImpl instance;
@@ -187,7 +188,7 @@ public class MealsRepositoryImpl {
 
     public FirebaseUser getCurrentUser() {
 
-        return UserAuthentication.getInstance().getCurrentUser();
+        return AuthenticationServices.getInstance().getCurrentUser();
     }
 
 

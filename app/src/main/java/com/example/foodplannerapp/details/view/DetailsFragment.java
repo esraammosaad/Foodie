@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,8 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
@@ -92,7 +95,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
         int mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
         presenter.getMealByID(mealID);
         backIcon.setOnClickListener((v) -> {
@@ -130,12 +133,14 @@ public class DetailsFragment extends Fragment implements ViewInterface {
                 (view1, selectedYear, selectedMonth, selectedDay) -> {
                     CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
                     presenter.addMealToCalendar(calenderMeal);
+                    presenter.insertCalendarMealToFireStore(calenderMeal);
                     Snackbar snackbar = Snackbar
                             .make(requireView(), "Meal is added to calendar", Snackbar.LENGTH_LONG).setActionTextColor(
                                     getResources().getColor(R.color.primaryColor)
                             ).setTextColor(getResources().getColor(R.color.white))
                             .setAction("UNDO", view2 -> {
                                 presenter.deleteMealFromCalendar(calenderMeal);
+                                presenter.deleteCalendarMealFromFireStore(calenderMeal);
 
                             });
 
@@ -161,6 +166,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         if (!isFav) {
             favIcon.setImageResource(R.drawable.baseline_favorite_24);
             presenter.addMealToFav(favMeal);
+            presenter.addFavoriteMealToFireStore(favMeal);
             Snackbar snackbar = Snackbar
                     .make(requireView(), "Meal is added to favorite", Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
             snackbar.show();
@@ -169,6 +175,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         } else {
             favIcon.setImageResource(R.drawable.baseline_favorite_border_24);
             presenter.deleteMealFromFav(favMeal);
+            presenter.deleteFavoriteMealFromFireStore(favMeal);
             Snackbar snackbar = Snackbar
                     .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
             snackbar.show();
@@ -244,7 +251,26 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     }
 
     @Override
+    public void onFavoriteMealAddedToFireStore(String message) {
+
+        Log.i("TAG", "onFavoriteMealAddedToFireStore: "+message);
+
+
+    }
+
+    @Override
+    public void onFavoriteMealFailedToAddedToFireStore(String errorMessage) {
+
+        Log.i("TAG", "onFavoriteMealFailedToAddedToFireStore: "+errorMessage);
+
+
+    }
+
+    @Override
     public void onFailure(String errorMessage) {
+        Snackbar snackbar = Snackbar
+                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
+        snackbar.show();
 
     }
 }

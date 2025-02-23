@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.profile.presenter.PresenterImpl;
 
 
@@ -45,7 +46,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter=new PresenterImpl(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()));
+        presenter=new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()));
         signOutButton=view.findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener((v)->{
 

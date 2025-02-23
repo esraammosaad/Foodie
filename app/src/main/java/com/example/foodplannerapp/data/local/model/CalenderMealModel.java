@@ -30,6 +30,9 @@ public class CalenderMealModel {
     @TypeConverters(ArrayListConverter.class)
     private ArrayList<Ingredient> ingredients;
 
+    public CalenderMealModel() {
+    }
+
     public CalenderMealModel(@NonNull String idMeal, int day, int month, int year, String userUID, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
         this.idMeal = idMeal;
         this.day = day;

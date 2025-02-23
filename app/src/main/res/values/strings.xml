@@ -63,4 +63,8 @@
     <string name="categories">Categories</string>
     <string name="areas">Areas</string>
     <string name="results">" Results"</string>
+    <string name="noInternetText">You have lost connection to the internet.\nThis app is offline</string>
+    <string name="dismiss">DISMISS</string>
+    <string name="turnOnWifi">TURN ON WIFI</string>
+    <string name="favorite_collection">favorite</string>
 </resources>

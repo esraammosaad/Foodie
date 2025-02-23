@@ -21,14 +21,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
 
-public class UserAuthentication {
+public class AuthenticationServices {
     private static FirebaseAuth firebaseAuth;
-    private static UserAuthentication instance;
+    private static AuthenticationServices instance;
     private static FirebaseUser currentUser;
     GoogleSignInClient googleSignInClient;
 
 
-    private UserAuthentication() {
+    private AuthenticationServices() {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -40,10 +40,10 @@ public class UserAuthentication {
         return firebaseAuth.getCurrentUser();
     }
 
-    public static UserAuthentication getInstance() {
+    public static AuthenticationServices getInstance() {
 
         if (instance == null) {
-            instance = new UserAuthentication();
+            instance = new AuthenticationServices();
         }
         if (currentUser == null) {
             currentUser = firebaseAuth.getCurrentUser();

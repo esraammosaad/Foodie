@@ -66,7 +66,7 @@
                 android:text="@string/recipeOfTheDay"
                 android:textSize="30dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toBottomOf="@+id/view5" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -286,6 +286,68 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="@+id/randomMealImg" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/noInternetBanner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="view5,noInternetIcon,noInternetText,dismiss,turnOnWifi" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_view"
+                android:backgroundTint="#FAF9F6"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintHorizontal_bias="0.951"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <ImageView
+                android:id="@+id/noInternetIcon"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/baseline_wifi_off_24"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <TextView
+                android:id="@+id/noInternetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/noInternetText"
+                app:layout_constraintStart_toEndOf="@+id/noInternetIcon"
+                app:layout_constraintTop_toTopOf="@+id/noInternetIcon" />
+
+            <TextView
+                android:id="@+id/dismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/dismiss"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/turnOnWifi"
+                app:layout_constraintTop_toBottomOf="@+id/noInternetText" />
+
+            <TextView
+                android:id="@+id/turnOnWifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/turnOnWifi"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintTop_toTopOf="@+id/dismiss" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

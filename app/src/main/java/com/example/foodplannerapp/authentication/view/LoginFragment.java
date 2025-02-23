@@ -3,6 +3,13 @@ package com.example.foodplannerapp.authentication.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,16 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
+import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -44,17 +50,17 @@ public class LoginFragment extends Fragment implements ViewInterface {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
 
-        @Override
-        public void onActivityResult(ActivityResult result) {
+                @Override
+                public void onActivityResult(ActivityResult result) {
 
-            try {
-                presenter.loginWithGoogle(result);
-            } catch (ApiException e) {
-                throw new RuntimeException(e);
-            }
+                    try {
+                        presenter.loginWithGoogle(result);
+                    } catch (ApiException e) {
+                        throw new RuntimeException(e);
+                    }
 
-        }
-    });
+                }
+            });
 
 
     public LoginFragment() {
@@ -85,7 +91,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
         signInWithGoogle = view.findViewById(R.id.googleSignInButton);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(UserAuthentication.getInstance()), this);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -143,12 +149,15 @@ public class LoginFragment extends Fragment implements ViewInterface {
     @Override
     public void onSuccess(String message) {
 
-       if(presenter.getCurrentUser()!=null){
-        Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment);
-        Snackbar snackbar = Snackbar
-                .make(requireView(), message, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
-        snackbar.show();
+        if (presenter.getCurrentUser() != null) {
+            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment);
+            Snackbar snackbar = Snackbar
+                    .make(requireView(), message, Snackbar.LENGTH_LONG);
+            snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+            snackbar.show();
+            presenter.getFavoriteMealsFromFireStore();
+
+
         }
 
     }

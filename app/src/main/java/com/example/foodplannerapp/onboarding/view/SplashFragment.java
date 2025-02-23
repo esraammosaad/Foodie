@@ -11,12 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.authentication.data.network.UserAuthentication;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
 import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class SplashFragment extends Fragment {
@@ -46,7 +44,7 @@ public class SplashFragment extends Fragment {
         presenter=PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
         new Handler().postDelayed(()-> Navigation.findNavController(view).navigate(
 
-               presenter.getOnBoardingState()? UserAuthentication.getInstance().getCurrentUser()!=null?R.id.action_splashFragment_to_homeFragment:R.id.action_splashFragment_to_loginFragment: R.id.action_splashFragment_to_viewPagerFragment
+               presenter.getOnBoardingState()? AuthenticationServices.getInstance().getCurrentUser()!=null?R.id.action_splashFragment_to_homeFragment:R.id.action_splashFragment_to_loginFragment: R.id.action_splashFragment_to_viewPagerFragment
 
         ), 5000);
     }

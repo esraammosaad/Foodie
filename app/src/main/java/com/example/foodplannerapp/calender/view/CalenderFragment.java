@@ -11,6 +11,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
+import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
 import com.example.foodplannerapp.favorite.view.FavoriteFragmentDirections;
@@ -32,7 +35,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class CalenderFragment extends Fragment implements CalendarListener {
+public class CalenderFragment extends Fragment implements CalendarListener , ViewInterface{
 
     CalendarView calendarView;
     RecyclerView recyclerView;
@@ -68,7 +71,7 @@ public class CalenderFragment extends Fragment implements CalendarListener {
         calendarView = view.findViewById(R.id.calendarView);
         recyclerView = view.findViewById(R.id.calendarRecyclerView);
         textCalendar = view.findViewById(R.id.textCalenderView);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())));
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -140,6 +143,7 @@ public class CalenderFragment extends Fragment implements CalendarListener {
 
         if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
             presenter.deleteMealFromCalendar(meal);
+            presenter.deleteCalendarMealFromFireStore(meal);
 
 
             Snackbar snackbar = Snackbar
@@ -148,6 +152,7 @@ public class CalenderFragment extends Fragment implements CalendarListener {
                     ).setTextColor(getResources().getColor(R.color.white))
                     .setAction("UNDO", view -> {
                         presenter.addMealToCalendar(meal);
+                        presenter.insertCalendarMealToFireStore(meal);
 
                     });
             snackbar.show();
@@ -161,5 +166,18 @@ public class CalenderFragment extends Fragment implements CalendarListener {
         CalenderFragmentDirections.ActionCalenderFragmentToDetailsFragment action=
                 CalenderFragmentDirections.actionCalenderFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
+    }
+
+    @Override
+    public void onSuccess(String message) {
+
+        Log.i("TAG", "onSuccess: "+message);
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        Log.i("TAG", "onFailure: "+errorMessage);
+
     }
 }
