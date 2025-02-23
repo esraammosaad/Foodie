@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
+import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,14 @@ public class FavoriteFragment extends Fragment implements FavoriteListener {
 
 
         snackbar.show();
+
+    }
+
+    @Override
+    public void onItemClickListener(FavoriteMealModel meal) {
+        FavoriteFragmentDirections.ActionFavoriteFragmentToDetailsFragment action=
+                FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
+        Navigation.findNavController(requireView()).navigate(action);
 
     }
 }

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
+import com.example.foodplannerapp.favorite.view.FavoriteFragmentDirections;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -152,5 +154,12 @@ public class CalenderFragment extends Fragment implements CalendarListener {
         }
 
 
+    }
+
+    @Override
+    public void onItemClickListener(CalenderMealModel meal) {
+        CalenderFragmentDirections.ActionCalenderFragmentToDetailsFragment action=
+                CalenderFragmentDirections.actionCalenderFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
+        Navigation.findNavController(requireView()).navigate(action);
     }
 }

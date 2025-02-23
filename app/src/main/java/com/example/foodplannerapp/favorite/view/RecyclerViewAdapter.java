@@ -90,6 +90,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             listener.onClickListener(mealsList.get(position));
 
         });
+        holder.mealImage.setOnClickListener((v)->{
+
+            listener.onItemClickListener(mealsList.get(position));
+        });
 
     }
 

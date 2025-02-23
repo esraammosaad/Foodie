@@ -24,6 +24,7 @@ import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.example.foodplannerapp.search_details.presenter.PresenterImpl;
 
 import java.util.Arrays;
@@ -99,6 +100,11 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
     @Override
     public void onClickListener(MealByFilter meal) {
+
+        SearchDetailsFragmentDirections.ActionSearchDetailsFragmentToDetailsFragment action=
+                SearchDetailsFragmentDirections.actionSearchDetailsFragmentToDetailsFragment(Integer.parseInt(meal.getidMeal()));
+        Navigation.findNavController(requireView()).navigate(action);
+
 
     }
 
