@@ -67,4 +67,11 @@
     <string name="dismiss">DISMISS</string>
     <string name="turnOnWifi">TURN ON WIFI</string>
     <string name="favorite_collection">favorite</string>
+    <string name="you_can_t_add_meal_to_favorite_until_you_sign_in">You can\'t add meal to favorite until you sign in</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="alert">Alert !</string>
+    <string name="you_can_t_scheduler_the_meal_until_you_sign_in">You can\'t scheduler the meal until you sign in</string>
+    <string name="continue_as_a_guest">CONTINUE AS A GUEST</string>
+    <string name="please_sign_in_to_can_save_your_favorite_meal">Please sign in to can save your favorite meal</string>
+    <string name="your_favorites_list_is_on_a_diet_add_some_tasty_picks">Your favorites list is on a diet… add some tasty picks</string>
 </resources>

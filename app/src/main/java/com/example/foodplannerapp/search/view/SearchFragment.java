@@ -1,5 +1,7 @@
 package com.example.foodplannerapp.search.view;
 
+import android.annotation.SuppressLint;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +11,9 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +29,7 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.models.Area;
 import com.example.foodplannerapp.data.models.Category;
+import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.IngredientMeal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
@@ -32,8 +38,15 @@ import com.example.foodplannerapp.search.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class SearchFragment extends Fragment implements SearchListener, ViewInterface {
@@ -48,6 +61,8 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     RecyclerViewIngredientAdapter ingredientAdapter;
     PresenterImpl presenter;
     Spinner spinner;
+    TextWatcher textWatcher;
+    List list;
 
 
     public SearchFragment() {
@@ -127,11 +142,83 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         areaAdapter = new RecyclerViewAreaAdapter(getContext(), List.of(), this);
         ingredientAdapter = new RecyclerViewIngredientAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(categoryAdapter);
+        list = List.of();
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @SuppressLint("CheckResult")
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+                if (!list.isEmpty() && list.get(0) instanceof Category) {
+                    Observable<Category> observable = Observable.fromIterable(list);
+                    observable.
+                            filter(category -> category.getStrCategory().toLowerCase().
+                                    contains(String.valueOf(s))).toList().
+                            subscribeOn(Schedulers.io()).
+                            observeOn(AndroidSchedulers.mainThread()).
+                            subscribe(
+                                    item -> {
+
+                                        categoryAdapter.setCategoryList(item);
+                                        categoryAdapter.notifyDataSetChanged();
+
+                                    }
+                            );
+                } else if (!list.isEmpty() && list.get(0) instanceof Area) {
+                    Observable<Area> observable = Observable.fromIterable(list);
+                    observable.
+                            filter(area -> area.getStrArea().toLowerCase().
+                                    contains(String.valueOf(s))).toList().
+                            subscribeOn(Schedulers.io()).
+                            observeOn(AndroidSchedulers.mainThread()).
+                            subscribe(
+                                    item -> {
+
+                                        areaAdapter.setAreaList(item);
+                                        areaAdapter.notifyDataSetChanged();
+
+                                    }
+                            );
+
+
+                } else if (!list.isEmpty() && list.get(0) instanceof IngredientMeal) {
+
+                    Observable<IngredientMeal> observable = Observable.fromIterable(list);
+                    observable.
+                            filter(ingredient -> ingredient.getStrIngredient().toLowerCase().
+                                    contains(String.valueOf(s))).toList().
+                            subscribeOn(Schedulers.io()).
+                            observeOn(AndroidSchedulers.mainThread()).
+                            subscribe(
+                                    item -> {
+
+                                        ingredientAdapter.setIngredientList(item);
+                                        ingredientAdapter.notifyDataSetChanged();
+
+                                    }
+                            );
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+
+        searchField.addTextChangedListener(textWatcher);
     }
 
 
     @Override
     public void onSuccess(List list) {
+        this.list = list;
         if (list.get(0) instanceof Category) {
             categoryAdapter.setCategoryList(list);
             recyclerView.setAdapter(categoryAdapter);
@@ -166,19 +253,19 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         if (item instanceof Category) {
 
             action =
-                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Category) item).getStrCategory(), ((Category) item).getStrCategoryThumb(),getString(R.string.categories));
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Category) item).getStrCategory(), ((Category) item).getStrCategoryThumb(), getString(R.string.categories));
 
 
         } else if (item instanceof IngredientMeal) {
             action =
-                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((IngredientMeal) item).getStrIngredient(), "https://www.themealdb.com/images/ingredients/" + ((IngredientMeal) item).getStrIngredient() + ".png",getString(R.string.ingredients));
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((IngredientMeal) item).getStrIngredient(), "https://www.themealdb.com/images/ingredients/" + ((IngredientMeal) item).getStrIngredient() + ".png", getString(R.string.ingredients));
 
 
         } else {
             Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
             String countryCode = countryCodeMap.getOrDefault(((Area) item).getStrArea(), "unknown");
             action =
-                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Area) item).getStrArea(), "https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png",getString(R.string.areas));
+                    SearchFragmentDirections.actionSearchFragmentToSearchDetailsFragment(((Area) item).getStrArea(), "https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png", getString(R.string.areas));
 
 
         }

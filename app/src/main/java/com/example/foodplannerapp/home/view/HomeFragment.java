@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class HomeFragment extends Fragment implements ViewInterface , HomeListener {
+public class HomeFragment extends Fragment implements ViewInterface, HomeListener {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;
@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,40 +68,40 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        recyclerView=view.findViewById(R.id.recyclerView);
-        randomMealImg=view.findViewById(R.id.randomMealImg);
-        randomMealName=view.findViewById(R.id.randomMealNameText);
-        randomMealCategory=view.findViewById(R.id.randomMealCategoryText);
-        randomMealArea=view.findViewById(R.id.randomMealAreaText);
-        refreshButton=view.findViewById(R.id.refreshButton);
-        viewRecipeButton=view.findViewById(R.id.viewRecipeButton);
-        flagIcon=view.findViewById(R.id.randomMealFlagIcon);
-        progressBar=view.findViewById(R.id.progressBar);
+        recyclerView = view.findViewById(R.id.recyclerView);
+        randomMealImg = view.findViewById(R.id.randomMealImg);
+        randomMealName = view.findViewById(R.id.randomMealNameText);
+        randomMealCategory = view.findViewById(R.id.randomMealCategoryText);
+        randomMealArea = view.findViewById(R.id.randomMealAreaText);
+        refreshButton = view.findViewById(R.id.refreshButton);
+        viewRecipeButton = view.findViewById(R.id.viewRecipeButton);
+        flagIcon = view.findViewById(R.id.randomMealFlagIcon);
+        progressBar = view.findViewById(R.id.progressBar);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager=new GridLayoutManager(getContext(),2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        myAdapter=new RecyclerViewAdapter(getContext(), Arrays.asList(),this);
+        myAdapter = new RecyclerViewAdapter(getContext(), Arrays.asList(), this);
         recyclerView.setAdapter(myAdapter);
         randomMealImg.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        presenter=new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())),this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
 
-        refreshButton.setOnClickListener((v)->{
+        refreshButton.setOnClickListener((v) -> {
 
             presenter.getRandomMeal();
 
         });
 
-        viewRecipeButton.setOnClickListener((v)->{
-         if(randomMeal!=null){
+        viewRecipeButton.setOnClickListener((v) -> {
+            if (randomMeal != null) {
 
-             HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
-                     HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
-             Navigation.findNavController(requireView()).navigate(action);
-         }
+                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
+                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
+                Navigation.findNavController(requireView()).navigate(action);
+            }
 
         });
 
@@ -112,16 +111,16 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
 
     @Override
     public void getRandomMeal(Meal meal) {
-        randomMeal=meal;
+        randomMeal = meal;
         randomMealName.setText(meal.getStrMeal());
         randomMealCategory.setText(meal.getStrCategory());
         randomMealArea.setText(meal.getStrArea());
         progressBar.setVisibility(View.GONE);
         randomMealImg.setVisibility(View.VISIBLE);
-        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(randomMealImg);
+        Glide.with(getContext()).load(meal.getStrMealThumb()).into(randomMealImg);
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
-        Glide.with(requireContext()).load("https://flagsapi.com/"+countryCode.toUpperCase()+"/flat/64.png").into(flagIcon);
+        Glide.with(requireContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
 
     }
 
@@ -135,10 +134,9 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
     @Override
     public void onFailure(String errorMessage) {
         Snackbar snackbar = Snackbar
-                .make( requireView(),errorMessage, Snackbar.LENGTH_LONG);
+                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
-
 
 
     }
@@ -147,7 +145,7 @@ public class HomeFragment extends Fragment implements ViewInterface , HomeListen
     @Override
     public void onClickListener(Meal meal) {
 
-        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action=
+        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
                 HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 

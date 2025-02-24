@@ -45,6 +45,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     TextView usernameError;
     Button signInWithGoogle;
     GoogleSignInClient googleSignInClient;
+    Button visitAsAGuestButton;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -95,6 +96,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         usernameError.setVisibility(View.GONE);
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
         signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
+        visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -153,6 +155,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
             Intent intent = googleSignInClient.getSignInIntent();
             activityResultLauncher.launch(intent);
 
+        });
+
+        visitAsAGuestButton.setOnClickListener((v)->{
+
+            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment);
         });
     }
 

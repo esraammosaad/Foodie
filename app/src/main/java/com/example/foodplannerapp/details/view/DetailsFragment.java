@@ -1,12 +1,15 @@
 package com.example.foodplannerapp.details.view;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplannerapp.MainActivity;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
@@ -95,7 +99,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         int mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
         presenter.getMealByID(mealID);
         backIcon.setOnClickListener((v) -> {
@@ -110,16 +114,53 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         recyclerView.setAdapter(myAdapter);
         favIcon.setOnClickListener((v) -> {
 
-            if (meal != null)
-                addToFavorite();
+            if (presenter.getCurrentUser() != null) {
+
+                if (meal != null)
+                    addToFavorite();
+            } else {
+               showDialog(getString(R.string.you_can_t_add_meal_to_favorite_until_you_sign_in));
+
+
+            }
 
         });
         addToCalendarButton.setOnClickListener(v -> {
 
+            if(presenter.getCurrentUser()!=null){
+
             if (meal != null)
                 addToCalendar(meal);
+            }else {
+
+                showDialog(getString(R.string.you_can_t_scheduler_the_meal_until_you_sign_in));
+
+            }
 
         });
+
+    }
+
+    public void showDialog(String text){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(text);
+        builder.setTitle(R.string.alert);
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.sign_in, (DialogInterface.OnClickListener) (dialog, which) -> {
+
+            Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment,null,
+                    new NavOptions.Builder()
+                            .setPopUpTo(R.id.homeFragment, true)
+                            .build());
+
+        });
+
+
+        builder.setNegativeButton(R.string.continue_as_a_guest, (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.cancel();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
     }
 
@@ -234,26 +275,27 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
-        favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-        presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
-            @Override
-            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
-                isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
-                if (isFav) {
-                    favIcon.setImageResource(R.drawable.baseline_favorite_24);
+        if (presenter.getCurrentUser() != null) {
+            favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+            presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
+                @Override
+                public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
+                    isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
+                    if (isFav) {
+                        favIcon.setImageResource(R.drawable.baseline_favorite_24);
+
+                    }
 
                 }
-
-            }
-        });
-
+            });
+        }
 
     }
 
     @Override
     public void onFavoriteMealAddedToFireStore(String message) {
 
-        Log.i("TAG", "onFavoriteMealAddedToFireStore: "+message);
+        Log.i("TAG", "onFavoriteMealAddedToFireStore: " + message);
 
 
     }
@@ -261,7 +303,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     @Override
     public void onFavoriteMealFailedToAddedToFireStore(String errorMessage) {
 
-        Log.i("TAG", "onFavoriteMealFailedToAddedToFireStore: "+errorMessage);
+        Log.i("TAG", "onFavoriteMealFailedToAddedToFireStore: " + errorMessage);
 
 
     }
@@ -269,7 +311,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     @Override
     public void onFailure(String errorMessage) {
         Snackbar snackbar = Snackbar
-                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
+                .make(getView(), errorMessage, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
         snackbar.show();
 
     }

@@ -54,11 +54,10 @@
                 android:layout_marginRight="20dp"
                 android:paddingTop="12dp"
                 android:paddingBottom="100dp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline7"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
-                app:layout_constraintVertical_bias="0.071"
+                app:layout_constraintTop_toBottomOf="@+id/view5"
                 app:reverseLayout="true"
                 app:stackFromEnd="true" />
 
@@ -75,6 +74,98 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="20dp" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foregroundGravity="center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/favoriteanimation" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/guestView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="view5,noInternetIcon,noInternetText,guest,login" />
+
+            <TextView
+                android:id="@+id/emptyFavText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="260dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="@string/your_favorites_list_is_on_a_diet_add_some_tasty_picks"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/favRecyclerView" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_view"
+                android:backgroundTint="#FAF9F6"
+                app:layout_constraintHorizontal_bias="0.951"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <ImageView
+                android:id="@+id/noInternetIcon"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="19dp"
+                android:src="@drawable/baseline_assignment_ind_24"
+                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                app:layout_constraintTop_toTopOf="@+id/view5" />
+
+            <TextView
+                android:id="@+id/noInternetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/please_sign_in_to_can_save_your_favorite_meal"
+                app:layout_constraintStart_toEndOf="@+id/noInternetIcon"
+                app:layout_constraintTop_toTopOf="@+id/view5" />
+
+            <TextView
+                android:id="@+id/guest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/continue_as_a_guest"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/login"
+                app:layout_constraintTop_toBottomOf="@+id/noInternetText" />
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/sign_in"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                app:layout_constraintTop_toTopOf="@+id/guest" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

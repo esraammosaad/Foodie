@@ -45,6 +45,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
     TextView passwordError;
     Button signInWithGoogle;
     GoogleSignInClient googleSignInClient;
+    Button visitAsAGuestButton;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -89,6 +90,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
         emailError = view.findViewById(R.id.emailError);
         passwordError = view.findViewById(R.id.passwordError);
         signInWithGoogle = view.findViewById(R.id.googleSignInButton);
+        visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
@@ -141,6 +143,10 @@ public class LoginFragment extends Fragment implements ViewInterface {
             Intent intent = googleSignInClient.getSignInIntent();
             activityResultLauncher.launch(intent);
 
+        });
+        visitAsAGuestButton.setOnClickListener((v)->{
+
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeFragment);
         });
 
 

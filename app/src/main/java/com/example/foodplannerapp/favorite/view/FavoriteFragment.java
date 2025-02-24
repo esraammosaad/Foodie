@@ -4,9 +4,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +17,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
@@ -27,6 +31,7 @@ import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
 import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +42,11 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
     RecyclerView recyclerView;
     PresenterImpl presenter;
     LiveData<List<FavoriteMealModel>> mealList;
+    LottieAnimationView lottieAnimationView;
+    TextView emptyFavText;
+    Group guestGroup;
+    TextView continueAsAGuest;
+    TextView signInText;
 
 
     public FavoriteFragment() {
@@ -59,6 +69,11 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        lottieAnimationView = view.findViewById(R.id.animationView);
+        guestGroup = view.findViewById(R.id.guestView);
+        emptyFavText = view.findViewById(R.id.emptyFavText);
+        continueAsAGuest = view.findViewById(R.id.guest);
+        signInText = view.findViewById(R.id.login);
         recyclerView = view.findViewById(R.id.favRecyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -68,17 +83,45 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         myAdapter = new RecyclerViewAdapter(getContext(), new ArrayList<>(), this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(myAdapter);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
-        mealList = presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
-        mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
-            @Override
-            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
+        lottieAnimationView.setVisibility(View.VISIBLE);
+        emptyFavText.setVisibility(View.VISIBLE);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        if (presenter.getCurrentUser() != null) {
+            mealList = presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
+            mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
+                @Override
+                public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
 
-                myAdapter.setMealsList(favoriteMealModels);
-                myAdapter.notifyDataSetChanged();
+                    if (!favoriteMealModels.isEmpty()) {
+
+                        lottieAnimationView.setVisibility(View.GONE);
+                        emptyFavText.setVisibility(View.GONE);
+                        myAdapter.setMealsList(favoriteMealModels);
+                        myAdapter.notifyDataSetChanged();
+                    }
 
 
-            }
+                }
+            });
+        } else {
+            lottieAnimationView.setVisibility(View.VISIBLE);
+            emptyFavText.setVisibility(View.VISIBLE);
+            guestGroup.setVisibility(View.VISIBLE);
+
+
+        }
+        signInText.setOnClickListener((v) -> {
+            Navigation.findNavController(getView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
+                    new NavOptions.Builder()
+                            .setPopUpTo(R.id.favoriteFragment, true).
+                            setPopUpTo(R.id.homeFragment, true)
+                            .build());
+        });
+        continueAsAGuest.setOnClickListener((v) -> {
+
+            guestGroup.setVisibility(View.INVISIBLE);
+
+
         });
 
 
@@ -106,7 +149,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
     @Override
     public void onItemClickListener(FavoriteMealModel meal) {
-        FavoriteFragmentDirections.ActionFavoriteFragmentToDetailsFragment action=
+        FavoriteFragmentDirections.ActionFavoriteFragmentToDetailsFragment action =
                 FavoriteFragmentDirections.actionFavoriteFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 
@@ -114,14 +157,14 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
     @Override
     public void onSuccess(String message) {
-        Log.i("TAG", "onSuccess: "+message);
+        Log.i("TAG", "onSuccess: " + message);
 
 
     }
 
     @Override
     public void onFailure(String errorMessage) {
-        Log.i("TAG", "onFailure: "+errorMessage);
+        Log.i("TAG", "onFailure: " + errorMessage);
 
     }
 }
