@@ -1,5 +1,7 @@
 package com.example.foodplannerapp.calender.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,8 @@ import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
 import com.example.foodplannerapp.favorite.view.FavoriteFragmentDirections;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.text.SimpleDateFormat;
@@ -71,7 +75,7 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
         calendarView = view.findViewById(R.id.calendarView);
         recyclerView = view.findViewById(R.id.calendarRecyclerView);
         textCalendar = view.findViewById(R.id.textCalenderView);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -141,25 +145,33 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
     @Override
     public void onClickListener(CalenderMealModel meal) {
 
-        if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
-            presenter.deleteMealFromCalendar(meal);
-            presenter.deleteCalendarMealFromFireStore(meal);
+        if(NetworkAvailability.isNetworkAvailable(getContext())){
+            if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
+                presenter.deleteMealFromCalendar(meal);
+                presenter.deleteCalendarMealFromFireStore(meal);
 
 
-            Snackbar snackbar = Snackbar
-                    .make(requireView(), "Meal is removed from calender", Snackbar.LENGTH_LONG).setActionTextColor(
-                            getResources().getColor(R.color.primaryColor)
-                    ).setTextColor(getResources().getColor(R.color.white))
-                    .setAction("UNDO", view -> {
-                        presenter.addMealToCalendar(meal);
-                        presenter.insertCalendarMealToFireStore(meal);
+                Snackbar snackbar = Snackbar
+                        .make(requireView(), "Meal is removed from calender", Snackbar.LENGTH_LONG).setActionTextColor(
+                                getResources().getColor(R.color.primaryColor)
+                        ).setTextColor(getResources().getColor(R.color.white))
+                        .setAction("UNDO", view -> {
+                            presenter.addMealToCalendar(meal);
+                            presenter.insertCalendarMealToFireStore(meal);
 
-                    });
-            snackbar.show();
+                        });
+                snackbar.show();
+            }
+        }else{
+            NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
         }
 
 
+
+
     }
+
+
 
     @Override
     public void onItemClickListener(CalenderMealModel meal) {

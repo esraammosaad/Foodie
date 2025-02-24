@@ -73,6 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 app:layout_constraintGuide_end="20dp" />
 
             <com.airbnb.lottie.LottieAnimationView
@@ -101,17 +102,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="260dp"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
                 android:text="@string/your_favorites_list_is_on_a_diet_add_some_tasty_picks"
                 android:textSize="16sp"
-                android:visibility="gone"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@+id/animationView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/favRecyclerView" />
+                app:layout_constraintTop_toTopOf="@+id/animationView"
+                app:layout_constraintVertical_bias="0.626" />
 
             <View
                 android:id="@+id/view5"

@@ -74,4 +74,8 @@
     <string name="continue_as_a_guest">CONTINUE AS A GUEST</string>
     <string name="please_sign_in_to_can_save_your_favorite_meal">Please sign in to can save your favorite meal</string>
     <string name="your_favorites_list_is_on_a_diet_add_some_tasty_picks">Your favorites list is on a diet… add some tasty picks</string>
+    <string name="no_internet_connection_please_reconnect_and_try_again">No internet connection please reconnect and try again!</string>
+    <string name="ok">OK</string>
+    <string name="meal_is_removed_from_favorite">Meal is removed from favorite</string>
+    <string name="meal_is_added_to_favorite">Meal is added to favorite</string>
 </resources>

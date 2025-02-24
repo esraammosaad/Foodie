@@ -1,5 +1,7 @@
 package com.example.foodplannerapp.favorite.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,9 @@ import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
 import com.example.foodplannerapp.home.view.HomeFragmentDirections;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NetworkListener;
+import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -85,7 +90,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         recyclerView.setAdapter(myAdapter);
         lottieAnimationView.setVisibility(View.VISIBLE);
         emptyFavText.setVisibility(View.VISIBLE);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         if (presenter.getCurrentUser() != null) {
             mealList = presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
             mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
@@ -96,9 +101,15 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
                         lottieAnimationView.setVisibility(View.GONE);
                         emptyFavText.setVisibility(View.GONE);
-                        myAdapter.setMealsList(favoriteMealModels);
-                        myAdapter.notifyDataSetChanged();
+                    } else {
+
+                        lottieAnimationView.setVisibility(View.VISIBLE);
+                        emptyFavText.setVisibility(View.VISIBLE);
+
+
                     }
+                    myAdapter.setMealsList(favoriteMealModels);
+                    myAdapter.notifyDataSetChanged();
 
 
                 }
@@ -113,8 +124,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         signInText.setOnClickListener((v) -> {
             Navigation.findNavController(getView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.favoriteFragment, true).
-                            setPopUpTo(R.id.homeFragment, true)
+                            .setPopUpTo(R.id.homeFragment, true)
                             .build());
         });
         continueAsAGuest.setOnClickListener((v) -> {
@@ -130,22 +140,33 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
     @Override
     public void onClickListener(FavoriteMealModel meal) {
-        presenter.deleteMealFromFavorite(meal);
-        presenter.deleteFavoriteMealFromFireStore(meal);
-        Snackbar snackbar = Snackbar
-                .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setActionTextColor(
-                        getResources().getColor(R.color.primaryColor)
-                ).setTextColor(getResources().getColor(R.color.white))
-                .setAction("UNDO", view -> {
-                    presenter.addMealToFavorite(meal);
-                    presenter.insertCalendarMealToFireStore(meal);
 
-                });
+        if(NetworkAvailability.isNetworkAvailable(getContext())){
+            presenter.deleteMealFromFavorite(meal);
+            presenter.deleteFavoriteMealFromFireStore(meal);
+            Snackbar snackbar = Snackbar
+                    .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setActionTextColor(
+                            getResources().getColor(R.color.primaryColor)
+                    ).setTextColor(getResources().getColor(R.color.white))
+                    .setAction("UNDO", view -> {
+                        presenter.addMealToFavorite(meal);
+                        presenter.insertCalendarMealToFireStore(meal);
+
+                    });
 
 
-        snackbar.show();
+            snackbar.show();
+        }else{
+
+            NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+
+
+        }
+
 
     }
+
+
 
     @Override
     public void onItemClickListener(FavoriteMealModel meal) {
@@ -167,4 +188,6 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         Log.i("TAG", "onFailure: " + errorMessage);
 
     }
+
+
 }

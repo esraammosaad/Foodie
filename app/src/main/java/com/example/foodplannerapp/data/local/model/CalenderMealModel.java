@@ -8,6 +8,7 @@ import androidx.room.TypeConverters;
 import com.example.foodplannerapp.data.models.Ingredient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity(tableName = "calendar_meal_table", primaryKeys = {"idMeal", "day", "month", "year"})
 public class CalenderMealModel {
@@ -28,7 +29,7 @@ public class CalenderMealModel {
     private String strMealThumb;
     private String strYoutube;
     @TypeConverters(ArrayListConverter.class)
-    private ArrayList<Ingredient> ingredients;
+    private List<Ingredient> ingredients;
 
     public CalenderMealModel() {
     }
@@ -105,11 +106,11 @@ public class CalenderMealModel {
         this.strYoutube = strYoutube;
     }
 
-    public ArrayList<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

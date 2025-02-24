@@ -79,6 +79,11 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
         authenticationRepository.getFavoriteMealsFromFireStore(this);
     }
 
+    public void getCalendarMealsFromFireStore() {
+
+        authenticationRepository.getCalendarMealsFromFireStore(this);
+    }
+
     @Override
     public void onSuccess(String message) {
         viewInterface.onSuccess(message);

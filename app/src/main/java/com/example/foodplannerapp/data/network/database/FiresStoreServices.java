@@ -61,7 +61,7 @@ public class FiresStoreServices {
 
     }
     public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal, FireStoreCallBack fireStoreCallBack) {
-        firebaseFirestore.collection(Strings.FAV_COLLECTION).document(meal.getIdMeal())
+        firebaseFirestore.collection(Strings.FAV_COLLECTION).document(meal.getUserUID()+meal.getIdMeal())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -90,7 +90,6 @@ public class FiresStoreServices {
                         if (task.isSuccessful()) {
 
                             getDataFromFirebaseCallBack.onGetFavoriteMeals(task.getResult());
-                            System.out.println("=========================================");
 
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -102,7 +101,7 @@ public class FiresStoreServices {
     }
 
     public void deleteMealInTheCalendarFromFireStore(CalenderMealModel meal, FireStoreCallBack fireStoreCallBack) {
-        firebaseFirestore.collection(Strings.CALENDAR_COLLECTION).document(meal.getIdMeal()+meal.getDay()+meal.getMonth()+meal.getYear())
+        firebaseFirestore.collection(Strings.CALENDAR_COLLECTION).document(meal.getUserUID()+meal.getIdMeal()+meal.getDay()+meal.getMonth()+meal.getYear())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -130,8 +129,7 @@ public class FiresStoreServices {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            getDataFromFirebaseCallBack.onGetFavoriteMeals(task.getResult());
-                            System.out.println("=========================================");
+                            getDataFromFirebaseCallBack.onGetCalendarMeals(task.getResult());
 
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());

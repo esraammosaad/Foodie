@@ -50,6 +50,14 @@ public class MealsRepositoryImpl {
 
     }
 
+    public void getNewRandomMeal(NetworkCallBack networkCallBack) {
+
+
+        mealsRemoteDataSource.getNewRandomMeal(networkCallBack);
+
+
+    }
+
     public void getMealByID(NetworkCallBack networkCallBack, int id) {
 
 

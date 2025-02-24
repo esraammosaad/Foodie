@@ -27,6 +27,10 @@ public class PresenterImpl implements NetworkCallBack<Meal> {
 
         mealsRepository.getRandomMeal(this);
     }
+    public void getNewRandomMeal(){
+
+        mealsRepository.getNewRandomMeal(this);
+    }
 
     public void getMealsByFirstLetter(){
 

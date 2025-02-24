@@ -97,7 +97,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
         signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
         visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -172,6 +172,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
+
 
     }
 

@@ -93,7 +93,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
         visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -162,6 +162,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
             snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
             snackbar.show();
             presenter.getFavoriteMealsFromFireStore();
+            presenter.getCalendarMealsFromFireStore();
 
 
         }

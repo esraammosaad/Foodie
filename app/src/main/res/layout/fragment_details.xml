@@ -15,44 +15,19 @@
             android:layout_height="match_parent"
             tools:context=".details.view.DetailsFragment">
 
-            <ImageView
-                android:id="@+id/detailsMealImage"
-                android:layout_width="match_parent"
-                android:layout_height="400dp"
-                android:scaleType="centerCrop"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/pancakes" />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/noLocalItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="noInternet,noWifiImg" />
 
-            <View
-                android:id="@+id/view2"
-                android:layout_width="match_parent"
-                android:layout_height="85dp"
-                android:background="#59878787"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/favIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/baseline_favorite_border_24"
-                app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                app:layout_constraintTop_toTopOf="@+id/backIcon" />
-
-            <ImageView
-                android:id="@+id/backIcon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/baseline_arrow_back_ios_24"
-                app:layout_constraintEnd_toStartOf="@+id/favIcon"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline5"
-                app:layout_constraintTop_toTopOf="@+id/detailsMealImage" />
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/internetGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="detailsMealImage,favIcon,view,mealNameDetails,mealAreaDetails,mealCategoryDetails,textView16,flagIconDetails,addToCalendarBtn,imageView10,textView3,textView11,textView14,webView,detailsRecyclerView,instructions,showMore" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline5"
@@ -68,6 +43,24 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="20dp" />
 
+            <ImageView
+                android:id="@+id/detailsMealImage"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@drawable/pancakes" />
+
+            <ImageView
+                android:id="@+id/favIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/baseline_favorite_border_24"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintTop_toTopOf="@+id/backIcon" />
+
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
@@ -76,6 +69,27 @@
                 app:layout_constraintBottom_toBottomOf="@+id/detailsMealImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <View
+                android:id="@+id/view2"
+                android:layout_width="match_parent"
+                android:layout_height="85dp"
+                android:background="#59878787"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/backIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/baseline_arrow_back_ios_24"
+                app:layout_constraintEnd_toStartOf="@+id/favIcon"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toTopOf="@+id/detailsMealImage" />
 
             <TextView
                 android:id="@+id/mealNameDetails"
@@ -254,6 +268,33 @@
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView14"
                 app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView" />
+
+            <TextView
+                android:id="@+id/noInternet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="@string/no_internet_connection_please_reconnect_and_try_again"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noWifiImg" />
+
+            <ImageView
+                android:id="@+id/noWifiImg"
+                android:layout_width="95dp"
+                android:layout_height="84dp"
+                android:layout_marginTop="244dp"
+                android:src="@drawable/nowifi"
+                android:visibility="gone"
+                app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                app:layout_constraintStart_toStartOf="@+id/guideline5"
+                app:layout_constraintTop_toBottomOf="@+id/view2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

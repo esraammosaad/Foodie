@@ -1,10 +1,18 @@
 package com.example.foodplannerapp.home.view;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -26,14 +34,16 @@ import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
-import com.google.android.material.snackbar.Snackbar;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NetworkChangeListener;
+import com.example.foodplannerapp.utilis.NetworkListener;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 
-public class HomeFragment extends Fragment implements ViewInterface, HomeListener {
+public class HomeFragment extends Fragment implements ViewInterface, HomeListener, NetworkListener {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;
@@ -47,6 +57,10 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
     PresenterImpl presenter;
     Meal randomMeal;
     ImageView flagIcon;
+    Group noInternetBanner;
+    TextView dismiss;
+    TextView turnWIFI;
+    NetworkChangeListener networkChangeListener;
 
     public HomeFragment() {
     }
@@ -67,6 +81,8 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
+        networkChangeListener = new NetworkChangeListener(this);
+
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         randomMealImg = view.findViewById(R.id.randomMealImg);
@@ -77,6 +93,9 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         viewRecipeButton = view.findViewById(R.id.viewRecipeButton);
         flagIcon = view.findViewById(R.id.randomMealFlagIcon);
         progressBar = view.findViewById(R.id.progressBar);
+        noInternetBanner = view.findViewById(R.id.noInternetBanner);
+        dismiss=view.findViewById(R.id.dismiss);
+        turnWIFI=view.findViewById(R.id.turnWIFI);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -85,14 +104,32 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         recyclerView.setAdapter(myAdapter);
         randomMealImg.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
-
         refreshButton.setOnClickListener((v) -> {
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
 
-            presenter.getRandomMeal();
+                presenter.getNewRandomMeal();
 
+            }else {
+
+                noInternetBanner.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        turnWIFI.setOnClickListener((v)->{
+
+            WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+            wifi.setWifiEnabled(true);
+            wifi.reconnect();
+
+
+        });
+
+        dismiss.setOnClickListener((v)->{
+            noInternetBanner.setVisibility(View.GONE);
         });
 
         viewRecipeButton.setOnClickListener((v) -> {
@@ -108,6 +145,18 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        requireActivity().registerReceiver(networkChangeListener, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().unregisterReceiver(networkChangeListener);
+    }
 
     @Override
     public void getRandomMeal(Meal meal) {
@@ -133,10 +182,10 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onFailure(String errorMessage) {
-        Snackbar snackbar = Snackbar
-                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
-        snackbar.show();
+//        Snackbar snackbar = Snackbar
+//                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG);
+//        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+//        snackbar.show();
 
 
     }
@@ -149,6 +198,22 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
                 HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 
+
+    }
+
+    @Override
+    public void onLostConnection() {
+
+        noInternetBanner.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void onConnectionReturned() {
+
+        noInternetBanner.setVisibility(View.GONE);
+        presenter.getMealsByFirstLetter();
+        presenter.getRandomMeal();
 
     }
 }

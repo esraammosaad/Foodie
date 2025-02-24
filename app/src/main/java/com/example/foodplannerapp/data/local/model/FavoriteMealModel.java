@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 import com.example.foodplannerapp.data.models.Ingredient;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity(tableName = "meal_table")
@@ -21,7 +22,7 @@ public class FavoriteMealModel {
     private String strMealThumb;
     private String strYoutube;
     @TypeConverters(ArrayListConverter.class)
-    private ArrayList<Ingredient> ingredients;
+    private List<Ingredient> ingredients;
 
     public FavoriteMealModel() {
     }
@@ -94,11 +95,11 @@ public class FavoriteMealModel {
         this.strYoutube = strYoutube;
     }
 
-    public ArrayList<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public void setIngredients(ArrayList<Ingredient> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 

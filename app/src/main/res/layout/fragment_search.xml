@@ -23,6 +23,30 @@
 
 
             <TextView
+                android:id="@+id/noInternet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="@string/no_internet_connection_please_reconnect_and_try_again"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noWifiImg" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/internetGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="view4,noInternetIcon2,dismiss2,turnWIFI2,noInternetText2" />
+
+            <TextView
                 android:id="@+id/textView17"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +98,7 @@
                 android:textColor="#C2C2C2"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -98,7 +122,7 @@
                 android:layout_marginEnd="20dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/searchTextField"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <ImageView
                 android:id="@+id/filterSmallIcon"
@@ -146,6 +170,71 @@
                 app:layout_constraintStart_toEndOf="@+id/searchTextField"
                 app:layout_constraintTop_toTopOf="@+id/filterIcon"
                 app:layout_constraintVertical_bias="0.145" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_view"
+                android:backgroundTint="#FAF9F6"
+                app:layout_constraintHorizontal_bias="0.951"
+                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+            <ImageView
+                android:id="@+id/noInternetIcon2"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/baseline_wifi_off_24"
+                app:layout_constraintStart_toStartOf="@+id/view4"
+                app:layout_constraintTop_toTopOf="@+id/view4" />
+
+            <TextView
+                android:id="@+id/dismiss2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/dismiss"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/turnWIFI2"
+                app:layout_constraintTop_toBottomOf="@+id/noInternetText2" />
+
+            <TextView
+                android:id="@+id/turnWIFI2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/turnOnWifi"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintTop_toTopOf="@+id/dismiss2" />
+
+            <TextView
+                android:id="@+id/noInternetText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/noInternetText"
+                app:layout_constraintStart_toEndOf="@+id/noInternetIcon2"
+                app:layout_constraintTop_toTopOf="@+id/noInternetIcon2" />
+
+            <ImageView
+                android:id="@+id/noWifiImg"
+                android:layout_width="95dp"
+                android:layout_height="84dp"
+                android:src="@drawable/nowifi"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/searchRecyclerView"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toTopOf="@+id/searchRecyclerView"
+                app:layout_constraintVertical_bias="0.339" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

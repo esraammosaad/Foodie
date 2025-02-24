@@ -291,8 +291,8 @@
                 android:id="@+id/noInternetBanner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="view5,noInternetIcon,noInternetText,guest,login" />
+                android:visibility="visible"
+                app:constraint_referenced_ids="view5,noInternetIcon,noInternetText,dismiss,turnWIFI" />
 
             <View
                 android:id="@+id/view5"
@@ -327,7 +327,7 @@
                 app:layout_constraintTop_toTopOf="@+id/noInternetIcon" />
 
             <TextView
-                android:id="@+id/guest"
+                android:id="@+id/dismiss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -335,11 +335,11 @@
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/dismiss"
                 android:textColor="@color/primaryColor"
-                app:layout_constraintEnd_toStartOf="@+id/login"
+                app:layout_constraintEnd_toStartOf="@+id/turnWIFI"
                 app:layout_constraintTop_toBottomOf="@+id/noInternetText" />
 
             <TextView
-                android:id="@+id/login"
+                android:id="@+id/turnWIFI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -347,7 +347,7 @@
                 android:text="@string/turnOnWifi"
                 android:textColor="@color/primaryColor"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintTop_toTopOf="@+id/guest" />
+                app:layout_constraintTop_toTopOf="@+id/dismiss" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

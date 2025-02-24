@@ -1,11 +1,21 @@
 package com.example.foodplannerapp.data.network;
 
+import android.content.Context;
+
 import com.example.foodplannerapp.data.models.AllAreasResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
 import com.example.foodplannerapp.data.models.MealModel;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
 
+import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,13 +27,39 @@ public class MealsRemoteDataSource {
     static public Retrofit retrofit;
     public static ApiServices apiServices;
     public static final String baseUrl = "https://www.themealdb.com/api/json/v1/1/";
+    OkHttpClient okHttpClient;
 
 
-    public MealsRemoteDataSource() {
+    public MealsRemoteDataSource(Context context) {
+
+
+
+        int cacheSize = 10 * 10 * 1024;
+        Cache cache = new Cache(new File(context.getCacheDir(), "http_cache"), cacheSize);
+        HttpLoggingInterceptor loggingInterceptor=new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+        okHttpClient = new OkHttpClient().
+                newBuilder().
+                cache(cache).
+                addInterceptor(chain -> {
+
+                    Request request = chain.request();
+                    if (!NetworkAvailability.isNetworkAvailable(context)) {
+                        request = request.newBuilder().
+                                header("Cache-Control", "public, only-if-cached, max-stale=2419200")
+                                .build();
+                    }
+                    return chain.proceed(request);
+                }).addNetworkInterceptor(chain -> {
+                    okhttp3.Response response=chain.proceed(chain.request());
+                    return response.newBuilder().header("Cache-Control", "public, max-age=1800").build();
+
+                }).addInterceptor(loggingInterceptor).build();
 
 
         retrofit = new Retrofit.Builder().
                 baseUrl(baseUrl).
+                client(okHttpClient).
                 addConverterFactory(GsonConverterFactory.create()).
                 build();
 
@@ -32,7 +68,35 @@ public class MealsRemoteDataSource {
 
     }
 
+
     public void getRandomMeal(NetworkCallBack networkCallBack) {
+        Call<MealModel> call = apiServices.getRandomMeal();
+        call.enqueue(new Callback<MealModel>() {
+            @Override
+            public void onResponse(Call<MealModel> call, Response<MealModel> response) {
+                if (response.isSuccessful())
+                    networkCallBack.onSuccess(response.body().getMeals().get(0), null);
+                else
+                    networkCallBack.onFailure(response.message());
+
+            }
+
+            @Override
+            public void onFailure(Call<MealModel> call, Throwable t) {
+                networkCallBack.onFailure(t.getMessage());
+
+            }
+        });
+
+
+    }
+
+    public void getNewRandomMeal(NetworkCallBack networkCallBack) {
+        try {
+            okHttpClient.cache().evictAll();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Call<MealModel> call = apiServices.getRandomMeal();
         call.enqueue(new Callback<MealModel>() {
             @Override
@@ -75,7 +139,8 @@ public class MealsRemoteDataSource {
 
 
     }
-    public void getMealByID(NetworkCallBack networkCallBack , int id){
+
+    public void getMealByID(NetworkCallBack networkCallBack, int id) {
         Call<MealModel> call = apiServices.getMealByID(id);
         call.enqueue(new Callback<MealModel>() {
             @Override
@@ -147,10 +212,10 @@ public class MealsRemoteDataSource {
         call.enqueue(new Callback<AllIngredientsResponse>() {
             @Override
             public void onResponse(Call<AllIngredientsResponse> call, Response<AllIngredientsResponse> response) {
-                if (response.isSuccessful()){
-                    System.out.println(response.body().getMeals().get(0).getStrIngredient()+"======================iiii");
-                    networkCallBack.onSuccess(null, response.body().getMeals());}
-                else
+                if (response.isSuccessful()) {
+                    System.out.println(response.body().getMeals().get(0).getStrIngredient() + "======================iiii");
+                    networkCallBack.onSuccess(null, response.body().getMeals());
+                } else
                     networkCallBack.onFailure(response.message());
 
             }

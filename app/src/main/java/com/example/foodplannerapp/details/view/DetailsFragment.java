@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.navigation.NavOptions;
@@ -26,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.foodplannerapp.MainActivity;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
@@ -39,8 +39,13 @@ import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -66,6 +71,8 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     TextView showMore;
     Button addToCalendarButton;
     Meal meal;
+    Group internetGroup;
+    Group noLocalItem;
 
 
     public DetailsFragment() {
@@ -98,28 +105,38 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         flagIcon = view.findViewById(R.id.flagIconDetails);
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
+        internetGroup=view.findViewById(R.id.internetGroup);
+        noLocalItem=view.findViewById(R.id.noLocalItem);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         int mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
-        presenter.getMealByID(mealID);
-        backIcon.setOnClickListener((v) -> {
 
-            Navigation.findNavController(view).navigateUp();
-        });
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         myAdapter = new RecyclerViewAdapter(getContext(), List.of());
         recyclerView.setAdapter(myAdapter);
+
+        backIcon.setOnClickListener((v) -> {
+
+            Navigation.findNavController(view).navigateUp();
+        });
         favIcon.setOnClickListener((v) -> {
 
             if (presenter.getCurrentUser() != null) {
 
-                if (meal != null)
+                if (NetworkAvailability.isNetworkAvailable(getContext())) {
                     addToFavorite();
+                } else {
+
+                    NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+
+
+                }
             } else {
-               showDialog(getString(R.string.you_can_t_add_meal_to_favorite_until_you_sign_in));
+
+                showDialog(getString(R.string.you_can_t_add_meal_to_favorite_until_you_sign_in));
 
 
             }
@@ -127,11 +144,19 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         });
         addToCalendarButton.setOnClickListener(v -> {
 
-            if(presenter.getCurrentUser()!=null){
+            if (presenter.getCurrentUser() != null) {
 
-            if (meal != null)
-                addToCalendar(meal);
-            }else {
+                if (meal != null || favMeal != null) {
+                    if (NetworkAvailability.isNetworkAvailable(getContext())) {
+                        addToCalendar();
+                    } else {
+
+                        NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+
+
+                    }
+                }
+            } else {
 
                 showDialog(getString(R.string.you_can_t_scheduler_the_meal_until_you_sign_in));
 
@@ -139,16 +164,93 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
         });
 
+        if (presenter.getCurrentUser() != null) {
+            loadMealsFromFavorite(mealID);
+
+        } else {
+            presenter.getMealByID(mealID);
+
+        }
+
     }
 
-    public void showDialog(String text){
+    public void loadMealsFromFavorite(int mealID) {
+        presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
+            @Override
+            public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
+                FavoriteMealModel foundMeal = favoriteMealModels.stream()
+                        .filter(meal -> meal.getIdMeal().equals(String.valueOf(mealID)))
+                        .findFirst()
+                        .orElse(null);
+
+                if (foundMeal != null) {
+                    isFav = true;
+                    favMeal = foundMeal;
+                    favIcon.setImageResource(R.drawable.baseline_favorite_24);
+                    loadVideo(foundMeal.getStrYoutube());
+                    mealName.setText(foundMeal.getStrMeal());
+                    mealArea.setText(foundMeal.getStrArea());
+                    mealCategory.setText(foundMeal.getStrCategory());
+                    showInstructions(foundMeal.getStrInstructions());
+                    ingredientsList = convertRoomList(foundMeal);
+                    updateRecyclerView(ingredientsList);
+                    loadFlagImage(foundMeal.getStrArea());
+
+                } else {
+                    presenter.getMealByID(mealID);
+
+                }
+
+            }
+        });
+    }
+
+
+    public void showInstructions(String mealInstructions) {
+        if (mealInstructions.length() > 150) {
+            instructions.setText(String.format("%s ....", mealInstructions.substring(0, 150)));
+            showMore.setOnClickListener((v) -> {
+
+                if (instructions.getText().length() < 160) {
+
+                    instructions.setText(mealInstructions);
+                    showMore.setText(R.string.show_less);
+                } else {
+                    instructions.setText(String.format("%s....", mealInstructions.substring(0, 150)));
+                    showMore.setText(R.string.show_more);
+
+                }
+            });
+
+        } else {
+            instructions.setText(mealInstructions);
+            showMore.setVisibility(View.GONE);
+        }
+    }
+
+
+    ArrayList<Ingredient> convertRoomList(FavoriteMealModel meal) {
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Ingredient>>() {
+        }.getType();
+        return gson.fromJson(gson.toJson(meal.getIngredients()), type);
+    }
+
+    public void updateRecyclerView(List<Ingredient> ingredientList) {
+
+        myAdapter.setIngredientList(ingredientsList);
+        myAdapter.notifyDataSetChanged();
+    }
+
+    public void showDialog(String text) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage(text);
         builder.setTitle(R.string.alert);
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.sign_in, (DialogInterface.OnClickListener) (dialog, which) -> {
 
-            Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment,null,
+            Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment, null,
                     new NavOptions.Builder()
                             .setPopUpTo(R.id.homeFragment, true)
                             .build());
@@ -164,7 +266,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
     }
 
-    public void addToCalendar(Meal meal) {
+    public void addToCalendar() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -172,7 +274,8 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
                 (view1, selectedYear, selectedMonth, selectedDay) -> {
-                    CalenderMealModel calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+                    CalenderMealModel calenderMeal = getCalenderMealModel(selectedYear, selectedMonth, selectedDay);
+
                     presenter.addMealToCalendar(calenderMeal);
                     presenter.insertCalendarMealToFireStore(calenderMeal);
                     Snackbar snackbar = Snackbar
@@ -202,33 +305,45 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
     }
 
+    @NonNull
+    private CalenderMealModel getCalenderMealModel(int selectedYear, int selectedMonth, int selectedDay) {
+        CalenderMealModel calenderMeal;
+        if (meal != null) {
+            calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+
+        } else {
+            calenderMeal = new CalenderMealModel(favMeal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), favMeal.getStrMeal(), favMeal.getStrCategory(), favMeal.getStrArea(), favMeal.getStrInstructions(), favMeal.getStrMealThumb(), favMeal.getStrYoutube(), ingredientsList);
+
+        }
+        return calenderMeal;
+    }
+
     public void addToFavorite() {
 
         if (!isFav) {
             favIcon.setImageResource(R.drawable.baseline_favorite_24);
             presenter.addMealToFav(favMeal);
             presenter.addFavoriteMealToFireStore(favMeal);
-            Snackbar snackbar = Snackbar
-                    .make(requireView(), "Meal is added to favorite", Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
-            snackbar.show();
+            showSnackBar(getString(R.string.meal_is_added_to_favorite));
             isFav = true;
 
         } else {
             favIcon.setImageResource(R.drawable.baseline_favorite_border_24);
             presenter.deleteMealFromFav(favMeal);
             presenter.deleteFavoriteMealFromFireStore(favMeal);
-            Snackbar snackbar = Snackbar
-                    .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
-            snackbar.show();
+            showSnackBar(getString(R.string.meal_is_removed_from_favorite));
             isFav = false;
         }
     }
 
-    public void loadVideo(Meal meal) {
-        String youtubeUrl = meal.getStrYoutube();
+    public void showSnackBar(String text) {
+        Snackbar snackbar = Snackbar
+                .make(requireView(), text, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
+        snackbar.show();
+    }
+
+    public void loadVideo(String youtubeUrl) {
         String videoId = youtubeUrl.substring(youtubeUrl.lastIndexOf("=") + 1);
-
-
         String video = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
                 + videoId + "\" title=\"YouTube video player\" frameborder=\"0\" "
                 + "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
@@ -244,52 +359,21 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     public void onSuccess(Meal meal) {
         this.meal = meal;
         ingredientsList = presenter.getIngredients(meal);
-        loadVideo(meal);
+        loadVideo(meal.getStrYoutube());
         mealName.setText(meal.getStrMeal());
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
-        if (meal.getStrInstructions().length() > 150) {
-            instructions.setText(String.format("%s ....", meal.getStrInstructions().substring(0, 150)));
-            showMore.setOnClickListener((v) -> {
-
-                if (instructions.getText().length() < 160) {
-
-                    instructions.setText(meal.getStrInstructions());
-                    showMore.setText(R.string.show_less);
-                } else {
-                    instructions.setText(String.format("%s....", meal.getStrInstructions().substring(0, 150)));
-                    showMore.setText(R.string.show_more);
-
-                }
-            });
-
-        } else {
-            instructions.setText(meal.getStrInstructions());
-            showMore.setVisibility(View.GONE);
-        }
-
-
+        showInstructions(meal.getStrInstructions());
         Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
-        myAdapter.setIngredientList(ingredientsList);
-        myAdapter.notifyDataSetChanged();
+        updateRecyclerView(ingredientsList);
+        loadFlagImage(meal.getStrArea());
+
+    }
+
+    public void loadFlagImage(String area) {
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
-        String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
-        Glide.with(this).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
-        if (presenter.getCurrentUser() != null) {
-            favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
-            presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid()).observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
-                @Override
-                public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
-                    isFav = favoriteMealModels.stream().anyMatch(meal -> meal.getIdMeal().equals(favMeal.getIdMeal()));
-                    if (isFav) {
-                        favIcon.setImageResource(R.drawable.baseline_favorite_24);
-
-                    }
-
-                }
-            });
-        }
-
+        String countryCode = countryCodeMap.getOrDefault(area, "unknown");
+        Glide.with(getContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
     }
 
     @Override
@@ -310,9 +394,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
     @Override
     public void onFailure(String errorMessage) {
-        Snackbar snackbar = Snackbar
-                .make(getView(), errorMessage, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
-        snackbar.show();
+        showSnackBar(errorMessage);
 
     }
 }

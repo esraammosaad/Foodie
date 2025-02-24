@@ -82,7 +82,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(myAdapter);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         if (selectedItem.equals(getString(R.string.categories))) {
             presenter.getMealsByCategory(textView.getText().toString());
 
