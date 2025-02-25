@@ -3,6 +3,7 @@ package com.example.foodplannerapp.authentication.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,12 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
@@ -25,6 +28,8 @@ import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -87,16 +92,16 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         signInText = view.findViewById(R.id.signInText);
         registerButton = view.findViewById(R.id.signInButton);
         emailEditText = view.findViewById(R.id.editTextTextEmailAddressRegister);
-        emailError=view.findViewById(R.id.emailError2);
-        passwordError=view.findViewById(R.id.passwordError2);
-        usernameEditText=view.findViewById(R.id.editTextUsername);
-        usernameError=view.findViewById(R.id.usernameError);
+        emailError = view.findViewById(R.id.emailError2);
+        passwordError = view.findViewById(R.id.passwordError2);
+        usernameEditText = view.findViewById(R.id.editTextUsername);
+        usernameError = view.findViewById(R.id.usernameError);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         usernameError.setVisibility(View.GONE);
         passwordEditText = view.findViewById(R.id.editTextTextPasswordRegister);
         signInWithGoogle = view.findViewById(R.id.googleSignInButtonRegister);
-        visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
+        visitAsAGuestButton = view.findViewById(R.id.visitAsAGuestButton);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -104,43 +109,47 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 .build();
         googleSignInClient = GoogleSignIn.getClient(getContext(), options);
         registerButton.setOnClickListener((v) -> {
-            if (emailEditText.getText().toString().isEmpty()) {
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+                if (emailEditText.getText().toString().isEmpty()) {
 
-                emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
-                emailError.setVisibility(View.VISIBLE);
-
-
-            }
-
-            if (passwordEditText.getText().toString().isEmpty()) {
-
-                passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
-                passwordError.setVisibility(View.VISIBLE);
-            }
-            if (usernameEditText.getText().toString().isEmpty()) {
-
-                usernameEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
-                usernameError.setVisibility(View.VISIBLE);
-            }
-            if(!emailEditText.getText().toString().isEmpty()){
-                emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                emailError.setVisibility(View.GONE);
-            }
-
-            if(!passwordEditText.getText().toString().isEmpty()){
-                passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                passwordError.setVisibility(View.GONE);
-            }
-            if(!usernameEditText.getText().toString().isEmpty()){
-                usernameEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                usernameError.setVisibility(View.GONE);
-            }
-
-            if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty() && !usernameEditText.getText().toString().isEmpty()) {
-
-                presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), usernameEditText.getText().toString());
+                    emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                    emailError.setVisibility(View.VISIBLE);
 
 
+                }
+
+                if (passwordEditText.getText().toString().isEmpty()) {
+
+                    passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                    passwordError.setVisibility(View.VISIBLE);
+                }
+                if (usernameEditText.getText().toString().isEmpty()) {
+
+                    usernameEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                    usernameError.setVisibility(View.VISIBLE);
+                }
+                if (!emailEditText.getText().toString().isEmpty()) {
+                    emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                    emailError.setVisibility(View.GONE);
+                }
+
+                if (!passwordEditText.getText().toString().isEmpty()) {
+                    passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                    passwordError.setVisibility(View.GONE);
+                }
+                if (!usernameEditText.getText().toString().isEmpty()) {
+                    usernameEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                    usernameError.setVisibility(View.GONE);
+                }
+
+                if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty() && !usernameEditText.getText().toString().isEmpty()) {
+
+                    presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), usernameEditText.getText().toString());
+
+
+                }
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
             }
 
 
@@ -152,14 +161,25 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         });
 
         signInWithGoogle.setOnClickListener((v) -> {
-            Intent intent = googleSignInClient.getSignInIntent();
-            activityResultLauncher.launch(intent);
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+            }
+
 
         });
 
-        visitAsAGuestButton.setOnClickListener((v)->{
+        visitAsAGuestButton.setOnClickListener((v) -> {
 
-            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment);
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+
+                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment);
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+            }
+
         });
     }
 

@@ -3,6 +3,8 @@ package com.example.foodplannerapp.details.view;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -40,6 +42,8 @@ import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NetworkChangeListener;
+import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
@@ -51,7 +55,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-public class DetailsFragment extends Fragment implements ViewInterface {
+public class DetailsFragment extends Fragment implements ViewInterface, NetworkListener {
 
     ImageView imageView;
     TextView mealName;
@@ -73,6 +77,8 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     Meal meal;
     Group internetGroup;
     Group noLocalItem;
+    NetworkChangeListener networkChangeListener;
+    int mealID;
 
 
     public DetailsFragment() {
@@ -105,11 +111,14 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         flagIcon = view.findViewById(R.id.flagIconDetails);
         favIcon = view.findViewById(R.id.favIcon);
         showMore = view.findViewById(R.id.showMore);
-        internetGroup=view.findViewById(R.id.internetGroup);
-        noLocalItem=view.findViewById(R.id.noLocalItem);
+        internetGroup = view.findViewById(R.id.internetGroup);
+        noLocalItem = view.findViewById(R.id.noLocalItem);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
-        int mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()),
+                new MealsLocalDataSource(getContext())),
+                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        networkChangeListener = new NetworkChangeListener(this);
+        mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
 
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
@@ -172,6 +181,7 @@ public class DetailsFragment extends Fragment implements ViewInterface {
 
         }
 
+
     }
 
     public void loadMealsFromFavorite(int mealID) {
@@ -197,7 +207,9 @@ public class DetailsFragment extends Fragment implements ViewInterface {
                     loadFlagImage(foundMeal.getStrArea());
 
                 } else {
+
                     presenter.getMealByID(mealID);
+
 
                 }
 
@@ -358,6 +370,9 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     @Override
     public void onSuccess(Meal meal) {
         this.meal = meal;
+        if (presenter.getCurrentUser() != null) {
+            favMeal = new FavoriteMealModel(meal.getIdMeal(), presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
+        }
         ingredientsList = presenter.getIngredients(meal);
         loadVideo(meal.getStrYoutube());
         mealName.setText(meal.getStrMeal());
@@ -368,12 +383,26 @@ public class DetailsFragment extends Fragment implements ViewInterface {
         updateRecyclerView(ingredientsList);
         loadFlagImage(meal.getStrArea());
 
+
     }
 
     public void loadFlagImage(String area) {
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(area, "unknown");
         Glide.with(getContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        requireActivity().registerReceiver(networkChangeListener, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().unregisterReceiver(networkChangeListener);
     }
 
     @Override
@@ -395,6 +424,25 @@ public class DetailsFragment extends Fragment implements ViewInterface {
     @Override
     public void onFailure(String errorMessage) {
         showSnackBar(errorMessage);
+        if (!NetworkAvailability.isNetworkAvailable(getContext())) {
+            noLocalItem.setVisibility(View.VISIBLE);
+            internetGroup.setVisibility(View.GONE);
+
+        }
+
+    }
+
+    @Override
+    public void onLostConnection() {
+
+
+    }
+
+    @Override
+    public void onConnectionReturned() {
+        noLocalItem.setVisibility(View.GONE);
+        internetGroup.setVisibility(View.VISIBLE);
+        presenter.getMealByID(mealID);
 
     }
 }

@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Entity(tableName = "meal_table")
+@Entity(tableName = "meal_table",  primaryKeys = {"userUID","idMeal"})
 public class FavoriteMealModel {
-    @PrimaryKey
     @NonNull
     private String idMeal;
+    @NonNull
     private String userUID;
     private String strMeal;
     private String strCategory;

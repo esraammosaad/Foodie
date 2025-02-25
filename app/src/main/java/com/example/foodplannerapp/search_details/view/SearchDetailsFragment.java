@@ -1,5 +1,6 @@
 package com.example.foodplannerapp.search_details.view;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,8 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +22,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.models.Area;
+import com.example.foodplannerapp.data.models.Category;
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.models.IngredientMeal;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
@@ -29,6 +35,10 @@ import com.example.foodplannerapp.search_details.presenter.PresenterImpl;
 
 import java.util.Arrays;
 import java.util.List;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface {
@@ -42,6 +52,8 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     RecyclerViewAdapter myAdapter;
     String selectedItem;
     PresenterImpl presenter;
+    TextWatcher textWatcher;
+    List<MealByFilter> mealByFilterList;
 
 
     public SearchDetailsFragment() {
@@ -75,7 +87,6 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         textView.setText(SearchDetailsFragmentArgs.fromBundle(getArguments()).getName());
         Glide.with(getContext()).load(SearchDetailsFragmentArgs.fromBundle(getArguments()).getImage()).into(imageView);
         selectedItem = SearchDetailsFragmentArgs.fromBundle(getArguments()).getFilter();
-
         myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -95,13 +106,50 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
             presenter.getMealsByIngredient(textView.getText().toString());
         }
 
+        textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @SuppressLint("CheckResult")
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+                if (mealByFilterList != null) {
+                    Observable<MealByFilter> observable = Observable.fromIterable(mealByFilterList);
+                    observable.
+                            filter(meal -> meal.getStrMeal().toLowerCase().
+                                    startsWith(String.valueOf(s))).toList().
+                            subscribeOn(Schedulers.io()).
+                            observeOn(AndroidSchedulers.mainThread()).
+                            subscribe(
+                                    item -> {
+
+                                        myAdapter.setMealsList(item);
+                                        myAdapter.notifyDataSetChanged();
+
+                                    }
+                            );
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        };
+        searchEditText.addTextChangedListener(textWatcher);
+
 
     }
 
     @Override
     public void onClickListener(MealByFilter meal) {
 
-        SearchDetailsFragmentDirections.ActionSearchDetailsFragmentToDetailsFragment action=
+        SearchDetailsFragmentDirections.ActionSearchDetailsFragmentToDetailsFragment action =
                 SearchDetailsFragmentDirections.actionSearchDetailsFragmentToDetailsFragment(Integer.parseInt(meal.getidMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 
@@ -110,6 +158,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
     @Override
     public void onSuccess(List<MealByFilter> list) {
+        this.mealByFilterList = list;
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
         resultsCount.setText(myAdapter.getItemCount() + getString(R.string.results));

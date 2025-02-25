@@ -27,6 +27,8 @@ import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -90,7 +92,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
         emailError = view.findViewById(R.id.emailError);
         passwordError = view.findViewById(R.id.passwordError);
         signInWithGoogle = view.findViewById(R.id.googleSignInButton);
-        visitAsAGuestButton=view.findViewById(R.id.visitAsAGuestButton);
+        visitAsAGuestButton = view.findViewById(R.id.visitAsAGuestButton);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
@@ -102,6 +104,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
 
         loginButton.setOnClickListener((v) -> {
+            if(NetworkAvailability.isNetworkAvailable(getContext())){
             if (emailEditText.getText().toString().isEmpty()) {
 
                 emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
@@ -132,7 +135,11 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
 
             }
-        });
+            }else {
+            NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+        }
+
+    });
         registerText.setOnClickListener((v) -> {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment);
 
@@ -140,13 +147,22 @@ public class LoginFragment extends Fragment implements ViewInterface {
         });
 
         signInWithGoogle.setOnClickListener((v) -> {
-            Intent intent = googleSignInClient.getSignInIntent();
-            activityResultLauncher.launch(intent);
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+                Intent intent = googleSignInClient.getSignInIntent();
+                activityResultLauncher.launch(intent);
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+            }
 
         });
-        visitAsAGuestButton.setOnClickListener((v)->{
+        visitAsAGuestButton.setOnClickListener((v) -> {
+            if (NetworkAvailability.isNetworkAvailable(getContext())) {
 
-            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeFragment);
+                Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeFragment);
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+            }
+
         });
 
 

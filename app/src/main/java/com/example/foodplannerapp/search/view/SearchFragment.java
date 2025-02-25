@@ -177,55 +177,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
 
-                if (!list.isEmpty() && list.get(0) instanceof Category) {
-                    Observable<Category> observable = Observable.fromIterable(list);
-                    observable.
-                            filter(category -> category.getStrCategory().toLowerCase().
-                                    contains(String.valueOf(s))).toList().
-                            subscribeOn(Schedulers.io()).
-                            observeOn(AndroidSchedulers.mainThread()).
-                            subscribe(
-                                    item -> {
-
-                                        categoryAdapter.setCategoryList(item);
-                                        categoryAdapter.notifyDataSetChanged();
-
-                                    }
-                            );
-                } else if (!list.isEmpty() && list.get(0) instanceof Area) {
-                    Observable<Area> observable = Observable.fromIterable(list);
-                    observable.
-                            filter(area -> area.getStrArea().toLowerCase().
-                                    contains(String.valueOf(s))).toList().
-                            subscribeOn(Schedulers.io()).
-                            observeOn(AndroidSchedulers.mainThread()).
-                            subscribe(
-                                    item -> {
-
-                                        areaAdapter.setAreaList(item);
-                                        areaAdapter.notifyDataSetChanged();
-
-                                    }
-                            );
-
-
-                } else if (!list.isEmpty() && list.get(0) instanceof IngredientMeal) {
-
-                    Observable<IngredientMeal> observable = Observable.fromIterable(list);
-                    observable.
-                            filter(ingredient -> ingredient.getStrIngredient().toLowerCase().
-                                    contains(String.valueOf(s))).toList().
-                            subscribeOn(Schedulers.io()).
-                            observeOn(AndroidSchedulers.mainThread()).
-                            subscribe(
-                                    item -> {
-
-                                        ingredientAdapter.setIngredientList(item);
-                                        ingredientAdapter.notifyDataSetChanged();
-
-                                    }
-                            );
-                }
+                   presenter.search(s, list);
 
             }
 
@@ -285,10 +237,50 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
         }
 
+        if(!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()){
+
+            noInternetText.setVisibility(View.VISIBLE);
+            noWifiImg.setVisibility(View.VISIBLE);
+
+
+        }
+
+    }
+
+    @Override
+    public void onSearch(List list) {
+        if (list.get(0) instanceof Category) {
+
+            categoryAdapter.setCategoryList(list);
+            categoryAdapter.notifyDataSetChanged();
+
+
+        } else if (list.get(0) instanceof Area) {
+
+
+            areaAdapter.setAreaList(list);
+            areaAdapter.notifyDataSetChanged();
+
+        } else {
+
+            ingredientAdapter.setIngredientList(list);
+            ingredientAdapter.notifyDataSetChanged();
+
+
+        }
+
     }
 
     @Override
     public void onFailure(String errorMessage) {
+
+        if(!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()){
+
+            noInternetText.setVisibility(View.VISIBLE);
+            noWifiImg.setVisibility(View.VISIBLE);
+
+
+        }
 
     }
 
@@ -324,15 +316,14 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onLostConnection() {
         noInternetGroup.setVisibility(View.VISIBLE);
-        if(list.isEmpty()){
-            noInternetText.setVisibility(View.VISIBLE);
-            noWifiImg.setVisibility(View.VISIBLE);
-        }
+
     }
 
     @Override
     public void onConnectionReturned() {
         noInternetGroup.setVisibility(View.GONE);
+        noInternetText.setVisibility(View.GONE);
+        noWifiImg.setVisibility(View.GONE);
         presenter.getAllCategories();
 
     }

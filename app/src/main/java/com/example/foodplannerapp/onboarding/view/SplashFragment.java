@@ -44,7 +44,10 @@ public class SplashFragment extends Fragment {
         presenter=PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
         new Handler().postDelayed(()-> Navigation.findNavController(view).navigate(
 
-               presenter.getOnBoardingState()? AuthenticationServices.getInstance().getCurrentUser()!=null?R.id.action_splashFragment_to_homeFragment:R.id.action_splashFragment_to_loginFragment: R.id.action_splashFragment_to_viewPagerFragment
+               presenter.getOnBoardingState()?
+                       AuthenticationServices.getInstance().getCurrentUser()!=null?
+                               R.id.action_splashFragment_to_homeFragment:R.id.action_splashFragment_to_loginFragment:
+                       R.id.action_splashFragment_to_viewPagerFragment
 
         ), 5000);
     }

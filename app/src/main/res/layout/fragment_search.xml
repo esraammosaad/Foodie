@@ -18,8 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            tools:context=".search.view.SearchFragment">
+            android:background="@color/white">
 
 
             <TextView
@@ -35,7 +34,6 @@
                 android:textSize="16sp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noWifiImg" />
 
@@ -43,7 +41,7 @@
                 android:id="@+id/internetGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="view4,noInternetIcon2,dismiss2,turnWIFI2,noInternetText2" />
 
             <TextView
@@ -61,15 +59,15 @@
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="20dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="20dp" />
 
@@ -77,20 +75,20 @@
                 android:id="@+id/menuIcon2"
                 android:layout_width="32dp"
                 android:layout_height="34dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginTop="60dp"
                 android:src="@drawable/baseline_menu_24"
                 app:layout_constraintEnd_toStartOf="@+id/textView17"
-                app:layout_constraintHorizontal_bias="0.033"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
                 android:id="@+id/searchTextField"
                 style="@style/text_field"
-                android:layout_width="284dp"
+                android:layout_width="280dp"
                 android:layout_height="55dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="36dp"
                 android:fontFamily="@font/inter"
                 android:hint="@string/search"
                 android:inputType="text"
@@ -104,7 +102,7 @@
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginTop="2dp"
                 android:src="@drawable/s"
                 app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
@@ -117,12 +115,8 @@
                 style="@style/text_field"
                 android:layout_width="60dp"
                 android:layout_height="55dp"
-                android:layout_marginStart="11dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/searchTextField"
-                app:layout_constraintTop_toBottomOf="@+id/view4" />
+                app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <ImageView
                 android:id="@+id/filterSmallIcon"
@@ -142,7 +136,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="20dp"
-                android:isScrollContainer="false"
+                android:foregroundGravity="clip_horizontal"
                 android:paddingBottom="100dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
@@ -164,22 +158,22 @@
                 android:layout_width="45dp"
                 android:layout_height="49dp"
                 android:backgroundTint="#00000000"
-                app:layout_constraintBottom_toTopOf="@+id/searchRecyclerView"
+                app:layout_constraintBottom_toBottomOf="@+id/filterIcon"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintHorizontal_bias="0.708"
-                app:layout_constraintStart_toEndOf="@+id/searchTextField"
-                app:layout_constraintTop_toTopOf="@+id/filterIcon"
-                app:layout_constraintVertical_bias="0.145" />
+                app:layout_constraintStart_toStartOf="@+id/filterIcon"
+                app:layout_constraintTop_toTopOf="@+id/filterIcon" />
 
             <View
                 android:id="@+id/view4"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
                 android:backgroundTint="#FAF9F6"
-                app:layout_constraintHorizontal_bias="0.951"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
             <ImageView

@@ -142,6 +142,14 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
         });
 
+        randomMealImg.setOnClickListener((v)->{
+            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
+                    HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
+            Navigation.findNavController(requireView()).navigate(action);
+
+
+        });
+
 
     }
 

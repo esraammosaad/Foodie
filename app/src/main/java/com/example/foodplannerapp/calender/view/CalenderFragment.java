@@ -6,9 +6,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +41,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class CalenderFragment extends Fragment implements CalendarListener , ViewInterface{
+public class CalenderFragment extends Fragment implements CalendarListener, ViewInterface {
 
     CalendarView calendarView;
     RecyclerView recyclerView;
@@ -51,6 +53,9 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
     int mealMonth = 0;
     int mealYear = 0;
     Calendar calendar;
+    Group guestGroup;
+    TextView continueAsAGuest;
+    TextView signInText;
 
 
     public CalenderFragment() {
@@ -75,7 +80,10 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
         calendarView = view.findViewById(R.id.calendarView);
         recyclerView = view.findViewById(R.id.calendarRecyclerView);
         textCalendar = view.findViewById(R.id.textCalenderView);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()),this);
+        guestGroup=view.findViewById(R.id.calendarGuestGroup);
+        continueAsAGuest = view.findViewById(R.id.guest);
+        signInText = view.findViewById(R.id.login);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -87,23 +95,26 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
         mealMonth = calendar.get(Calendar.MONTH) + 1;
         mealYear = calendar.get(Calendar.YEAR);
 
-        calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
-        calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
-            @Override
-            public void onChanged(List<CalenderMealModel> calenderMealModels) {
+        if (presenter.getCurrentUser() != null) {
 
-                myAdapter.setMealsList(calenderMealModels);
-                myAdapter.notifyDataSetChanged();
-                recyclerView.setAdapter(myAdapter);
-                calendar.set(Calendar.MONTH, mealMonth - 1);
-                SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
-                String monthName = monthFormat.format(calendar.getTime());
-                textCalendar.setText("Today's Picks: " + monthName + " " + mealDay + ", " + mealYear);
+            calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+            calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
+                @Override
+                public void onChanged(List<CalenderMealModel> calenderMealModels) {
+
+                    myAdapter.setMealsList(calenderMealModels);
+                    myAdapter.notifyDataSetChanged();
+                    recyclerView.setAdapter(myAdapter);
+                    calendar.set(Calendar.MONTH, mealMonth - 1);
+                    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+                    String monthName = monthFormat.format(calendar.getTime());
+                    textCalendar.setText("Today's Picks: " + monthName + " " + mealDay + ", " + mealYear);
 
 
-            }
+                }
 
-        });
+            });
+
 
 
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
@@ -138,6 +149,27 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
 
         });
 
+        }else{
+
+            guestGroup.setVisibility(View.VISIBLE);
+            textCalendar.setText("Sign in now to scheduler your meals");
+
+
+        }
+        signInText.setOnClickListener((v) -> {
+            Navigation.findNavController(getView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
+                    new NavOptions.Builder()
+                            .setPopUpTo(R.id.calendarView,true)
+                            .setPopUpTo(R.id.homeFragment, true)
+                            .build());
+        });
+        continueAsAGuest.setOnClickListener((v) -> {
+
+            guestGroup.setVisibility(View.GONE);
+
+
+        });
+
 
     }
 
@@ -145,7 +177,7 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
     @Override
     public void onClickListener(CalenderMealModel meal) {
 
-        if(NetworkAvailability.isNetworkAvailable(getContext())){
+        if (NetworkAvailability.isNetworkAvailable(getContext())) {
             if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
                 presenter.deleteMealFromCalendar(meal);
                 presenter.deleteCalendarMealFromFireStore(meal);
@@ -162,20 +194,17 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
                         });
                 snackbar.show();
             }
-        }else{
-            NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+        } else {
+            NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
         }
-
-
 
 
     }
 
 
-
     @Override
     public void onItemClickListener(CalenderMealModel meal) {
-        CalenderFragmentDirections.ActionCalenderFragmentToDetailsFragment action=
+        CalenderFragmentDirections.ActionCalenderFragmentToDetailsFragment action =
                 CalenderFragmentDirections.actionCalenderFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
     }
@@ -183,13 +212,13 @@ public class CalenderFragment extends Fragment implements CalendarListener , Vie
     @Override
     public void onSuccess(String message) {
 
-        Log.i("TAG", "onSuccess: "+message);
+        Log.i("TAG", "onSuccess: " + message);
 
     }
 
     @Override
     public void onFailure(String errorMessage) {
-        Log.i("TAG", "onFailure: "+errorMessage);
+        Log.i("TAG", "onFailure: " + errorMessage);
 
     }
 }

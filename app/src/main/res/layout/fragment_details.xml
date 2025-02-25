@@ -46,9 +46,10 @@
             <ImageView
                 android:id="@+id/detailsMealImage"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="460dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@drawable/pancakes" />
@@ -64,7 +65,7 @@
             <View
                 android:id="@+id/view"
                 android:layout_width="match_parent"
-                android:layout_height="135dp"
+                android:layout_height="160dp"
                 android:background="#59878787"
                 app:layout_constraintBottom_toBottomOf="@+id/detailsMealImage"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,9 +116,11 @@
                 android:fontFamily="@font/inter_semibold"
                 android:textColor="#FFFFFF"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/detailsMealImage"
                 app:layout_constraintEnd_toStartOf="@+id/textView16"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/mealNameDetails"
+                app:layout_constraintVertical_bias="0.0"
                 tools:text="American" />
 
             <TextView
@@ -285,12 +288,14 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noWifiImg" />
 
-            <ImageView
+            <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/noWifiImg"
                 android:layout_width="95dp"
                 android:layout_height="84dp"
                 android:layout_marginTop="244dp"
-                android:src="@drawable/nowifi"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/nointernet"
                 android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"

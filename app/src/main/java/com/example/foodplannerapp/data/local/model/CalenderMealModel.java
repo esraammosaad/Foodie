@@ -10,7 +10,7 @@ import com.example.foodplannerapp.data.models.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "calendar_meal_table", primaryKeys = {"idMeal", "day", "month", "year"})
+@Entity(tableName = "calendar_meal_table", primaryKeys = {"userUID","idMeal", "day", "month", "year"})
 public class CalenderMealModel {
 
     @NonNull
@@ -21,6 +21,7 @@ public class CalenderMealModel {
     private int month;
     @NonNull
     private int year;
+    @NonNull
     private String userUID;
     private String strMeal;
     private String strCategory;

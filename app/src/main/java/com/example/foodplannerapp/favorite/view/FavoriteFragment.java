@@ -124,12 +124,13 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         signInText.setOnClickListener((v) -> {
             Navigation.findNavController(getView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
                     new NavOptions.Builder()
+                            .setPopUpTo(R.id.favoriteFragment,true)
                             .setPopUpTo(R.id.homeFragment, true)
                             .build());
         });
         continueAsAGuest.setOnClickListener((v) -> {
 
-            guestGroup.setVisibility(View.INVISIBLE);
+            guestGroup.setVisibility(View.GONE);
 
 
         });

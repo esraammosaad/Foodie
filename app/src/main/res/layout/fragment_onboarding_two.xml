@@ -4,96 +4,111 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".onboarding.view.OnboardingFragmentTwo">
-    <ImageView
-        android:id="@+id/onboardingImgThree"
+    tools:context=".onboarding.view.OnboardingFragmentOne">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/onboardingtwo"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="392dp"
-        android:layout_height="449dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/onboardingImgThree" />
-
-    <TextView
-        android:id="@+id/onboardingTitleTextThree"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="30dp"
-        android:fontFamily="@font/fredoka_one"
-        android:gravity="center"
-        android:text="@string/onboardingTextTwo"
-        android:textColor="@color/white"
-        android:textSize="35sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
-
-    <TextView
-        android:id="@+id/onboardingDescriptionTextThree"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/fredoka"
-        android:layout_margin="8dp"
-        android:gravity="center"
-        android:text="@string/onboardingDescriptionTwo"
-        android:textColor="@color/textSecondaryColor"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/onboardingTitleTextThree" />
-
-    <TextView
-        android:id="@+id/skipText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="96dp"
-        android:fontFamily="@font/fredoka_one"
-        android:text="@string/skip"
-        android:textColor="@color/white"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/nextText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="220dp"
-        android:layout_marginBottom="100dp"
-        android:fontFamily="@font/fredoka_one"
-        android:text="@string/next"
-        android:textColor="@color/white"
-        android:textSize="22sp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.293"
-        app:layout_constraintStart_toEndOf="@+id/skipText"
-        app:layout_constraintTop_toTopOf="@+id/skipText" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/nextIcon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="18dp"
-        android:src="@drawable/baseline_arrow_forward_ios_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/nextText"
-        app:layout_constraintTop_toTopOf="@+id/nextText" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <View
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="800dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/onboarding_view_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/onboardingImgThree" />
+
+            <View
+                android:id="@+id/onboardingImgThree"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:background="@drawable/onboardingtwo"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@+id/imageView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/onboardingTitleTextThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:fontFamily="@font/fredoka_one"
+                android:gravity="center"
+                android:text="@string/onboardingTextTwo"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+            <TextView
+                android:id="@+id/onboardingDescriptionTextThree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="32dp"
+                android:fontFamily="@font/fredoka"
+                android:gravity="center"
+                android:text="@string/onboardingDescriptionTwo"
+                android:textColor="@color/textSecondaryColor"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toBottomOf="@+id/onboardingTitleTextThree" />
+
+            <TextView
+                android:id="@+id/skipText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="108dp"
+                android:fontFamily="@font/fredoka_one"
+                android:text="@string/skip"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintStart_toStartOf="@+id/onboardingDescriptionTextThree"
+                app:layout_constraintTop_toBottomOf="@+id/onboardingDescriptionTextThree" />
+
+            <TextView
+                android:id="@+id/nextText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="220dp"
+                android:fontFamily="@font/fredoka_one"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="22sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.354"
+                app:layout_constraintStart_toEndOf="@+id/skipText"
+                app:layout_constraintTop_toTopOf="@+id/skipText" />
+
+            <ImageView
+                android:id="@+id/nextIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="18dp"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/nextText"
+                app:layout_constraintTop_toTopOf="@+id/nextText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
