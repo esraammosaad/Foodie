@@ -78,4 +78,5 @@
     <string name="ok">OK</string>
     <string name="meal_is_removed_from_favorite">Meal is removed from favorite</string>
     <string name="meal_is_added_to_favorite">Meal is added to favorite</string>
+    <string name="please_sign_in_to_can_schedule_your_meals">Please sign in to can schedule your meals</string>
 </resources>

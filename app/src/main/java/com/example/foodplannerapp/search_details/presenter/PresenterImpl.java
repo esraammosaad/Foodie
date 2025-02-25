@@ -1,15 +1,19 @@
 package com.example.foodplannerapp.search_details.presenter;
 
+import android.annotation.SuppressLint;
+
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
-import com.example.foodplannerapp.data.network.NetworkCallBack;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.search_details.view.ViewInterface;
 
 import java.util.List;
 
-public class PresenterImpl implements NetworkCallBack<MealByFilter> {
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.SingleTransformer;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+
+public class PresenterImpl {
 
     MealsRepositoryImpl mealsRepository;
     ViewInterface viewInterface;
@@ -19,31 +23,47 @@ public class PresenterImpl implements NetworkCallBack<MealByFilter> {
         this.viewInterface = viewInterface;
     }
 
-    public void getMealsByCategory(String categoryName){
+    @SuppressLint("CheckResult")
+    public void getMealsByCategory(String categoryName) {
 
-        mealsRepository.getAllMealsByCategory(this,  categoryName);
-
-    }
-    public void getMealsByArea(String areaName){
-
-        mealsRepository.getAllMealsByArea(this,  areaName);
-
-    }
-    public void getMealsByIngredient(String ingredientName){
-
-        mealsRepository.getAllMealsByIngredient(this,  ingredientName);
+        mealsRepository.getAllMealsByCategory(categoryName).
+                compose(apply()).
+                subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
+                        throwable -> viewInterface.onFailure(throwable.getMessage()));
 
     }
 
-    @Override
-    public void onSuccess(Meal meal, List<MealByFilter> list) {
-        viewInterface.onSuccess(list);
+    @SuppressLint("CheckResult")
+    public void getMealsByArea(String areaName) {
+
+        mealsRepository.getAllMealsByArea(areaName).
+                compose(apply()).
+                subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
+                        throwable -> viewInterface.onFailure(throwable.getMessage()));
 
     }
 
-    @Override
-    public void onFailure(String errorMessage) {
-        viewInterface.onFailure(errorMessage);
+    @SuppressLint("CheckResult")
+    public void getMealsByIngredient(String ingredientName) {
+
+        mealsRepository.getAllMealsByIngredient(ingredientName).
+                compose(apply()).
+                subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
+                        throwable -> viewInterface.onFailure(throwable.getMessage()));
 
     }
+
+
+    public SingleTransformer<GetMealsByFilterResponse, List<MealByFilter>> apply() {
+
+        return upstream ->
+                upstream.
+                        subscribeOn(Schedulers.io()).
+                        observeOn(AndroidSchedulers.mainThread()).
+                        map(getMealsByFilterResponse -> getMealsByFilterResponse.getMeals());
+
+
+    }
+
+
 }

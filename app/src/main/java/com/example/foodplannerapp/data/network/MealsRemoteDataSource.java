@@ -12,6 +12,8 @@ import com.example.foodplannerapp.utilis.NetworkAvailability;
 import java.io.File;
 import java.io.IOException;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -20,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MealsRemoteDataSource {
@@ -31,8 +34,6 @@ public class MealsRemoteDataSource {
 
 
     public MealsRemoteDataSource(Context context) {
-
-
 
         int cacheSize = 10 * 10 * 1024;
         Cache cache = new Cache(new File(context.getCacheDir(), "http_cache"), cacheSize);
@@ -61,6 +62,7 @@ public class MealsRemoteDataSource {
                 baseUrl(baseUrl).
                 client(okHttpClient).
                 addConverterFactory(GsonConverterFactory.create()).
+                addCallAdapterFactory(RxJava3CallAdapterFactory.create()).
                 build();
 
         apiServices = retrofit.create(ApiServices.class);
@@ -69,230 +71,52 @@ public class MealsRemoteDataSource {
     }
 
 
-    public void getRandomMeal(NetworkCallBack networkCallBack) {
-        Call<MealModel> call = apiServices.getRandomMeal();
-        call.enqueue(new Callback<MealModel>() {
-            @Override
-            public void onResponse(Call<MealModel> call, Response<MealModel> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(response.body().getMeals().get(0), null);
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<MealModel> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<MealModel> getRandomMeal() {
+        return apiServices.getRandomMeal();
     }
 
-    public void getNewRandomMeal(NetworkCallBack networkCallBack) {
+    public Single<MealModel> getNewRandomMeal() {
         try {
             okHttpClient.cache().evictAll();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Call<MealModel> call = apiServices.getRandomMeal();
-        call.enqueue(new Callback<MealModel>() {
-            @Override
-            public void onResponse(Call<MealModel> call, Response<MealModel> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(response.body().getMeals().get(0), null);
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<MealModel> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
+        return apiServices.getRandomMeal();
 
     }
 
-    public void getMealsByFirstLetter(NetworkCallBack networkCallBack) {
-        Call<MealModel> call = apiServices.getMealsByFirstLetter("b");
-        call.enqueue(new Callback<MealModel>() {
-            @Override
-            public void onResponse(Call<MealModel> call, Response<MealModel> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<MealModel> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
+    public Single<MealModel> getMealsByFirstLetter() {
+        return apiServices.getMealsByFirstLetter("c");
 
     }
 
-    public void getMealByID(NetworkCallBack networkCallBack, int id) {
-        Call<MealModel> call = apiServices.getMealByID(id);
-        call.enqueue(new Callback<MealModel>() {
-            @Override
-            public void onResponse(Call<MealModel> call, Response<MealModel> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(response.body().getMeals().get(0), null);
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<MealModel> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
+    public Single<MealModel> getMealByID(int id) {
+        return apiServices.getMealByID(id);
 
     }
 
-    public void getAllCategories(NetworkCallBack networkCallBack) {
-        Call<GetAllCategoriesResponse> call = apiServices.getAllCategoriesWithPhotos();
-        call.enqueue(new Callback<GetAllCategoriesResponse>() {
-            @Override
-            public void onResponse(Call<GetAllCategoriesResponse> call, Response<GetAllCategoriesResponse> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getCategories());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<GetAllCategoriesResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<GetAllCategoriesResponse> getAllCategories() {
+        return apiServices.getAllCategoriesWithPhotos();
     }
 
-    public void getAllAreas(NetworkCallBack networkCallBack) {
-        Call<AllAreasResponse> call = apiServices.getAllAreas("list");
-        call.enqueue(new Callback<AllAreasResponse>() {
-            @Override
-            public void onResponse(Call<AllAreasResponse> call, Response<AllAreasResponse> response) {
-
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getAreas());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<AllAreasResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<AllAreasResponse> getAllAreas() {
+       return apiServices.getAllAreas("list");
     }
 
-    public void getAllIngredients(NetworkCallBack networkCallBack) {
-        Call<AllIngredientsResponse> call = apiServices.getAllIngredients("list");
-        call.enqueue(new Callback<AllIngredientsResponse>() {
-            @Override
-            public void onResponse(Call<AllIngredientsResponse> call, Response<AllIngredientsResponse> response) {
-                if (response.isSuccessful()) {
-                    System.out.println(response.body().getMeals().get(0).getStrIngredient() + "======================iiii");
-                    networkCallBack.onSuccess(null, response.body().getMeals());
-                } else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<AllIngredientsResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<AllIngredientsResponse> getAllIngredients() {
+        return apiServices.getAllIngredients("list");
     }
 
-    public void getAllMealsByCategory(NetworkCallBack networkCallBack, String categoryName) {
-        Call<GetMealsByFilterResponse> call = apiServices.getMealSByCategory(categoryName);
-        call.enqueue(new Callback<GetMealsByFilterResponse>() {
-            @Override
-            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<GetMealsByFilterResponse> getAllMealsByCategory(String categoryName) {
+        return apiServices.getMealSByCategory(categoryName);
     }
 
-    public void getAllMealsByArea(NetworkCallBack networkCallBack, String areaName) {
-        Call<GetMealsByFilterResponse> call = apiServices.getMealSByArea(areaName);
-        call.enqueue(new Callback<GetMealsByFilterResponse>() {
-            @Override
-            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
-
+    public Single<GetMealsByFilterResponse> getAllMealsByArea(String areaName) {
+        return apiServices.getMealSByArea(areaName);
     }
 
-    public void getAllMealsByIngredient(NetworkCallBack networkCallBack, String ingredientName) {
-        Call<GetMealsByFilterResponse> call = apiServices.getMealSByIngredient(ingredientName);
-        call.enqueue(new Callback<GetMealsByFilterResponse>() {
-            @Override
-            public void onResponse(Call<GetMealsByFilterResponse> call, Response<GetMealsByFilterResponse> response) {
-                if (response.isSuccessful())
-                    networkCallBack.onSuccess(null, response.body().getMeals());
-                else
-                    networkCallBack.onFailure(response.message());
-
-            }
-
-            @Override
-            public void onFailure(Call<GetMealsByFilterResponse> call, Throwable t) {
-                networkCallBack.onFailure(t.getMessage());
-
-            }
-        });
-
+    public Single<GetMealsByFilterResponse> getAllMealsByIngredient(String ingredientName) {
+        return apiServices.getMealSByIngredient(ingredientName);
 
     }
 

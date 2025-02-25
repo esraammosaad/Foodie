@@ -20,7 +20,7 @@
                 android:id="@+id/calendarGuestGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:constraint_referenced_ids="view5,noInternetText,guest,noInternetIcon,login" />
 
             <CalendarView
@@ -123,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                android:text="@string/please_sign_in_to_can_save_your_favorite_meal"
+                android:text="@string/please_sign_in_to_can_schedule_your_meals"
                 app:layout_constraintStart_toEndOf="@+id/noInternetIcon"
                 app:layout_constraintTop_toTopOf="@+id/view5" />
 

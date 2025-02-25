@@ -7,8 +7,13 @@ import com.example.foodplannerapp.authentication.data.network.AuthenticationServ
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
+import com.example.foodplannerapp.data.models.AllAreasResponse;
+import com.example.foodplannerapp.data.models.AllIngredientsResponse;
+import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
+import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
 import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.models.MealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.network.NetworkCallBack;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,12 +21,14 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+
 
 public class MealsRepositoryImpl {
 
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
-
 
 
     private static MealsRepositoryImpl instance;
@@ -42,63 +49,55 @@ public class MealsRepositoryImpl {
 
     }
 
-    public void getRandomMeal(NetworkCallBack networkCallBack) {
+    public Single<MealModel> getRandomMeal() {
+        return mealsRemoteDataSource.getRandomMeal();
+    }
+
+    public Single<MealModel> getNewRandomMeal() {
+        return mealsRemoteDataSource.getNewRandomMeal();
+    }
+
+    public Single<MealModel> getMealByID(int id) {
 
 
-        mealsRemoteDataSource.getRandomMeal(networkCallBack);
+        return mealsRemoteDataSource.getMealByID(id);
 
 
     }
 
-    public void getNewRandomMeal(NetworkCallBack networkCallBack) {
+    public Single<MealModel> getMealsByFirstLetter() {
 
-
-        mealsRemoteDataSource.getNewRandomMeal(networkCallBack);
-
-
-    }
-
-    public void getMealByID(NetworkCallBack networkCallBack, int id) {
-
-
-        mealsRemoteDataSource.getMealByID(networkCallBack, id);
+        return mealsRemoteDataSource.getMealsByFirstLetter();
 
 
     }
 
-    public void getMealsByFirstLetter(NetworkCallBack networkCallBack) {
+    public Single<GetAllCategoriesResponse> getAllCategories() {
 
-        mealsRemoteDataSource.getMealsByFirstLetter(networkCallBack);
-
-
-    }
-
-    public void getAllCategories(NetworkCallBack networkCallBack) {
-
-        mealsRemoteDataSource.getAllCategories(networkCallBack);
+        return mealsRemoteDataSource.getAllCategories();
 
     }
 
-    public void getAllAreas(NetworkCallBack networkCallBack) {
+    public Single<AllAreasResponse> getAllAreas() {
 
-        mealsRemoteDataSource.getAllAreas(networkCallBack);
+        return mealsRemoteDataSource.getAllAreas();
     }
 
-    public void getAllIngredients(NetworkCallBack networkCallBack) {
+    public Single<AllIngredientsResponse> getAllIngredients() {
 
-        mealsRemoteDataSource.getAllIngredients(networkCallBack);
+        return mealsRemoteDataSource.getAllIngredients();
     }
 
-    public void getAllMealsByCategory(NetworkCallBack networkCallBack, String categoryName) {
-        mealsRemoteDataSource.getAllMealsByCategory(networkCallBack, categoryName);
+    public Single<GetMealsByFilterResponse> getAllMealsByCategory(String categoryName) {
+        return mealsRemoteDataSource.getAllMealsByCategory(categoryName);
     }
 
-    public void getAllMealsByArea(NetworkCallBack networkCallBack, String areaName) {
-        mealsRemoteDataSource.getAllMealsByArea(networkCallBack, areaName);
+    public Single<GetMealsByFilterResponse> getAllMealsByArea(String areaName) {
+        return mealsRemoteDataSource.getAllMealsByArea(areaName);
     }
 
-    public void getAllMealsByIngredient(NetworkCallBack networkCallBack, String ingredientName) {
-        mealsRemoteDataSource.getAllMealsByIngredient(networkCallBack, ingredientName);
+    public Single<GetMealsByFilterResponse> getAllMealsByIngredient(String ingredientName) {
+        return mealsRemoteDataSource.getAllMealsByIngredient(ingredientName);
     }
 
     public ArrayList<Ingredient> getIngredientsList(Meal meal) {

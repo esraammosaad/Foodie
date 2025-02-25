@@ -34,7 +34,7 @@ public class PresenterImpl implements NetworkCallBack, FireStoreCallBack {
 
     public void getMealByID(int id){
 
-        mealsRepository.getMealByID(this,id);
+        mealsRepository.getMealByID(id);
     }
 
 

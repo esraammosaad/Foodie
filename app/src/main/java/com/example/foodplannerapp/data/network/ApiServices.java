@@ -1,12 +1,13 @@
 package com.example.foodplannerapp.data.network;
 
 import com.example.foodplannerapp.data.models.AllAreasResponse;
-import com.example.foodplannerapp.data.models.AllCategoriesResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
 import com.example.foodplannerapp.data.models.MealModel;
 
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -14,31 +15,23 @@ import retrofit2.http.Query;
 public interface ApiServices {
 
     @GET("random.php")
-    Call<MealModel> getRandomMeal();
-
+    Single<MealModel> getRandomMeal();
     @GET("search.php")
-    Call<MealModel> getMealsByFirstLetter(@Query("f") String firstLetter);
-
+    Single<MealModel> getMealsByFirstLetter(@Query("f") String firstLetter);
     @GET("lookup.php")
-    Call<MealModel> getMealByID(@Query("i") Integer id);
-
+    Single<MealModel>  getMealByID(@Query("i") Integer id);
     @GET("categories.php")
-    Call<GetAllCategoriesResponse> getAllCategoriesWithPhotos();
+    Single<GetAllCategoriesResponse> getAllCategoriesWithPhotos();
     @GET("list.php")
-    Call<AllCategoriesResponse> getAllCategories(@Query("c") String list);
-
+    Single<AllAreasResponse> getAllAreas(@Query("a") String list);
     @GET("list.php")
-    Call<AllAreasResponse> getAllAreas(@Query("a") String list);
-
-    @GET("list.php")
-    Call<AllIngredientsResponse> getAllIngredients(@Query("i") String list);
-
+    Single<AllIngredientsResponse> getAllIngredients(@Query("i") String list);
     @GET("filter.php")
-    Call<GetMealsByFilterResponse> getMealSByCategory(@Query("c") String category);
+    Single<GetMealsByFilterResponse> getMealSByCategory(@Query("c") String category);
     @GET("filter.php")
-    Call<GetMealsByFilterResponse> getMealSByIngredient(@Query("i") String category);
+    Single<GetMealsByFilterResponse> getMealSByIngredient(@Query("i") String category);
     @GET("filter.php")
-    Call<GetMealsByFilterResponse> getMealSByArea(@Query("a") String category);
+    Single<GetMealsByFilterResponse> getMealSByArea(@Query("a") String category);
 
 
 }

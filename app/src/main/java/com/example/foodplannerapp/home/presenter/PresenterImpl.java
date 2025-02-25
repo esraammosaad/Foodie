@@ -1,16 +1,12 @@
 package com.example.foodplannerapp.home.presenter;
 
-import android.view.View;
-
-import com.bumptech.glide.Glide;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.network.NetworkCallBack;
+import android.annotation.SuppressLint;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.view.ViewInterface;
+import com.example.foodplannerapp.utilis.SingleTransformation;
 
-import java.util.List;
 
-public class PresenterImpl implements NetworkCallBack<Meal> {
+public class PresenterImpl {
 
     MealsRepositoryImpl mealsRepository;
     ViewInterface viewInterface;
@@ -18,46 +14,42 @@ public class PresenterImpl implements NetworkCallBack<Meal> {
     public PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
 
         this.mealsRepository = mealsRepository;
-        this.viewInterface=viewInterface;
+        this.viewInterface = viewInterface;
     }
 
 
+    @SuppressLint("CheckResult")
+    public void getRandomMeal() {
 
-    public void getRandomMeal(){
-
-        mealsRepository.getRandomMeal(this);
-    }
-    public void getNewRandomMeal(){
-
-        mealsRepository.getNewRandomMeal(this);
-    }
-
-    public void getMealsByFirstLetter(){
-
-        mealsRepository.getMealsByFirstLetter(this);
+        mealsRepository.getRandomMeal().
+                compose(SingleTransformation.apply()).
+                map(mealModel -> mealModel.getMeals().get(0)).
+                subscribe(
+                        meal -> viewInterface.getRandomMeal(meal),
+                        error -> viewInterface.onFailure(error.getMessage()));
     }
 
-    @Override
-    public void onSuccess(Meal meal, List<Meal> list) {
-        if (meal != null) {
+    @SuppressLint("CheckResult")
+    public void getNewRandomMeal() {
 
-            viewInterface.getRandomMeal(meal);
-
-
-        }
-
-        if (list != null) {
-
-            viewInterface.getMealsByFirstLetter(list);
-
-
-        }
-
+        mealsRepository.getNewRandomMeal().
+                compose(SingleTransformation.apply()).
+                map(mealModel -> mealModel.getMeals().get(0)).
+                subscribe(
+                        meal -> viewInterface.getRandomMeal(meal),
+                        error -> viewInterface.onFailure(error.getMessage()));
     }
 
-    @Override
-    public void onFailure(String errorMessage) {
-        viewInterface.onFailure(errorMessage);
+    @SuppressLint("CheckResult")
+    public void getMealsByFirstLetter() {
 
+        mealsRepository.getMealsByFirstLetter().
+                compose(SingleTransformation.apply()).
+                map(mealModel -> mealModel.getMeals()).
+                subscribe(
+                        mealList -> viewInterface.getMealsByFirstLetter(mealList),
+                        error -> viewInterface.onFailure(error.getMessage()));
     }
+
+
 }
