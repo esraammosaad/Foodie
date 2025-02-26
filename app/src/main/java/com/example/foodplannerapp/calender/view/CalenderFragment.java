@@ -1,15 +1,12 @@
 package com.example.foodplannerapp.calender.view;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
 
+import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +27,6 @@ import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
-import com.example.foodplannerapp.favorite.view.FavoriteFragmentDirections;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
@@ -97,55 +93,26 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
         if (presenter.getCurrentUser() != null) {
 
-            calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
-            calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
-                @Override
-                public void onChanged(List<CalenderMealModel> calenderMealModels) {
-
-                    myAdapter.setMealsList(calenderMealModels);
-                    myAdapter.notifyDataSetChanged();
-                    recyclerView.setAdapter(myAdapter);
-                    calendar.set(Calendar.MONTH, mealMonth - 1);
-                    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
-                    String monthName = monthFormat.format(calendar.getTime());
-                    textCalendar.setText("Today's Picks: " + monthName + " " + mealDay + ", " + mealYear);
-
-
-                }
-
-            });
-
+            presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+            calendar.set(Calendar.MONTH, mealMonth - 1);
+            SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
+            textCalendar.setText("Today's Picks: " +  monthFormat.format(calendar.getTime()) + " " + mealDay + ", " + mealYear);
 
 
         calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
             mealDay = dayOfMonth;
             mealMonth = month + 1;
             mealYear = year;
-            calendarMealsList.removeObservers(getViewLifecycleOwner());
-            calendarMealsList = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
-            calendarMealsList.observe(getViewLifecycleOwner(), new Observer<List<CalenderMealModel>>() {
-                @Override
-                public void onChanged(List<CalenderMealModel> calenderMealModels) {
-
-
-                    myAdapter.setMealsList(calenderMealModels);
-                    recyclerView.setAdapter(myAdapter);
+                    presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
                     calendar.set(Calendar.MONTH, month);
-                    SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
-                    String monthName = monthFormat.format(calendar.getTime());
                     if (mealDay == calendar.get(Calendar.DAY_OF_MONTH) && mealMonth == calendar.get(Calendar.MONTH) + 1 && mealYear == calendar.get(Calendar.YEAR)) {
 
-                        textCalendar.setText("Today's Picks: " + monthName + " " + dayOfMonth + ", " + year);
+                        textCalendar.setText("Today's Picks: " +  monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
 
 
                     } else {
-                        textCalendar.setText("Your Meal Plan For " + monthName + " " + dayOfMonth + ", " + year);
+                        textCalendar.setText("Your Meal Plan For " +  monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
                     }
-
-
-                }
-            });
-
 
         });
 
@@ -214,6 +181,20 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
         Log.i("TAG", "onSuccess: " + message);
 
+    }
+
+    @Override
+    public void onCalendarListDatabaseSuccess(List<CalenderMealModel> list) {
+        myAdapter.setMealsList(list);
+        myAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(myAdapter);
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.compositeDisposable.clear();
     }
 
     @Override

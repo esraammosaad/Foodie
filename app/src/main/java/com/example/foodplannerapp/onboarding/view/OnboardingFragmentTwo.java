@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 
 
 public class OnboardingFragmentTwo extends Fragment {
@@ -16,6 +19,7 @@ public class OnboardingFragmentTwo extends Fragment {
     TextView nextBtn;
     TextView skipBtn;
     ViewPager2 viewPager;
+    PresenterImpl presenter;
 
 
 
@@ -38,6 +42,7 @@ public class OnboardingFragmentTwo extends Fragment {
         nextBtn=view.findViewById(R.id.nextText);
         skipBtn=view.findViewById(R.id.skipText);
         viewPager=getActivity().findViewById(R.id.viewPager2);
+        presenter= PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
         nextBtn.setOnClickListener((v)->{
 
             viewPager.setCurrentItem(2);
@@ -47,6 +52,8 @@ public class OnboardingFragmentTwo extends Fragment {
 
 
             Navigation.findNavController(view).navigate(R.id.action_viewPagerFragment_to_loginFragment2);
+            presenter.setOnOnBoardingState();
+
         });
         return view;
     }

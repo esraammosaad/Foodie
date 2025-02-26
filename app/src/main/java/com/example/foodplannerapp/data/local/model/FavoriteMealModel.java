@@ -2,6 +2,7 @@ package com.example.foodplannerapp.data.local.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 import com.example.foodplannerapp.data.models.Ingredient;
@@ -24,8 +25,10 @@ public class FavoriteMealModel {
     @TypeConverters(ArrayListConverter.class)
     private List<Ingredient> ingredients;
 
+
     public FavoriteMealModel() {
     }
+
 
     public FavoriteMealModel(String idMeal, String userUID, String strMeal, String strCategory, String strArea, String strInstructions, String strMealThumb, String strYoutube, ArrayList<Ingredient> ingredients) {
         this.idMeal = idMeal;

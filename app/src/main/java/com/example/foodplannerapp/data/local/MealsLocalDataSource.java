@@ -2,16 +2,17 @@ package com.example.foodplannerapp.data.local;
 
 import android.content.Context;
 
-import androidx.lifecycle.LiveData;
-
+import com.airbnb.lottie.L;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+
 public class MealsLocalDataSource {
     MealsDao mealsDao;
-    LiveData<List<FavoriteMealModel>> mealsList;
 
     public MealsLocalDataSource(Context context) {
         MyDataBase myDataBase = MyDataBase.getInstance(context);
@@ -20,56 +21,41 @@ public class MealsLocalDataSource {
 
     }
 
-    public void addMealToDB(FavoriteMealModel favoriteMealModel) {
-        new Thread(
-
-                () -> {
-                    mealsDao.insertMeal(favoriteMealModel);
-                }
-        ).start();
+    public Completable addMealToDB(FavoriteMealModel favoriteMealModel) {
+        return mealsDao.insertMeal(favoriteMealModel);
 
 
     }
 
-    public void deleteMealFromDB(FavoriteMealModel favoriteMealModel) {
-        new Thread(
-
-                () -> {
-                    mealsDao.deleteMeal(favoriteMealModel);
-                }
-        ).start();
+    public Completable deleteMealFromDB(FavoriteMealModel favoriteMealModel) {
+        return mealsDao.deleteMeal(favoriteMealModel);
 
 
     }
 
-    public LiveData<List<FavoriteMealModel>> getAllMeals(String userUID) {
-        mealsList = mealsDao.getAllMeals(userUID);
-        return mealsList;
+    public Observable<List<FavoriteMealModel>> getAllMeals(String userUID) {
+        return mealsDao.getAllMealsFromFavorite(userUID);
     }
 
-    public void addMealToCalendar(CalenderMealModel meal) {
-
-        new Thread(
-                () -> {
-
-                    mealsDao.insertMealToCalendar(meal);
-                }
-
-        ).start();
+    public Observable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID) {
+        return mealsDao.getMealByIDFromFavorite(userUID, mealID);
     }
 
-    public void deleteMealFromCalendar(CalenderMealModel meal) {
-
-        new Thread(
-                () -> {
-
-                    mealsDao.deleteMeal(meal);
-                }
-
-        ).start();
+    public Observable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID) {
+        return mealsDao.getMealByIDFromCalendar(userUID, mealID);
     }
 
-    public LiveData<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID, int day, int month, int year) {
+    public Completable addMealToCalendar(CalenderMealModel meal) {
+        return mealsDao.insertMealToCalendar(meal);
+
+    }
+
+    public Completable deleteMealFromCalendar(CalenderMealModel meal) {
+        return mealsDao.deleteMeal(meal);
+
+    }
+
+    public Observable<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID, int day, int month, int year) {
         return mealsDao.getAllMealsFromCalendar(userUID, day, month, year);
     }
 

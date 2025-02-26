@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -157,39 +158,47 @@ public class MealsRepositoryImpl {
         return ingredientsList;
     }
 
-    public void addMealToFavorite(FavoriteMealModel meal) {
+    public Completable addMealToFavorite(FavoriteMealModel meal) {
 
-        mealsLocalDataSource.addMealToDB(meal);
+        return mealsLocalDataSource.addMealToDB(meal);
     }
 
-    public void deleteMealFromFavorite(FavoriteMealModel meal) {
+    public Completable deleteMealFromFavorite(FavoriteMealModel meal) {
 
-        mealsLocalDataSource.deleteMealFromDB(meal);
+        return mealsLocalDataSource.deleteMealFromDB(meal);
     }
 
-    public LiveData<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID) {
+    public Observable<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID) {
         return mealsLocalDataSource.getAllMeals(userUID);
     }
 
-    public void addMealToCalender(CalenderMealModel meal) {
+    public Completable addMealToCalender(CalenderMealModel meal) {
 
 
-        mealsLocalDataSource.addMealToCalendar(meal);
-
-
-    }
-
-    public void deleteMealFromCalender(CalenderMealModel meal) {
-
-
-        mealsLocalDataSource.deleteMealFromCalendar(meal);
+        return mealsLocalDataSource.addMealToCalendar(meal);
 
 
     }
 
-    public LiveData<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day, int month, int year) {
+    public Completable deleteMealFromCalender(CalenderMealModel meal) {
+
+
+       return mealsLocalDataSource.deleteMealFromCalendar(meal);
+
+
+    }
+
+    public Observable<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day, int month, int year) {
 
         return mealsLocalDataSource.getAllMealsFromCalendar(userUID, day, month, year);
+    }
+
+    public Observable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID) {
+        return mealsLocalDataSource.getMealByIDFromFavorite(userUID, mealID);
+    }
+
+    public Observable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID) {
+        return mealsLocalDataSource.getMealByIDFromCalendar(userUID, mealID);
     }
 
 

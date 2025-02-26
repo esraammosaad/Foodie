@@ -12,23 +12,31 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 import java.util.List;
 
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
+
 @Dao
 public interface MealsDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertMeal(FavoriteMealModel favoriteMealModel);
+    Completable insertMeal(FavoriteMealModel favoriteMealModel);
 
     @Delete
-    void deleteMeal(FavoriteMealModel favoriteMealModel);
+    Completable deleteMeal(FavoriteMealModel favoriteMealModel);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertMealToCalendar(CalenderMealModel calenderMealModel);
+    Completable insertMealToCalendar(CalenderMealModel calenderMealModel);
 
     @Delete
-    void deleteMeal(CalenderMealModel calenderMealModel);
+    Completable deleteMeal(CalenderMealModel calenderMealModel);
 
     @Query("select * from meal_table where userUID= :userUID")
-    LiveData<List<FavoriteMealModel>> getAllMeals(String userUID);
+    Observable<List<FavoriteMealModel>> getAllMealsFromFavorite(String userUID);
+    @Query("select * from meal_table where userUID= :userUID AND idMeal= :mealID")
+    Observable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID);
+    @Query("select * from calendar_meal_table where userUID= :userUID AND idMeal= :mealID")
+    Observable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID);
 
     @Query("select * from calendar_meal_table where userUID= :userUID AND day= :day AND month= :month AND year= :year")
-    LiveData<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID,int day , int month , int year);
+    Observable<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID,int day , int month , int year);
 }

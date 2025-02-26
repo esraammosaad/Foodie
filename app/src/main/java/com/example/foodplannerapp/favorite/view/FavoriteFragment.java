@@ -92,28 +92,8 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         emptyFavText.setVisibility(View.VISIBLE);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         if (presenter.getCurrentUser() != null) {
-            mealList = presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
-            mealList.observe(getViewLifecycleOwner(), new Observer<List<FavoriteMealModel>>() {
-                @Override
-                public void onChanged(List<FavoriteMealModel> favoriteMealModels) {
+            presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
 
-                    if (!favoriteMealModels.isEmpty()) {
-
-                        lottieAnimationView.setVisibility(View.GONE);
-                        emptyFavText.setVisibility(View.GONE);
-                    } else {
-
-                        lottieAnimationView.setVisibility(View.VISIBLE);
-                        emptyFavText.setVisibility(View.VISIBLE);
-
-
-                    }
-                    myAdapter.setMealsList(favoriteMealModels);
-                    myAdapter.notifyDataSetChanged();
-
-
-                }
-            });
         } else {
             lottieAnimationView.setVisibility(View.VISIBLE);
             emptyFavText.setVisibility(View.VISIBLE);
@@ -153,6 +133,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
                         presenter.addMealToFavorite(meal);
                         presenter.insertCalendarMealToFireStore(meal);
 
+
                     });
 
 
@@ -178,6 +159,25 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
     }
 
     @Override
+    public void onFavoriteListSuccess(List<FavoriteMealModel> list) {
+        if (!list.isEmpty()) {
+
+            lottieAnimationView.setVisibility(View.GONE);
+            emptyFavText.setVisibility(View.GONE);
+        } else {
+
+            lottieAnimationView.setVisibility(View.VISIBLE);
+            emptyFavText.setVisibility(View.VISIBLE);
+
+
+        }
+        myAdapter.setMealsList(list);
+        myAdapter.notifyDataSetChanged();
+        recyclerView.setAdapter(myAdapter);
+
+    }
+
+    @Override
     public void onSuccess(String message) {
         Log.i("TAG", "onSuccess: " + message);
 
@@ -190,5 +190,9 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
     }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.compositeDisposable.clear();
+    }
 }

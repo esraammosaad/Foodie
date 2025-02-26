@@ -11,6 +11,8 @@ import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.utilis.CompletableTransformation;
+import com.example.foodplannerapp.utilis.Transformation;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseUser;
@@ -99,7 +101,9 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
     @Override
     public void onGetFavoriteMeals(QuerySnapshot mealsList) {
         for(QueryDocumentSnapshot meal : mealsList){
-            mealsRepository.addMealToFavorite(meal.toObject(FavoriteMealModel.class));
+            mealsRepository.addMealToFavorite(meal.toObject(FavoriteMealModel.class)).
+                    compose(CompletableTransformation.apply()).
+                    subscribe();
 
         }
 
@@ -108,7 +112,10 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
     @Override
     public void onGetCalendarMeals(QuerySnapshot mealsList) {
         for(QueryDocumentSnapshot meal : mealsList){
-            mealsRepository.addMealToCalender(meal.toObject(CalenderMealModel.class));
+            mealsRepository.
+                    addMealToCalender(meal.toObject(CalenderMealModel.class)).
+                    compose(CompletableTransformation.apply()).
+                    subscribe();
 
         }
 
