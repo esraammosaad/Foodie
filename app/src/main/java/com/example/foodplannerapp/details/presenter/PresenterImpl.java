@@ -1,6 +1,5 @@
 package com.example.foodplannerapp.details.presenter;
 
-import android.annotation.SuppressLint;
 
 
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;

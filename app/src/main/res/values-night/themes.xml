@@ -4,6 +4,12 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorSurface">@color/secondaryColor</item>
+        <item name="colorAccent">@color/textColor</item>
+        <item name="color">@color/white</item>
+
+
+
     </style>
     <style name="text_field" parent="Theme.Material3.DayNight">
         <item name="android:layout_height">60dp</item>

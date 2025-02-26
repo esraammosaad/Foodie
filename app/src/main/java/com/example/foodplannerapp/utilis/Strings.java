@@ -6,5 +6,7 @@ public class Strings {
     static final public String SEEN_ONBOARDING="SEEN_ONBOARDING";
     static final public String FAV_COLLECTION="Favorite";
     static final public String CALENDAR_COLLECTION="Calendar";
+    static final public String DARK_MODE="DARK_MODE";
+
 
 }

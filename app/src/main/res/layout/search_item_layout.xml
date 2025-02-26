@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
-    android:backgroundTint="#FFFFFF"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingBottom="15dp">
@@ -16,8 +14,8 @@
         android:layout_height="wrap_content"
         android:elevation="4dp"
         android:foregroundGravity="center"
-        app:cardBackgroundColor="#F5F5F5"
         app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="0dp"
         app:cardMaxElevation="0dp"
         app:contentPaddingBottom="8dp"

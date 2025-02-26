@@ -1,9 +1,7 @@
-package com.example.foodplannerapp.onboarding.data.local;
+package com.example.foodplannerapp.utilis;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-
-import com.example.foodplannerapp.utilis.Strings;
 
 public class SharedPreferencesManager {
 
@@ -35,6 +33,19 @@ public class SharedPreferencesManager {
     public boolean getOnBoardingState(){
 
        return prefs.getBoolean(Strings.SEEN_ONBOARDING,false);
+
+
+    }
+    public  void saveThemeState(boolean state){
+
+        editor.putBoolean(Strings.DARK_MODE,state);
+        editor.apply();
+
+
+    }
+    public boolean getThemeState(){
+
+        return prefs.getBoolean(Strings.DARK_MODE,false);
 
 
     }

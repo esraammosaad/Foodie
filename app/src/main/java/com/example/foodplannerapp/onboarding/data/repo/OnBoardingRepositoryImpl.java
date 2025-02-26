@@ -1,6 +1,6 @@
 package com.example.foodplannerapp.onboarding.data.repo;
 
-import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 
 public class OnBoardingRepositoryImpl {
     SharedPreferencesManager sharedPreferencesManager;
@@ -26,6 +26,10 @@ public class OnBoardingRepositoryImpl {
 
     public boolean getOnBoardingState(){
         return sharedPreferencesManager.getOnBoardingState();
+    }
+
+    public boolean getThemeState(){
+        return sharedPreferencesManager.getThemeState();
     }
 
 }

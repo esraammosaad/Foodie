@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 

@@ -22,18 +22,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
-import com.example.foodplannerapp.data.models.Area;
-import com.example.foodplannerapp.data.models.Category;
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.IngredientMeal;
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
-import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.example.foodplannerapp.search_details.presenter.PresenterImpl;
 
-import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -118,20 +111,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
 
                 if (mealByFilterList != null) {
-                    Observable<MealByFilter> observable = Observable.fromIterable(mealByFilterList);
-                    observable.
-                            filter(meal -> meal.getStrMeal().toLowerCase().
-                                    startsWith(String.valueOf(s))).toList().
-                            subscribeOn(Schedulers.io()).
-                            observeOn(AndroidSchedulers.mainThread()).
-                            subscribe(
-                                    item -> {
-
-                                        myAdapter.setMealsList(item);
-                                        myAdapter.notifyDataSetChanged();
-
-                                    }
-                            );
+                    presenter.search(s, mealByFilterList);
                 }
 
             }
@@ -159,6 +139,16 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     @Override
     public void onSuccess(List<MealByFilter> list) {
         this.mealByFilterList = list;
+        myAdapter.setMealsList(list);
+        myAdapter.notifyDataSetChanged();
+        resultsCount.setText(myAdapter.getItemCount() + getString(R.string.results));
+
+    }
+
+    @Override
+    public void onSearch(List<MealByFilter> list) {
+
+
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
         resultsCount.setText(myAdapter.getItemCount() + getString(R.string.results));

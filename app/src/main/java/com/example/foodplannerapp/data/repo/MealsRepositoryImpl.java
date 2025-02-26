@@ -1,7 +1,6 @@
 package com.example.foodplannerapp.data.repo;
 
 
-import androidx.lifecycle.LiveData;
 
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
@@ -15,7 +14,6 @@ import com.example.foodplannerapp.data.models.Ingredient;
 import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.NetworkCallBack;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;

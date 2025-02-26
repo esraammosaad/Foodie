@@ -1,15 +1,11 @@
 package com.example.foodplannerapp.favorite.view;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +16,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.foodplannerapp.R;
@@ -31,9 +26,7 @@ import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
-import com.example.foodplannerapp.home.view.HomeFragmentDirections;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
-import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.google.android.material.snackbar.Snackbar;
 

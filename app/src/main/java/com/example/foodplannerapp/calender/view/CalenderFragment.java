@@ -2,6 +2,7 @@ package com.example.foodplannerapp.calender.view;
 
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
@@ -76,7 +77,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         calendarView = view.findViewById(R.id.calendarView);
         recyclerView = view.findViewById(R.id.calendarRecyclerView);
         textCalendar = view.findViewById(R.id.textCalenderView);
-        guestGroup=view.findViewById(R.id.calendarGuestGroup);
+        guestGroup = view.findViewById(R.id.calendarGuestGroup);
         continueAsAGuest = view.findViewById(R.id.guest);
         signInText = view.findViewById(R.id.login);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
@@ -96,37 +97,36 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
             presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
             calendar.set(Calendar.MONTH, mealMonth - 1);
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
-            textCalendar.setText("Today's Picks: " +  monthFormat.format(calendar.getTime()) + " " + mealDay + ", " + mealYear);
+            textCalendar.setText(getString(R.string.today_s_picks) + monthFormat.format(calendar.getTime()) + " " + mealDay + ", " + mealYear);
 
 
-        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
-            mealDay = dayOfMonth;
-            mealMonth = month + 1;
-            mealYear = year;
-                    presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
-                    calendar.set(Calendar.MONTH, month);
-                    if (mealDay == calendar.get(Calendar.DAY_OF_MONTH) && mealMonth == calendar.get(Calendar.MONTH) + 1 && mealYear == calendar.get(Calendar.YEAR)) {
+            calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
+                mealDay = dayOfMonth;
+                mealMonth = month + 1;
+                mealYear = year;
+                presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+                calendar.set(Calendar.MONTH, month);
+                if (mealDay == calendar.get(Calendar.DAY_OF_MONTH) && mealMonth == calendar.get(Calendar.MONTH) + 1 && mealYear == calendar.get(Calendar.YEAR)) {
+                    textCalendar.setText(getString(R.string.today_s_picks) + monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
 
-                        textCalendar.setText("Today's Picks: " +  monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
+                } else {
+                    textCalendar.setText(getString(R.string.your_meal_plan_for) + monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
+                }
 
+            });
 
-                    } else {
-                        textCalendar.setText("Your Meal Plan For " +  monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
-                    }
-
-        });
-
-        }else{
+        } else {
 
             guestGroup.setVisibility(View.VISIBLE);
-            textCalendar.setText("Sign in now to scheduler your meals");
+            textCalendar.setText(R.string.sign_in_now_to_scheduler_your_meals);
 
 
         }
         signInText.setOnClickListener((v) -> {
+
             Navigation.findNavController(getView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.calendarView,true)
+                            .setPopUpTo(R.id.calendarView, true)
                             .setPopUpTo(R.id.homeFragment, true)
                             .build());
         });
@@ -168,6 +168,12 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        presenter.compositeDisposable.clear();
+    }
+
 
     @Override
     public void onItemClickListener(CalenderMealModel meal) {
@@ -176,12 +182,6 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         Navigation.findNavController(requireView()).navigate(action);
     }
 
-    @Override
-    public void onSuccess(String message) {
-
-        Log.i("TAG", "onSuccess: " + message);
-
-    }
 
     @Override
     public void onCalendarListDatabaseSuccess(List<CalenderMealModel> list) {
@@ -191,10 +191,12 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
     }
 
+
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.compositeDisposable.clear();
+    public void onSuccess(String message) {
+
+        Log.i("TAG", "onSuccess: " + message);
+
     }
 
     @Override

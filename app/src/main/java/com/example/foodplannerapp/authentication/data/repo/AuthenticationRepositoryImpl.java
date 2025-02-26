@@ -8,6 +8,7 @@ import com.example.foodplannerapp.authentication.data.network.AuthenticationCall
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
+import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseUser;
@@ -85,6 +86,17 @@ public class AuthenticationRepositoryImpl {
         firesStoreServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(),getDataFromFirebaseCallBack);
     }
 
+    public void saveThemeState(Context context, boolean state){
+
+        SharedPreferencesManager.getInstance(context).saveThemeState(state);
+
+    }
+
+    public boolean getThemeState(Context context){
+
+        return SharedPreferencesManager.getInstance(context).getThemeState();
+
+    }
 
 
     }

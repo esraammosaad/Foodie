@@ -2,7 +2,6 @@ package com.example.foodplannerapp.data.local;
 
 import android.content.Context;
 
-import com.airbnb.lottie.L;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 

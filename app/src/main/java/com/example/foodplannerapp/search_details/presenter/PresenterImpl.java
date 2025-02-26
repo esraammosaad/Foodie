@@ -10,7 +10,9 @@ import com.example.foodplannerapp.search_details.view.ViewInterface;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.SingleTransformer;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class PresenterImpl {
@@ -26,7 +28,7 @@ public class PresenterImpl {
     @SuppressLint("CheckResult")
     public void getMealsByCategory(String categoryName) {
 
-        mealsRepository.getAllMealsByCategory(categoryName).
+        Disposable disposable= mealsRepository.getAllMealsByCategory(categoryName).
                 compose(apply()).
                 subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
@@ -36,7 +38,7 @@ public class PresenterImpl {
     @SuppressLint("CheckResult")
     public void getMealsByArea(String areaName) {
 
-        mealsRepository.getAllMealsByArea(areaName).
+        Disposable disposable= mealsRepository.getAllMealsByArea(areaName).
                 compose(apply()).
                 subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
@@ -46,11 +48,27 @@ public class PresenterImpl {
     @SuppressLint("CheckResult")
     public void getMealsByIngredient(String ingredientName) {
 
-        mealsRepository.getAllMealsByIngredient(ingredientName).
+       Disposable disposable= mealsRepository.getAllMealsByIngredient(ingredientName).
                 compose(apply()).
                 subscribe(mealByFilters -> viewInterface.onSuccess(mealByFilters),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
 
+    }
+
+    public void search(CharSequence s,List<MealByFilter> mealByFilterList){
+        Observable<MealByFilter> observable = Observable.fromIterable(mealByFilterList);
+       Disposable disposable=observable.
+                filter(meal -> meal.getStrMeal().toLowerCase().
+                        startsWith(String.valueOf(s))).toList().
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(
+                        item -> {
+
+                           viewInterface.onSearch(item);
+
+                        }
+                );
     }
 
 

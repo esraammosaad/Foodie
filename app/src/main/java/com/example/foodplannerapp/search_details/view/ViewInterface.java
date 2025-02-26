@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ViewInterface {
     void onSuccess(List<MealByFilter> list);
+    void onSearch(List<MealByFilter> list);
 
     void onFailure(String errorMessage);
 }

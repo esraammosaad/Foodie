@@ -1,7 +1,5 @@
 package com.example.foodplannerapp.onboarding.view;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,13 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.onboarding.data.local.SharedPreferencesManager;
+import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
-import com.example.foodplannerapp.utilis.Strings;
 
 public class OnboardingFragmentThree extends Fragment {
 

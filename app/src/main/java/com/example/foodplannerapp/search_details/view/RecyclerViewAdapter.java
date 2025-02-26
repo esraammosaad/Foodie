@@ -12,14 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
-import com.example.foodplannerapp.home.view.HomeListener;
-import com.example.foodplannerapp.utilis.CountryCodeMapper;
-
 import java.util.List;
-import java.util.Map;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 

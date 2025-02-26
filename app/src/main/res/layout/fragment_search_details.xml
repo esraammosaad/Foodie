@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".search_details.view.SearchDetailsFragment"
-    android:background="@color/white"
     >
 
     <ScrollView
@@ -18,7 +17,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/white"
+
             tools:context=".search_details.view.SearchDetailsFragment">
 
             <EditText
@@ -90,12 +89,10 @@
                 android:id="@+id/view"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="100dp"
-                android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_background_layout"
-                app:layout_constraintEnd_toStartOf="@+id/guideline12"
-                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/searchDetailsImage" />
 
             <TextView
@@ -115,13 +112,10 @@
                 android:id="@+id/view3"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="120dp"
-                android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
-                app:layout_constraintEnd_toStartOf="@+id/guideline12"
-                app:layout_constraintHorizontal_bias="0.6"
-                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/searchDetailsImage" />
 
             <androidx.recyclerview.widget.RecyclerView

@@ -1,11 +1,8 @@
 package com.example.foodplannerapp.home.view;
 
-import static androidx.core.content.ContextCompat.getSystemService;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;

@@ -1,6 +1,5 @@
 package com.example.foodplannerapp.search_details.view;
 
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealByFilter;
 
 public interface SearchDetailsListener {

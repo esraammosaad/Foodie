@@ -1,19 +1,15 @@
 package com.example.foodplannerapp.favorite.presenter;
 
-import androidx.lifecycle.LiveData;
 
-import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.view.ViewInterface;
 import com.example.foodplannerapp.utilis.CompletableTransformation;
-import com.example.foodplannerapp.utilis.SingleTransformation;
 import com.example.foodplannerapp.utilis.Transformation;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.List;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;

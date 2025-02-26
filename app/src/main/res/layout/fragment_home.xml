@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".home.view.HomeFragment"
     >
 
@@ -19,7 +18,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/randomMealCategoryText"
@@ -135,9 +134,10 @@
                 android:background="@drawable/home_button_layout"
                 android:backgroundTint="@color/white"
                 android:drawableRight="@drawable/baseline_arrow_forward_24"
+                android:drawableTint="?attr/color"
                 android:text="@string/viewRecipe"
-                android:textColor="@color/textColor"
-                app:backgroundTint="@null"
+                android:textColor="?attr/color"
+                app:backgroundTint="?attr/colorAccent"
                 app:layout_constraintBottom_toBottomOf="@+id/randomMealImg"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4" />
 
@@ -206,6 +206,7 @@
                 android:paddingLeft="40dp"
                 android:paddingEnd="12dp"
                 android:text="@string/refresh"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintTop_toBottomOf="@+id/randomMealImg" />
 

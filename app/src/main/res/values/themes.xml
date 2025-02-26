@@ -3,6 +3,14 @@
     <style name="Base.Theme.FoodPlannerApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="colorSurface">#F5F5F5</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="color">@color/textColor</item>
+
+
+
+
     </style>
 
     <style name="text_field">
