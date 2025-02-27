@@ -7,7 +7,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class PresenterImpl {
 
-    AuthenticationRepositoryImpl authenticationRepository;
+    private final AuthenticationRepositoryImpl authenticationRepository;
 
     public PresenterImpl(AuthenticationRepositoryImpl authenticationRepository) {
         this.authenticationRepository = authenticationRepository;

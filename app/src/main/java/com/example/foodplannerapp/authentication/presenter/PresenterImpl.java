@@ -19,12 +19,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebaseCallBack {
-    AuthenticationRepositoryImpl authenticationRepository;
-    MealsRepositoryImpl mealsRepository;
-    ViewInterface viewInterface;
+    private final AuthenticationRepositoryImpl authenticationRepository;
+    private final MealsRepositoryImpl mealsRepository;
+    private final ViewInterface viewInterface;
 
 
-    public PresenterImpl(AuthenticationRepositoryImpl authenticationRepository, MealsRepositoryImpl mealsRepository,ViewInterface viewInterface) {
+    public PresenterImpl(AuthenticationRepositoryImpl authenticationRepository,
+                         MealsRepositoryImpl mealsRepository,
+                         ViewInterface viewInterface) {
         this.authenticationRepository = authenticationRepository;
         this.mealsRepository=mealsRepository;
         this.viewInterface = viewInterface;

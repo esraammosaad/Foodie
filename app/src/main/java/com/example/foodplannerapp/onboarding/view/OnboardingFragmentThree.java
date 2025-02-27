@@ -19,8 +19,8 @@ import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 
 public class OnboardingFragmentThree extends Fragment {
 
-    Button getStartedBtn;
-    PresenterImpl presenter;
+    private Button getStartedBtn;
+    private PresenterImpl presenter;
 
 
 

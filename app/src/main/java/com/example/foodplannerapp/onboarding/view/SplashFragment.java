@@ -22,7 +22,7 @@ import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 
 public class SplashFragment extends Fragment {
 
-    PresenterImpl presenter;
+    private PresenterImpl presenter;
 
 
     public SplashFragment() {
@@ -52,11 +52,7 @@ public class SplashFragment extends Fragment {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
         new Handler().postDelayed(() -> {
-
-
             if (isAdded()) {
-
-
                 Navigation.findNavController(view).navigate(
 
 
@@ -64,8 +60,6 @@ public class SplashFragment extends Fragment {
                                 AuthenticationServices.getInstance().getCurrentUser() != null ?
                                         R.id.action_splashFragment_to_homeFragment : R.id.action_splashFragment_to_loginFragment :
                                 R.id.action_splashFragment_to_viewPagerFragment
-
-
                 );
             }
         }, 5000);

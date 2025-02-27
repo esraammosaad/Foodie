@@ -21,9 +21,9 @@ import java.util.Map;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
 
-    Context context;
-    List<Meal> mealsList;
-    HomeListener listener;
+    private final Context context;
+    private List<Meal> mealsList;
+    private final HomeListener listener;
 
     public void setMealsList(List<Meal> mealsList) {
         this.mealsList = mealsList;

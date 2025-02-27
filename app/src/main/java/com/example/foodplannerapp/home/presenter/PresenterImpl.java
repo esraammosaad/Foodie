@@ -3,6 +3,8 @@ package com.example.foodplannerapp.home.presenter;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.view.ViewInterface;
 import com.example.foodplannerapp.utilis.SingleTransformation;
+
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 
@@ -10,6 +12,7 @@ public class PresenterImpl {
 
     MealsRepositoryImpl mealsRepository;
     ViewInterface viewInterface;
+    public static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
 
@@ -20,32 +23,35 @@ public class PresenterImpl {
 
     public void getRandomMeal() {
 
-        Disposable disposable=mealsRepository.getRandomMeal().
+        Disposable disposable = mealsRepository.getRandomMeal().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals().get(0)).
                 subscribe(
                         meal -> viewInterface.getRandomMeal(meal),
                         error -> viewInterface.onFailure(error.getMessage()));
+        compositeDisposable.add(disposable);
     }
 
     public void getNewRandomMeal() {
 
-        Disposable disposable=mealsRepository.getNewRandomMeal().
+        Disposable disposable = mealsRepository.getNewRandomMeal().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals().get(0)).
                 subscribe(
                         meal -> viewInterface.getRandomMeal(meal),
                         error -> viewInterface.onFailure(error.getMessage()));
+        compositeDisposable.add(disposable);
     }
 
     public void getMealsByFirstLetter() {
 
-        Disposable disposable=mealsRepository.getMealsByFirstLetter().
+        Disposable disposable = mealsRepository.getMealsByFirstLetter().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals()).
                 subscribe(
                         mealList -> viewInterface.getMealsByFirstLetter(mealList),
                         error -> viewInterface.onFailure(error.getMessage()));
+        compositeDisposable.add(disposable);
     }
 
 

@@ -1,6 +1,5 @@
 package com.example.foodplannerapp.search_details.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
@@ -36,34 +35,29 @@ import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.List;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
 public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface, NetworkListener {
 
-    ImageView imageView;
-    TextView textView;
-    RecyclerView recyclerView;
-    TextView resultsCount;
-    EditText searchEditText;
-    ImageView backIcon;
-    RecyclerViewAdapter myAdapter;
-    String selectedItem;
-    PresenterImpl presenter;
-    TextWatcher textWatcher;
-    List<MealByFilter> mealByFilterList;
-    ProgressBar progressBar;
-    Group internetGroup;
-    Group noInternetGroup;
-    NetworkChangeListener networkChangeListener;
-    TextView dismiss;
-    TextView turnOnWIFI;
+    private ImageView imageView;
+    private TextView textView;
+    private RecyclerView recyclerView;
+    private TextView resultsCount;
+    private EditText searchEditText;
+    private ImageView backIcon;
+    private RecyclerViewAdapter myAdapter;
+    private String selectedItem;
+    private PresenterImpl presenter;
+    private TextWatcher textWatcher;
+    private List<MealByFilter> mealByFilterList;
+    private ProgressBar progressBar;
+    private Group internetGroup;
+    private Group noInternetGroup;
+    private NetworkChangeListener networkChangeListener;
+    private TextView dismiss;
+    private TextView turnOnWIFI;
 
 
     public SearchDetailsFragment() {
@@ -89,19 +83,19 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         resultsCount = view.findViewById(R.id.countOfResults);
         searchEditText = view.findViewById(R.id.searchTextFieldDetails);
         backIcon = view.findViewById(R.id.backIconSearch);
-        progressBar=view.findViewById(R.id.progressBar4);
-        internetGroup=view.findViewById(R.id.internetGroup);
-        noInternetGroup=view.findViewById(R.id.noInternetGrup);
-        dismiss=view.findViewById(R.id.dismiss2);
-        turnOnWIFI=view.findViewById(R.id.turnWIFI2);
-        networkChangeListener=new NetworkChangeListener(this);
+        progressBar = view.findViewById(R.id.progressBar4);
+        internetGroup = view.findViewById(R.id.internetGroup);
+        noInternetGroup = view.findViewById(R.id.noInternetGrup);
+        dismiss = view.findViewById(R.id.dismiss2);
+        turnOnWIFI = view.findViewById(R.id.turnWIFI2);
+        networkChangeListener = new NetworkChangeListener(this);
         backIcon.setOnClickListener((v) -> {
 
             Navigation.findNavController(view).navigateUp();
         });
         recyclerView = view.findViewById(R.id.searchDetailsRecyclerView);
         textView.setText(SearchDetailsFragmentArgs.fromBundle(getArguments()).getName());
-        Glide.with(getContext()).load(SearchDetailsFragmentArgs.fromBundle(getArguments()).getImage()).into(imageView);
+        Glide.with(requireContext()).load(SearchDetailsFragmentArgs.fromBundle(getArguments()).getImage()).into(imageView);
         selectedItem = SearchDetailsFragmentArgs.fromBundle(getArguments()).getFilter();
         myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setHasFixedSize(true);
@@ -128,7 +122,6 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
             }
 
-            @SuppressLint("CheckResult")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -145,11 +138,11 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
             }
         };
         searchEditText.addTextChangedListener(textWatcher);
-        dismiss.setOnClickListener((v)->{
+        dismiss.setOnClickListener((v) -> {
 
             internetGroup.setVisibility(View.GONE);
         });
-        turnOnWIFI.setOnClickListener((v)->{
+        turnOnWIFI.setOnClickListener((v) -> {
             WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
             wifi.setWifiEnabled(true);
             wifi.reconnect();
@@ -163,7 +156,8 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     public void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        requireActivity().registerReceiver(networkChangeListener, filter);     }
+        requireActivity().registerReceiver(networkChangeListener, filter);
+    }
 
     @Override
     public void onStop() {
@@ -204,15 +198,12 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
     @Override
     public void onFailure(String errorMessage) {
-        if(!NetworkAvailability.isNetworkAvailable(getContext()) && mealByFilterList==null){
+        if (!NetworkAvailability.isNetworkAvailable(requireContext()) && mealByFilterList == null) {
 
             noInternetGroup.setVisibility(View.VISIBLE);
 
-
         }
         progressBar.setVisibility(View.GONE);
-
-
 
     }
 
@@ -229,6 +220,11 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         internetGroup.setVisibility(View.GONE);
         noInternetGroup.setVisibility(View.GONE);
 
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PresenterImpl.compositeDisposable.clear();
     }
 }

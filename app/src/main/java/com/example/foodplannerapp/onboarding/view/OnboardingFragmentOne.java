@@ -19,10 +19,10 @@ import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
 
 public class OnboardingFragmentOne extends Fragment {
 
-    TextView nextBtn;
-    TextView skipBtn;
-    ViewPager2 viewPager;
-    PresenterImpl presenter;
+    private TextView nextBtn;
+    private TextView skipBtn;
+    private ViewPager2 viewPager;
+    private PresenterImpl presenter;
 
 
 

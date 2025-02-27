@@ -40,27 +40,25 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends Fragment implements ViewInterface {
 
-    TextView registerText;
-    Button loginButton;
-    EditText emailEditText;
-    EditText passwordEditText;
-    PresenterImpl presenter;
-    TextView emailError;
-    TextView passwordError;
-    Button signInWithGoogle;
-    GoogleSignInClient googleSignInClient;
-    Button visitAsAGuestButton;
-    ProgressBar progressBar;
-    ImageView googleIcon;
-    ImageView guestIcon;
+    private TextView registerText;
+    private Button loginButton;
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private PresenterImpl presenter;
+    private TextView emailError;
+    private TextView passwordError;
+    private Button signInWithGoogle;
+    private GoogleSignInClient googleSignInClient;
+    private Button visitAsAGuestButton;
+    private ProgressBar progressBar;
+    private ImageView googleIcon;
+    private ImageView guestIcon;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
-
                 @Override
                 public void onActivityResult(ActivityResult result) {
-
                     try {
                         presenter.loginWithGoogle(result);
                     } catch (ApiException e) {
@@ -103,16 +101,19 @@ public class LoginFragment extends Fragment implements ViewInterface {
         guestIcon = view.findViewById(R.id.imageView2);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(),
+                FiresStoreServices.getInstance()),
+                MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
+                        new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        googleSignInClient = GoogleSignIn.getClient(getActivity(), options);
+        googleSignInClient = GoogleSignIn.getClient(requireActivity(), options);
 
 
         loginButton.setOnClickListener((v) -> {
-            if(NetworkAvailability.isNetworkAvailable(getContext())){
+            if(NetworkAvailability.isNetworkAvailable(requireContext())){
             if (emailEditText.getText().toString().isEmpty()) {
 
                 emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
@@ -150,6 +151,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
             }
             }else {
+
             NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
         }
 
@@ -161,7 +163,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
         });
 
         signInWithGoogle.setOnClickListener((v) -> {
-            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+            if (NetworkAvailability.isNetworkAvailable(requireContext())) {
                 Intent intent = googleSignInClient.getSignInIntent();
                 activityResultLauncher.launch(intent);
                 progressBar.setVisibility(View.VISIBLE);
@@ -176,7 +178,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
         });
         visitAsAGuestButton.setOnClickListener((v) -> {
-            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+            if (NetworkAvailability.isNetworkAvailable(requireContext())) {
 
                 Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_homeFragment);
             } else {

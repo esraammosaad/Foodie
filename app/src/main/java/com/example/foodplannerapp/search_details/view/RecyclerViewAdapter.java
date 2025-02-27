@@ -18,9 +18,9 @@ import java.util.List;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
 
-    Context context;
-    List<MealByFilter> mealsList;
-    SearchDetailsListener listener;
+    private final Context context;
+    private List<MealByFilter> mealsList;
+    private final SearchDetailsListener listener;
 
     public void setMealsList(List<MealByFilter> mealsList) {
         this.mealsList = mealsList;

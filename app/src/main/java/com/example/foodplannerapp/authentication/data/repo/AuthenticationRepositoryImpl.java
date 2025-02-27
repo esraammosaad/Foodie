@@ -15,9 +15,9 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class AuthenticationRepositoryImpl {
 
-    AuthenticationServices authenticationServices;
-    FiresStoreServices firesStoreServices;
-    static private AuthenticationRepositoryImpl instance;
+    private final AuthenticationServices authenticationServices;
+    private final FiresStoreServices firesStoreServices;
+    private static AuthenticationRepositoryImpl instance;
 
     private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices){
         this.authenticationServices = authenticationServices;

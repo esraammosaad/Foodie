@@ -327,4 +327,10 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         presenter.getAllCategories();
 
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PresenterImpl.compositeDisposable.clear();
+    }
 }

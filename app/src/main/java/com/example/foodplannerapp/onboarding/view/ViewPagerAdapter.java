@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentStateAdapter {
 
-    ArrayList<Fragment> fragmentList;
+    private final ArrayList<Fragment> fragmentList;
 
 
 

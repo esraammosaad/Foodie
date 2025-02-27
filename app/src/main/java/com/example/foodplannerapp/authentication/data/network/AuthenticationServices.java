@@ -35,11 +35,6 @@ public class AuthenticationServices {
 
     }
 
-    public FirebaseUser getCurrentUser() {
-
-        return firebaseAuth.getCurrentUser();
-    }
-
     public static AuthenticationServices getInstance() {
 
         if (instance == null) {
@@ -51,6 +46,13 @@ public class AuthenticationServices {
         return instance;
 
     }
+
+
+    public FirebaseUser getCurrentUser() {
+
+        return firebaseAuth.getCurrentUser();
+    }
+
 
     public void register(String email, String password, String name, AuthenticationCallBack authenticationCallBack) {
 

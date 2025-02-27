@@ -41,21 +41,21 @@ import com.google.android.material.snackbar.Snackbar;
 
 public class RegisterFragment extends Fragment implements ViewInterface {
 
-    TextView signInText;
-    Button registerButton;
-    PresenterImpl presenter;
-    EditText emailEditText;
-    EditText passwordEditText;
-    EditText usernameEditText;
-    TextView emailError;
-    TextView passwordError;
-    TextView usernameError;
-    Button signInWithGoogle;
-    GoogleSignInClient googleSignInClient;
-    Button visitAsAGuestButton;
-    ProgressBar progressBar;
-    ImageView googleIcon;
-    ImageView guestIcon;
+    private TextView signInText;
+    private Button registerButton;
+    private PresenterImpl presenter;
+    private EditText emailEditText;
+    private EditText passwordEditText;
+    private EditText usernameEditText;
+    private TextView emailError;
+    private TextView passwordError;
+    private TextView usernameError;
+    private Button signInWithGoogle;
+    private GoogleSignInClient googleSignInClient;
+    private Button visitAsAGuestButton;
+    private ProgressBar progressBar;
+    private ImageView googleIcon;
+    private ImageView guestIcon;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(

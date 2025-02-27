@@ -1,12 +1,10 @@
 package com.example.foodplannerapp.profile.view;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -37,31 +34,29 @@ import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 import com.google.android.material.materialswitch.MaterialSwitch;
-import com.google.android.material.snackbar.Snackbar;
 
 
 public class ProfileFragment extends Fragment implements NetworkListener {
 
-    Button signOutButton;
-    PresenterImpl presenter;
-    TextView userName;
-    TextView userEmail;
-    ImageView userImg;
-    ImageView githubIcon;
-    ImageView linkedinIcon;
-    ImageView googleIcon;
-    MaterialSwitch darkModeSwitch;
-    ImageView editProfileIcon;
-    ImageView shareAppIcon;
-    Group guestGroup;
-    Group guestSecondGroup;
-    Group profileGroup;
-    NetworkChangeListener networkChangeListener;
-    TextView guest;
-    TextView login;
-    ImageView noInternetIcon;
-    TextView noInternetText;
-
+    private Button signOutButton;
+    private PresenterImpl presenter;
+    private TextView userName;
+    private TextView userEmail;
+    private ImageView userImg;
+    private ImageView githubIcon;
+    private ImageView linkedinIcon;
+    private ImageView googleIcon;
+    private MaterialSwitch darkModeSwitch;
+    private ImageView editProfileIcon;
+    private ImageView shareAppIcon;
+    private Group guestGroup;
+    private Group guestSecondGroup;
+    private Group profileGroup;
+    private NetworkChangeListener networkChangeListener;
+    private TextView guest;
+    private TextView login;
+    private ImageView noInternetIcon;
+    private TextView noInternetText;
 
 
     public ProfileFragment() {
@@ -115,8 +110,8 @@ public class ProfileFragment extends Fragment implements NetworkListener {
             });
 
         } else {
-
-
+            userName.setText(presenter.getCurrentUser().getDisplayName());
+            userEmail.setText(presenter.getCurrentUser().getEmail());
             signOutButton.setOnClickListener((v) -> {
 
                 if (NetworkAvailability.isNetworkAvailable(getContext())) {
@@ -144,18 +139,13 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
 
             });
-
             guest.setOnClickListener((v) -> {
                 guestGroup.setVisibility(View.GONE);
             });
 
-
-            userName.setText(presenter.getCurrentUser().getDisplayName());
-            userEmail.setText(presenter.getCurrentUser().getEmail());
             if (presenter.getCurrentUser().getPhotoUrl() != null) {
                 Glide.with(requireContext()).load(presenter.getCurrentUser().getPhotoUrl()).into(userImg);
             }
-
             darkModeSwitch.setChecked(presenter.getThemeState(getContext()));
             darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
@@ -170,7 +160,6 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
                 }
             });
-
             githubIcon.setOnClickListener((v) -> {
                 openWebView("https://github.com/esraammosaad");
 
@@ -192,7 +181,6 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
 
             });
-
             shareAppIcon.setOnClickListener((v) -> {
                 try {
                     Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -207,9 +195,6 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
             });
         }
-
-
-
 
     }
 

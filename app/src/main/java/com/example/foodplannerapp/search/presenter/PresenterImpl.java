@@ -1,6 +1,5 @@
 package com.example.foodplannerapp.search.presenter;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 import com.example.foodplannerapp.data.models.Area;
 import com.example.foodplannerapp.data.models.Category;
@@ -10,53 +9,55 @@ import com.example.foodplannerapp.search.view.ViewInterface;
 import com.example.foodplannerapp.utilis.SingleTransformation;
 import java.util.List;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 public class PresenterImpl {
-    MealsRepositoryImpl mealsRepository;
-    ViewInterface viewInterface;
+    private final MealsRepositoryImpl mealsRepository;
+    private final ViewInterface viewInterface;
+    public static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public PresenterImpl(MealsRepositoryImpl mealsRepository, ViewInterface viewInterface) {
         this.mealsRepository = mealsRepository;
         this.viewInterface = viewInterface;
     }
 
-    @SuppressLint("CheckResult")
     public void getAllCategories() {
 
-        mealsRepository.getAllCategories().
+        Disposable disposable=mealsRepository.getAllCategories().
                 compose(SingleTransformation.apply()).
                 map(getAllCategoriesResponse -> getAllCategoriesResponse.getCategories()).
                 subscribe(categoryList -> viewInterface.onSuccess(categoryList),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
+        compositeDisposable.add(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void getAllAreas() {
 
-        mealsRepository.getAllAreas().
+       Disposable disposable= mealsRepository.getAllAreas().
                 compose(SingleTransformation.apply()).
                 map(getAllAreasResponse -> getAllAreasResponse.getAreas()).
                 subscribe(areaList -> viewInterface.onSuccess(areaList),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
+       compositeDisposable.add(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void getAllIngredients() {
 
-        mealsRepository.getAllIngredients().
+        Disposable disposable=mealsRepository.getAllIngredients().
                 compose(SingleTransformation.apply()).
                 map(getAllIngredientsResponse -> getAllIngredientsResponse.getMeals()).
                 subscribe(mealList -> viewInterface.onSuccess(mealList),
                         throwable -> viewInterface.onFailure(throwable.getMessage()));
+        compositeDisposable.add(disposable);
     }
 
-    @SuppressLint("CheckResult")
     public void search(CharSequence s, List list) {
 
         if (!list.isEmpty() && list.get(0) instanceof Category) {
 
             Observable<Category> observable = Observable.fromIterable(list);
-            observable.
+            Disposable disposable=observable.
                     filter(category -> category.
                             getStrCategory().
                             toLowerCase().
@@ -67,9 +68,10 @@ public class PresenterImpl {
                             item -> viewInterface.onSearch(item),
                             throwable -> Log.i("TAG", "search: "+throwable.getMessage())
                     );
+            compositeDisposable.add(disposable);
         } else if (!list.isEmpty() && list.get(0) instanceof Area) {
             Observable<Area> observable = Observable.fromIterable(list);
-            observable.
+            Disposable disposable=observable.
                     filter(area -> area.
                             getStrArea().
                             toLowerCase().
@@ -80,12 +82,13 @@ public class PresenterImpl {
                             item -> viewInterface.onSearch(item),
                             throwable -> Log.i("TAG", "search: "+throwable.getMessage())
                     );
+            compositeDisposable.add(disposable);
 
 
         } else if (!list.isEmpty() && list.get(0) instanceof IngredientMeal) {
 
             Observable<IngredientMeal> observable = Observable.fromIterable(list);
-            observable.
+            Disposable disposable=observable.
                     filter(ingredient -> ingredient.
                             getStrIngredient().
                             toLowerCase().
@@ -96,8 +99,8 @@ public class PresenterImpl {
                             item -> viewInterface.onSearch(item),
                             throwable -> Log.i("TAG", "search: "+throwable.getMessage())
                     );
+            compositeDisposable.add(disposable);
         }
     }
-
 
 }

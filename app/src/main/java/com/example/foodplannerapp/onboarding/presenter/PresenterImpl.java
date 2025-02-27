@@ -4,7 +4,7 @@ import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
 
 public class PresenterImpl {
 
-    OnBoardingRepositoryImpl onBoardingRepository;
+    private OnBoardingRepositoryImpl onBoardingRepository;
     private static PresenterImpl instance;
     private PresenterImpl(OnBoardingRepositoryImpl onBoardingRepository){
 

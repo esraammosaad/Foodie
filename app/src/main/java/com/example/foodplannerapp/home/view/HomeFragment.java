@@ -35,31 +35,29 @@ import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
-import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 
 public class HomeFragment extends Fragment implements ViewInterface, HomeListener, NetworkListener {
 
-    RecyclerView recyclerView;
-    RecyclerViewAdapter myAdapter;
-    ImageView randomMealImg;
-    TextView randomMealName;
-    TextView randomMealCategory;
-    TextView randomMealArea;
-    Button viewRecipeButton;
-    Button refreshButton;
-    ProgressBar progressBar;
-    PresenterImpl presenter;
-    Meal randomMeal;
-    ImageView flagIcon;
-    Group noInternetBanner;
-    TextView dismiss;
-    TextView turnWIFI;
-    NetworkChangeListener networkChangeListener;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter myAdapter;
+    private ImageView randomMealImg;
+    private TextView randomMealName;
+    private TextView randomMealCategory;
+    private TextView randomMealArea;
+    private Button viewRecipeButton;
+    private Button refreshButton;
+    private ProgressBar progressBar;
+    private PresenterImpl presenter;
+    private Meal randomMeal;
+    private ImageView flagIcon;
+    private Group noInternetBanner;
+    private TextView dismiss;
+    private TextView turnWIFI;
+    private NetworkChangeListener networkChangeListener;
 
     public HomeFragment() {
     }
@@ -79,9 +77,6 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-
-        networkChangeListener = new NetworkChangeListener(this);
-
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerView);
         randomMealImg = view.findViewById(R.id.randomMealImg);
@@ -95,15 +90,17 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         noInternetBanner = view.findViewById(R.id.noInternetBanner);
         dismiss=view.findViewById(R.id.dismiss);
         turnWIFI=view.findViewById(R.id.turnWIFI);
+        networkChangeListener = new NetworkChangeListener(this);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
-        myAdapter = new RecyclerViewAdapter(getContext(), Arrays.asList(), this);
+        myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(myAdapter);
         randomMealImg.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
+                new MealsLocalDataSource(getContext())), this);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
         refreshButton.setOnClickListener((v) -> {
@@ -134,22 +131,25 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         viewRecipeButton.setOnClickListener((v) -> {
             if (randomMeal != null) {
 
-                HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
-                        HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
-                Navigation.findNavController(requireView()).navigate(action);
+               navigateToDetailsScreen();
             }
 
         });
 
         randomMealImg.setOnClickListener((v)->{
-            HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
-                    HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
-            Navigation.findNavController(requireView()).navigate(action);
+            navigateToDetailsScreen();
+
 
 
         });
 
 
+    }
+
+    private void navigateToDetailsScreen(){
+        HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
+                HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
+        Navigation.findNavController(requireView()).navigate(action);
     }
 
     @Override
@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         randomMealArea.setText(meal.getStrArea());
         progressBar.setVisibility(View.GONE);
         randomMealImg.setVisibility(View.VISIBLE);
-        Glide.with(getContext()).load(meal.getStrMealThumb()).into(randomMealImg);
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(randomMealImg);
         Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(requireContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
@@ -189,11 +189,6 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onFailure(String errorMessage) {
-//        Snackbar snackbar = Snackbar
-//                .make(requireView(), errorMessage, Snackbar.LENGTH_LONG);
-//        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
-//        snackbar.show();
-
 
     }
 
@@ -205,24 +200,26 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
                 HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
 
-
     }
 
     @Override
     public void onLostConnection() {
         NoInternetSnackBar.showSnackBar(requireView());
-
-
         noInternetBanner.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onConnectionReturned() {
-
         noInternetBanner.setVisibility(View.GONE);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PresenterImpl.compositeDisposable.clear();
     }
 }

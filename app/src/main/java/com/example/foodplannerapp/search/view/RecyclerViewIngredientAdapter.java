@@ -1,7 +1,6 @@
 package com.example.foodplannerapp.search.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +20,10 @@ import java.util.List;
 public class RecyclerViewIngredientAdapter extends RecyclerView.Adapter<RecyclerViewIngredientAdapter.ViewHolder>{
 
 
-    private static final String TAG = "MyAdapter";
 
-    Context context;
-    List<IngredientMeal> ingredientList;
-    SearchListener listener;
+    private final Context context;
+    private List<IngredientMeal> ingredientList;
+    private final SearchListener listener;
 
 
 
@@ -68,8 +66,6 @@ public class RecyclerViewIngredientAdapter extends RecyclerView.Adapter<Recycler
         LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
         View view = layoutInflater.inflate(R.layout.search_item_layout,recyclerview,false);
         RecyclerViewIngredientAdapter.ViewHolder viewHolder=new RecyclerViewIngredientAdapter.ViewHolder(view);
-        Log.i(TAG, "onCreateViewHolder: ");
-
 
         return viewHolder;
     }
@@ -84,8 +80,6 @@ public class RecyclerViewIngredientAdapter extends RecyclerView.Adapter<Recycler
             listener.onClickListener(ingredientList.get(position));
         });
 
-
-        Log.i(TAG, "onBindViewHolder: ");
 
     }
 
