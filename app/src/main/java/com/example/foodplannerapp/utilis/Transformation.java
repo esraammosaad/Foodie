@@ -8,12 +8,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class Transformation {
     static public <T> ObservableTransformer<T,T> apply(){
 
-        return upstream -> {
-
-            return upstream.
-                    subscribeOn(Schedulers.io()).
-                    observeOn(AndroidSchedulers.mainThread());
-        };
+        return upstream -> upstream.
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread());
 
 
     }

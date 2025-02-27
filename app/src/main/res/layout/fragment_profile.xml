@@ -18,7 +18,117 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="150dp">
+            android:paddingBottom="110dp">
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/profileGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                app:constraint_referenced_ids="editProfileCard,shareProfileCard,signOutButton,userImg,userName,userEmail,darkModeCard,linearLayout,linkedinIcon,githubIcon,googleIcon" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/calendarGuestGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="view5,noInternetText,guest,noInternetIcon,login" />
+
+            <View
+                android:id="@+id/view5"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_view"
+                android:backgroundTint="#FAF9F6"
+                app:layout_constraintEnd_toStartOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <TextView
+                android:id="@+id/noInternetText"
+                android:layout_width="265dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="5dp"
+                android:gravity="clip_vertical"
+                android:text="@string/signInNow"
+                app:layout_constraintEnd_toEndOf="@+id/view5"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/noInternetIcon"
+                app:layout_constraintTop_toTopOf="@+id/noInternetIcon" />
+
+            <TextView
+                android:id="@+id/guest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/continue_as_a_guest"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/login"
+                app:layout_constraintTop_toBottomOf="@+id/noInternetText" />
+
+            <ImageView
+                android:id="@+id/noInternetIcon"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="19dp"
+                android:src="@drawable/baseline_assignment_ind_24"
+                app:layout_constraintStart_toStartOf="@+id/view5"
+                app:layout_constraintTop_toTopOf="@+id/view5" />
+
+            <TextView
+                android:id="@+id/login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/sign_in"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toEndOf="@+id/view5"
+                app:layout_constraintTop_toTopOf="@+id/guest" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="20dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.94910944" />
+
+            <ImageView
+                android:id="@+id/menuIcon"
+                android:layout_width="32dp"
+                android:layout_height="34dp"
+                android:layout_marginTop="56dp"
+                android:src="@drawable/baseline_menu_24"
+                app:layout_constraintEnd_toStartOf="@+id/textView9"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/appName"
+                android:textColor="@color/primaryColor"
+                android:textSize="34sp"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/editProfileCard"
@@ -74,6 +184,7 @@
                         app:layout_constraintTop_toTopOf="@+id/shareProfileText"
                         app:layout_constraintVertical_bias="0.333"
                         app:tint="@color/textColor" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
@@ -135,71 +246,42 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
-
-            <androidx.constraintlayout.widget.Guideline
-                android:id="@+id/guideline4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.94910944" />
-
-            <ImageView
-                android:id="@+id/menuIcon"
-                android:layout_width="32dp"
-                android:layout_height="34dp"
-                android:layout_marginTop="56dp"
-                android:src="@drawable/baseline_menu_24"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="@string/appName"
-                android:textColor="@color/primaryColor"
-                android:textSize="34sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <Button
                 android:id="@+id/signOutButton"
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="44dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/main_button_layout"
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/signOut"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toBottomOf="@+id/githubIcon" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/guestGroupProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="emptyFavText,animationView" />
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/userImg"
-                android:layout_width="135dp"
-                android:layout_height="135dp"
-                android:layout_marginTop="40dp"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginTop="32dp"
                 android:background="?attr/colorPrimaryFixed"
                 android:backgroundTint="?attr/colorPrimaryContainer"
                 android:padding="7dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView9"
+                app:layout_constraintTop_toBottomOf="@+id/view5"
                 app:shapeAppearance="@style/circleImageView"
                 app:srcCompat="@drawable/img"
                 app:strokeColor="@color/black"
@@ -357,6 +439,37 @@
                 android:src="@drawable/goo"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintTop_toTopOf="@+id/githubIcon" />
+
+            <TextView
+                android:id="@+id/emptyFavText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="112dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="@string/guestText"
+                android:textSize="16sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/animationView" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animationView"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="188dp"
+                android:foregroundGravity="center"
+                app:layout_constraintEnd_toStartOf="@+id/guideline4"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/userImg"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/loading" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

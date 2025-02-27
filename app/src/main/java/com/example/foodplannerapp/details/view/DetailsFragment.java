@@ -1,15 +1,20 @@
 package com.example.foodplannerapp.details.view;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+
 import android.content.DialogInterface;
 import android.content.IntentFilter;
+
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
@@ -44,6 +49,7 @@ import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
+import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -56,29 +62,29 @@ import java.util.Map;
 
 public class DetailsFragment extends Fragment implements ViewInterface, NetworkListener {
 
-    ImageView imageView;
-    TextView mealName;
-    TextView mealArea;
-    TextView mealCategory;
-    WebView mealVideo;
-    RecyclerView recyclerView;
-    TextView instructions;
-    ArrayList<Ingredient> ingredientsList;
-    RecyclerViewAdapter myAdapter;
-    PresenterImpl presenter;
-    ImageView backIcon;
-    ImageView flagIcon;
-    ImageView favIcon;
-    boolean isFav = false;
-    FavoriteMealModel favMeal;
-    CalenderMealModel calMeal;
-    TextView showMore;
-    Button addToCalendarButton;
-    Meal meal;
-    Group internetGroup;
-    Group noLocalItem;
-    NetworkChangeListener networkChangeListener;
-    int mealID;
+    private ImageView imageView;
+    private TextView mealName;
+    private TextView mealArea;
+    private TextView mealCategory;
+    private WebView mealVideo;
+    private RecyclerView recyclerView;
+    private TextView instructions;
+    private ArrayList<Ingredient> ingredientsList;
+    private RecyclerViewAdapter myAdapter;
+    private PresenterImpl presenter;
+    private ImageView backIcon;
+    private ImageView flagIcon;
+    private ImageView favIcon;
+    private boolean isFav = false;
+    private FavoriteMealModel favMeal;
+    private CalenderMealModel calMeal;
+    private TextView showMore;
+    private Button addToCalendarButton;
+    private Meal meal;
+    private Group internetGroup;
+    private Group noLocalItem;
+    private NetworkChangeListener networkChangeListener;
+    private int mealID;
 
 
     public DetailsFragment() {
@@ -114,6 +120,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         internetGroup = view.findViewById(R.id.internetGroup);
         noLocalItem = view.findViewById(R.id.noLocalItem);
         addToCalendarButton = view.findViewById(R.id.addToCalendarBtn);
+        calendarPermission();
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()),
                 new MealsLocalDataSource(getContext())),
                 FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
@@ -168,15 +175,13 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         });
 
         if (presenter.getCurrentUser() != null) {
-                presenter.getMealByIDFromFavorite(presenter.getCurrentUser().getUid(), String.valueOf(mealID));
-                presenter.getMealByIDFromCalendar(presenter.getCurrentUser().getUid(), String.valueOf(mealID));
+            presenter.getMealByIDFromFavorite(presenter.getCurrentUser().getUid(), String.valueOf(mealID));
+            presenter.getMealByIDFromCalendar(presenter.getCurrentUser().getUid(), String.valueOf(mealID));
 
         } else {
             presenter.getMealByID(mealID);
 
         }
-
-
     }
 
 
@@ -201,8 +206,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             showMore.setVisibility(View.GONE);
         }
     }
-
-
     public void updateRecyclerView(List<Ingredient> ingredients) {
 
         myAdapter.setIngredientList(ingredients);
@@ -240,15 +243,17 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
                 (view1, selectedYear, selectedMonth, selectedDay) -> {
-                    CalenderMealModel calenderMeal = getCalenderMealModel(selectedYear, selectedMonth, selectedDay);
 
+                    CalenderMealModel calenderMeal = convertMealToCalendarMeal(selectedYear, selectedMonth, selectedDay);
+                    presenter.addMealToMobileCalendar(requireContext(), selectedYear, selectedMonth, selectedDay, meal);
                     presenter.addMealToCalendar(calenderMeal);
-                    presenter.insertCalendarMealToFireStore(calenderMeal);
+                    presenter.addCalendarMealToFireStore(calenderMeal);
+
                     Snackbar snackbar = Snackbar
-                            .make(requireView(), "Meal is added to calendar", Snackbar.LENGTH_LONG).setActionTextColor(
+                            .make(requireView(), getString(R.string.meal_is_added_to_calendar), Snackbar.LENGTH_LONG).setActionTextColor(
                                     getResources().getColor(R.color.primaryColor)
                             ).setTextColor(getResources().getColor(R.color.white))
-                            .setAction("UNDO", view2 -> {
+                            .setAction(R.string.undo, view2 -> {
                                 presenter.deleteMealFromCalendar(calenderMeal);
                                 presenter.deleteCalendarMealFromFireStore(calenderMeal);
 
@@ -272,7 +277,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     }
 
     @NonNull
-    private CalenderMealModel getCalenderMealModel(int selectedYear, int selectedMonth, int selectedDay) {
+    private CalenderMealModel convertMealToCalendarMeal(int selectedYear, int selectedMonth, int selectedDay) {
         CalenderMealModel calenderMeal;
         if (meal != null) {
             calenderMeal = new CalenderMealModel(meal.getIdMeal(), selectedDay, selectedMonth + 1, selectedYear, presenter.getCurrentUser().getUid(), meal.getStrMeal(), meal.getStrCategory(), meal.getStrArea(), meal.getStrInstructions(), meal.getStrMealThumb(), meal.getStrYoutube(), ingredientsList);
@@ -302,6 +307,46 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             isFav = false;
         }
     }
+    private void calendarPermission(){
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_CALENDAR}, 1);
+
+        }
+
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_CALENDAR}, 2);
+
+        }
+
+
+    }
+    public void loadFlagImage(String area) {
+        if (isAdded()) {
+            Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
+            String countryCode = countryCodeMap.getOrDefault(area, "unknown");
+            Glide.with(requireContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
+        }
+    }
+    ArrayList<Ingredient> convertRoomList(List<Ingredient> ingredients) {
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<Ingredient>>() {
+        }.getType();
+        return gson.fromJson(gson.toJson(ingredients), type);
+    }
+    public void showSnackBar(String text) {
+        if (getView() != null) {
+            Snackbar snackbar = Snackbar
+                    .make(requireView(), text, Snackbar.LENGTH_LONG)
+                    .setTextColor(getResources().getColor(R.color.white));
+            snackbar.show();
+        }
+    }
+    public void loadVideo(String youtubeUrl) {
+        mealVideo.loadData(presenter.loadVideo(youtubeUrl), "text/html", "utf-8");
+        mealVideo.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        mealVideo.getSettings().setJavaScriptEnabled(true);
+        mealVideo.setWebChromeClient(new WebChromeClient());
+    }
 
 
     @Override
@@ -313,7 +358,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         mealArea.setText(meal.getStrArea());
         mealCategory.setText(meal.getStrCategory());
         showInstructions(meal.getStrInstructions());
-        Glide.with(getContext()).load(meal.getStrMealThumb()).into(imageView);
+        Glide.with(requireContext()).load(meal.getStrMealThumb()).into(imageView);
         updateRecyclerView(ingredientsList);
         loadFlagImage(meal.getStrArea());
 
@@ -325,7 +370,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
         if (!favoriteMealModel.isEmpty()) {
             favMeal = favoriteMealModel.get(0);
-            System.out.println(favMeal.getIdMeal().toString()+"===================");
             isFav = true;
             favIcon.setImageResource(R.drawable.baseline_favorite_24);
             ingredientsList = convertRoomList(favMeal.getIngredients());
@@ -334,21 +378,19 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             mealArea.setText(favMeal.getStrArea());
             mealCategory.setText(favMeal.getStrCategory());
             showInstructions(favMeal.getStrInstructions());
-            Glide.with(getContext()).load(favMeal.getStrMealThumb()).into(imageView);
+            Glide.with(requireContext()).load(favMeal.getStrMealThumb()).into(imageView);
             updateRecyclerView(ingredientsList);
             loadFlagImage(favMeal.getStrArea());
-        }else {
+        } else {
             presenter.getMealByID(mealID);
         }
 
 
-        }
-
-
+    }
 
     @Override
     public void onCalendarDatabaseSuccess(List<CalenderMealModel> calenderMealModel) {
-        if (calenderMealModel!=null) {
+        if (calenderMealModel != null) {
             calMeal = calenderMealModel.get(0);
             ingredientsList = convertRoomList(calMeal.getIngredients());
             loadVideo(calMeal.getStrYoutube());
@@ -359,19 +401,10 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             Glide.with(getContext()).load(calMeal.getStrMealThumb()).into(imageView);
             updateRecyclerView(ingredientsList);
             loadFlagImage(calMeal.getStrArea());
-        }else {
+        } else {
             presenter.getMealByID(mealID);
         }
 
-    }
-
-
-    public void loadFlagImage(String area) {
-        if (isAdded()) {
-            Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
-            String countryCode = countryCodeMap.getOrDefault(area, "unknown");
-            Glide.with(getContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
-        }
     }
 
     @Override
@@ -388,7 +421,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     }
 
     @Override
-    public void onFavoriteMealAddedToFireStore(String message) {
+    public void onFavoriteMealSuccessfullyAddedToFireStore(String message) {
 
         Log.i("TAG", "onFavoriteMealAddedToFireStore: " + message);
 
@@ -406,7 +439,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     @Override
     public void onFailure(String errorMessage) {
         showSnackBar(errorMessage);
-        if (!NetworkAvailability.isNetworkAvailable(getContext()) && favMeal==null && calMeal==null) {
+        if (!NetworkAvailability.isNetworkAvailable(getContext()) && favMeal == null && calMeal == null) {
             noLocalItem.setVisibility(View.VISIBLE);
             internetGroup.setVisibility(View.GONE);
 
@@ -417,6 +450,8 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     @Override
     public void onLostConnection() {
 
+        NoInternetSnackBar.showSnackBar(getView());
+
 
     }
 
@@ -424,39 +459,14 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     public void onConnectionReturned() {
         noLocalItem.setVisibility(View.GONE);
         internetGroup.setVisibility(View.VISIBLE);
+        presenter.getMealByID(mealID);
 
     }
 
-    ArrayList<Ingredient> convertRoomList(List<Ingredient> ingredients) {
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Ingredient>>() {
-        }.getType();
-        return gson.fromJson(gson.toJson(ingredients), type);
-    }
-
-    public void showSnackBar(String text) {
-        if (getView() != null) {
-            Snackbar snackbar = Snackbar
-                    .make(requireView(), text, Snackbar.LENGTH_LONG).setTextColor(getResources().getColor(R.color.white));
-            snackbar.show();
-        }
-    }
-
-    public void loadVideo(String youtubeUrl) {
-        String videoId = youtubeUrl.substring(youtubeUrl.lastIndexOf("=") + 1);
-        String video = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/"
-                + videoId + "\" title=\"YouTube video player\" frameborder=\"0\" "
-                + "allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" "
-                + "allowfullscreen></iframe>";
-        mealVideo.loadData(video, "text/html", "utf-8");
-        mealVideo.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        mealVideo.getSettings().setJavaScriptEnabled(true);
-        mealVideo.setWebChromeClient(new WebChromeClient());
-    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        presenter.compositeDisposable.clear();
+        PresenterImpl.compositeDisposable.clear();
     }
 }

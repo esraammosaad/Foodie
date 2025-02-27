@@ -34,6 +34,8 @@ import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
+import com.example.foodplannerapp.utilis.NoInternetSnackBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
 import java.util.List;
@@ -208,6 +210,8 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onLostConnection() {
+        NoInternetSnackBar.showSnackBar(requireView());
+
 
         noInternetBanner.setVisibility(View.VISIBLE);
 

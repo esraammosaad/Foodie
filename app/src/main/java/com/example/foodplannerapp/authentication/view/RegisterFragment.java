@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.foodplannerapp.R;
@@ -51,6 +53,9 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     Button signInWithGoogle;
     GoogleSignInClient googleSignInClient;
     Button visitAsAGuestButton;
+    ProgressBar progressBar;
+    ImageView googleIcon;
+    ImageView guestIcon;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -96,6 +101,9 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         passwordError = view.findViewById(R.id.passwordError2);
         usernameEditText = view.findViewById(R.id.editTextUsername);
         usernameError = view.findViewById(R.id.usernameError);
+        progressBar = view.findViewById(R.id.progressBar2);
+        googleIcon = view.findViewById(R.id.userImg);
+        guestIcon = view.findViewById(R.id.imageView2);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         usernameError.setVisibility(View.GONE);
@@ -145,6 +153,12 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty() && !usernameEditText.getText().toString().isEmpty()) {
 
                     presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString(), usernameEditText.getText().toString());
+                    progressBar.setVisibility(View.VISIBLE);
+                    registerButton.setVisibility(View.INVISIBLE);
+                    signInWithGoogle.setVisibility(View.INVISIBLE);
+                    visitAsAGuestButton.setVisibility(View.INVISIBLE);
+                    googleIcon.setVisibility(View.INVISIBLE);
+                    guestIcon.setVisibility(View.INVISIBLE);
 
 
                 }
@@ -166,6 +180,12 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 activityResultLauncher.launch(intent);
             } else {
                 NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+                progressBar.setVisibility(View.VISIBLE);
+                registerButton.setVisibility(View.INVISIBLE);
+                signInWithGoogle.setVisibility(View.INVISIBLE);
+                visitAsAGuestButton.setVisibility(View.INVISIBLE);
+                googleIcon.setVisibility(View.INVISIBLE);
+                guestIcon.setVisibility(View.INVISIBLE);
             }
 
 
@@ -186,12 +206,14 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     @Override
     public void onSuccess(String message) {
 
-
+        if (presenter.getCurrentUser() != null) {
         Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
         Snackbar snackbar = Snackbar
                 .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
         snackbar.show();
+        progressBar.setVisibility(View.GONE);}
+
 
 
     }
@@ -202,6 +224,7 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
+        progressBar.setVisibility(View.GONE);
 
 
     }

@@ -1,10 +1,15 @@
 package com.example.foodplannerapp.search_details.view;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -17,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -26,6 +32,11 @@ import com.example.foodplannerapp.data.models.MealByFilter;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.search_details.presenter.PresenterImpl;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NetworkChangeListener;
+import com.example.foodplannerapp.utilis.NetworkListener;
+import com.example.foodplannerapp.utilis.NoInternetSnackBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -34,7 +45,7 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 
-public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface {
+public class SearchDetailsFragment extends Fragment implements SearchDetailsListener, ViewInterface, NetworkListener {
 
     ImageView imageView;
     TextView textView;
@@ -47,6 +58,12 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     PresenterImpl presenter;
     TextWatcher textWatcher;
     List<MealByFilter> mealByFilterList;
+    ProgressBar progressBar;
+    Group internetGroup;
+    Group noInternetGroup;
+    NetworkChangeListener networkChangeListener;
+    TextView dismiss;
+    TextView turnOnWIFI;
 
 
     public SearchDetailsFragment() {
@@ -72,6 +89,12 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         resultsCount = view.findViewById(R.id.countOfResults);
         searchEditText = view.findViewById(R.id.searchTextFieldDetails);
         backIcon = view.findViewById(R.id.backIconSearch);
+        progressBar=view.findViewById(R.id.progressBar4);
+        internetGroup=view.findViewById(R.id.internetGroup);
+        noInternetGroup=view.findViewById(R.id.noInternetGrup);
+        dismiss=view.findViewById(R.id.dismiss2);
+        turnOnWIFI=view.findViewById(R.id.turnWIFI2);
+        networkChangeListener=new NetworkChangeListener(this);
         backIcon.setOnClickListener((v) -> {
 
             Navigation.findNavController(view).navigateUp();
@@ -82,7 +105,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         selectedItem = SearchDetailsFragmentArgs.fromBundle(getArguments()).getFilter();
         myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
         recyclerView.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(myAdapter);
@@ -122,7 +145,30 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
             }
         };
         searchEditText.addTextChangedListener(textWatcher);
+        dismiss.setOnClickListener((v)->{
 
+            internetGroup.setVisibility(View.GONE);
+        });
+        turnOnWIFI.setOnClickListener((v)->{
+            WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
+            wifi.setWifiEnabled(true);
+            wifi.reconnect();
+
+        });
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        requireActivity().registerReceiver(networkChangeListener, filter);     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().unregisterReceiver(networkChangeListener);
 
     }
 
@@ -142,6 +188,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
         resultsCount.setText(myAdapter.getItemCount() + getString(R.string.results));
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -157,6 +204,31 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
 
     @Override
     public void onFailure(String errorMessage) {
+        if(!NetworkAvailability.isNetworkAvailable(getContext()) && mealByFilterList==null){
+
+            noInternetGroup.setVisibility(View.VISIBLE);
+
+
+        }
+        progressBar.setVisibility(View.GONE);
+
+
+
+    }
+
+    @Override
+    public void onLostConnection() {
+        internetGroup.setVisibility(View.VISIBLE);
+        NoInternetSnackBar.showSnackBar(requireView());
+
+
+    }
+
+    @Override
+    public void onConnectionReturned() {
+        internetGroup.setVisibility(View.GONE);
+        noInternetGroup.setVisibility(View.GONE);
+
 
     }
 }

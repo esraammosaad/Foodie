@@ -21,9 +21,9 @@ import java.util.Map;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
 
-    Context context;
-    List<CalenderMealModel> mealsList;
-    CalendarListener listener;
+    private final Context context;
+    private List<CalenderMealModel> mealsList;
+    private final CalendarListener listener;
 
     public void setMealsList(List<CalenderMealModel> mealsList) {
         this.mealsList = mealsList;
@@ -88,7 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         String countryCode = countryCodeMap.getOrDefault(meal.getStrArea(), "unknown");
         Glide.with(context).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(holder.mealCountryFlagIcon);
         holder.removeIcon.setOnClickListener((v) -> {
-            listener.onClickListener(mealsList.get(position));
+            listener.onRemoveClickListener(mealsList.get(position));
 
         });
         holder.mealImage.setOnClickListener((v)->{

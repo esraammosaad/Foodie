@@ -7,6 +7,8 @@
         <item name="colorSurface">#F5F5F5</item>
         <item name="colorAccent">@color/white</item>
         <item name="color">@color/textColor</item>
+        <item name="colorOnSurface">#F5F5F5</item>
+        <item name="colorOnPrimary">@color/black</item>
 
 
 

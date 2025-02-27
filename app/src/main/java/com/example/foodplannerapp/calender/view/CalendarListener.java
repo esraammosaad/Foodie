@@ -4,7 +4,7 @@ import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 
 public interface CalendarListener {
 
-    void onClickListener(CalenderMealModel meal);
+    void onRemoveClickListener(CalenderMealModel meal);
     void onItemClickListener(CalenderMealModel meal);
 
 }

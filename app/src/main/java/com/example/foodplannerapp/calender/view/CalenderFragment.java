@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,13 +37,13 @@ import java.util.List;
 import java.util.Locale;
 
 
+
 public class CalenderFragment extends Fragment implements CalendarListener, ViewInterface {
 
     CalendarView calendarView;
     RecyclerView recyclerView;
     RecyclerViewAdapter myAdapter;
     PresenterImpl presenter;
-    LiveData<List<CalenderMealModel>> calendarMealsList;
     TextView textCalendar;
     int mealDay = 0;
     int mealMonth = 0;
@@ -80,7 +79,11 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         guestGroup = view.findViewById(R.id.calendarGuestGroup);
         continueAsAGuest = view.findViewById(R.id.guest);
         signInText = view.findViewById(R.id.login);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        presenter = new PresenterImpl(
+                MealsRepositoryImpl.getInstance(
+                        new MealsRemoteDataSource(getContext()),
+                        new MealsLocalDataSource(getContext())),
+                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -124,7 +127,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         }
         signInText.setOnClickListener((v) -> {
 
-            Navigation.findNavController(getView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
+            Navigation.findNavController(requireView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
                     new NavOptions.Builder()
                             .setPopUpTo(R.id.calendarView, true)
                             .setPopUpTo(R.id.homeFragment, true)
@@ -142,19 +145,17 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
 
     @Override
-    public void onClickListener(CalenderMealModel meal) {
+    public void onRemoveClickListener(CalenderMealModel meal) {
 
-        if (NetworkAvailability.isNetworkAvailable(getContext())) {
+        if (NetworkAvailability.isNetworkAvailable(requireContext())) {
             if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
                 presenter.deleteMealFromCalendar(meal);
                 presenter.deleteCalendarMealFromFireStore(meal);
-
-
                 Snackbar snackbar = Snackbar
-                        .make(requireView(), "Meal is removed from calender", Snackbar.LENGTH_LONG).setActionTextColor(
+                        .make(requireView(), getString(R.string.meal_is_removed_from_calender), Snackbar.LENGTH_LONG).setActionTextColor(
                                 getResources().getColor(R.color.primaryColor)
                         ).setTextColor(getResources().getColor(R.color.white))
-                        .setAction("UNDO", view -> {
+                        .setAction(getString(R.string.undo), view -> {
                             presenter.addMealToCalendar(meal);
                             presenter.insertCalendarMealToFireStore(meal);
 
@@ -168,12 +169,6 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        presenter.compositeDisposable.clear();
-    }
-
 
     @Override
     public void onItemClickListener(CalenderMealModel meal) {
@@ -184,10 +179,10 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
 
     @Override
-    public void onCalendarListDatabaseSuccess(List<CalenderMealModel> list) {
+    public void onGetCalendarListFromDatabase(List<CalenderMealModel> list) {
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(myAdapter);
+
 
     }
 
@@ -195,13 +190,19 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
     @Override
     public void onSuccess(String message) {
 
-        Log.i("TAG", "onSuccess: " + message);
+        Log.i("TAG", "onSuccess: FIRESTORE " + message);
 
     }
 
     @Override
     public void onFailure(String errorMessage) {
-        Log.i("TAG", "onFailure: " + errorMessage);
+        Log.i("TAG", "onFailure: FIRESTORE" + errorMessage);
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        PresenterImpl.compositeDisposable.clear();
     }
 }

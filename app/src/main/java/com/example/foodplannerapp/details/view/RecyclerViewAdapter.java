@@ -1,7 +1,6 @@
 package com.example.foodplannerapp.details.view;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,9 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
-    private static final String TAG = "MyAdapter";
 
-    Context context;
-    List<Ingredient> ingredientList;
+    private final Context context;
+    private List<Ingredient> ingredientList;
 
     public void setIngredientList(List<Ingredient> ingredientList) {
         this.ingredientList = ingredientList;
@@ -64,9 +62,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         LayoutInflater layoutInflater=LayoutInflater.from(recyclerview.getContext());
         View view = layoutInflater.inflate(R.layout.ingredient_item_layout,recyclerview,false);
         ViewHolder viewHolder=new ViewHolder(view);
-        Log.i(TAG, "onCreateViewHolder: ");
-
-
         return viewHolder;
     }
 
@@ -76,9 +71,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.ingredientName.setText(ingredient.getIngredient());
         holder.ingredientMeasure.setText(ingredient.getMeasure());
         Glide.with(context).load(ingredient.getImage()).into(holder.ingredientImage);
-
-
-        Log.i(TAG, "onBindViewHolder: ");
 
     }
 

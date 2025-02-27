@@ -83,4 +83,13 @@
     <string name="your_meal_plan_for">"Your Meal Plan For "</string>
     <string name="sign_in_now_to_scheduler_your_meals">Sign in now to scheduler your meals</string>
     <string name="contact_us">Contact Us</string>
+    <string name="guestText">"Hungry for more? Log in now to unlock delicious features! "</string>
+    <string name="signInNow">Log in now or risk missing out on the juiciest bites!</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="searchMeal">Search Meal</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="meal_is_added_to_calendar">Meal is added to calendar</string>
+    <string name="undo">UNDO</string>
+    <string name="meal_is_removed_from_calender">Meal is removed from calender</string>
 </resources>

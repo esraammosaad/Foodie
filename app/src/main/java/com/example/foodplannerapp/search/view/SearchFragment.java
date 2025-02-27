@@ -24,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -39,14 +40,11 @@ import com.example.foodplannerapp.utilis.CountryCodeMapper;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
+import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 import com.google.android.material.snackbar.Snackbar;
-
-
 import java.util.List;
 import java.util.Map;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+
 
 
 public class SearchFragment extends Fragment implements SearchListener, ViewInterface, NetworkListener {
@@ -69,6 +67,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     TextView turnWIFI;
     ImageView noWifiImg;
     TextView noInternetText;
+    ProgressBar progressBar;
 
 
 
@@ -103,6 +102,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         noInternetText=view.findViewById(R.id.noInternet);
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         spinner = view.findViewById(R.id.spinner);
+        progressBar=view.findViewById(R.id.progressBar3);
         String[] items = {getString(R.string.categories), getString(R.string.ingredients), getString(R.string.areas)};
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>
@@ -122,7 +122,6 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                if(NetworkAvailability.isNetworkAvailable(getContext())){
                     if (item.equals(getString(R.string.categories))) {
 
                         presenter.getAllCategories();
@@ -139,14 +138,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
                     }
 
 
-                }else{
 
-                    noInternetGroup.setVisibility(View.VISIBLE);
-                    Snackbar snackbar = Snackbar
-                            .make(requireView(), "No Internet Connection", Snackbar.LENGTH_LONG).
-                            setTextColor(getResources().getColor(R.color.white));
-                    snackbar.show();
-                }
 
 
             }
@@ -158,7 +150,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
         presenter.getAllCategories();
         searchField.setHint("Search Category");
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(gridLayoutManager);
         categoryAdapter = new RecyclerViewCategoryAdapter(getContext(), List.of(), this);
@@ -245,6 +237,9 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
         }
 
+        progressBar.setVisibility(View.GONE);
+
+
     }
 
     @Override
@@ -278,9 +273,12 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
             noInternetText.setVisibility(View.VISIBLE);
             noWifiImg.setVisibility(View.VISIBLE);
+            noInternetGroup.setVisibility(View.VISIBLE);
+
 
 
         }
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -316,6 +314,8 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onLostConnection() {
         noInternetGroup.setVisibility(View.VISIBLE);
+        NoInternetSnackBar.showSnackBar(requireView());
+
 
     }
 

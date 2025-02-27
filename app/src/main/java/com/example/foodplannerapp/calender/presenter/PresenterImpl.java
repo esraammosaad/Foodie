@@ -16,7 +16,7 @@ public class PresenterImpl implements FireStoreCallBack {
     MealsRepositoryImpl mealsRepository;
     FireStoreRepositoryImpl fireStoreRepository;
     ViewInterface viewInterface;
-    public CompositeDisposable compositeDisposable = new CompositeDisposable();
+    static public CompositeDisposable compositeDisposable = new CompositeDisposable();
 
 
     public PresenterImpl(MealsRepositoryImpl mealsRepository,FireStoreRepositoryImpl fireStoreRepository, ViewInterface viewInterface) {
@@ -27,9 +27,9 @@ public class PresenterImpl implements FireStoreCallBack {
 
     public void getAllMealsFromCalendar(String userUID, int day , int month , int year) {
 
-        Disposable disposable= mealsRepository.getAllCalendarMeals(userUID, day , month,year).
+       Disposable  disposable= mealsRepository.getAllCalendarMeals(userUID, day , month,year).
                  compose(Transformation.apply()).
-                 subscribe(calenderMealModels -> viewInterface.onCalendarListDatabaseSuccess(calenderMealModels),
+                 subscribe(calenderMealModels -> viewInterface.onGetCalendarListFromDatabase(calenderMealModels),
                          throwable -> viewInterface.onFailure(throwable.getMessage()));
         compositeDisposable.add(disposable);
 
@@ -39,7 +39,7 @@ public class PresenterImpl implements FireStoreCallBack {
 
         Disposable disposable=mealsRepository.deleteMealFromCalender(meal).
                 compose(CompletableTransformation.apply()).
-                subscribe();
+                subscribe(() -> getAllMealsFromCalendar(getCurrentUser().getUid(),meal.getDay(),meal.getMonth(),meal.getYear()));
         compositeDisposable.add(disposable);
     }
     public void addMealToCalendar(CalenderMealModel meal){
@@ -50,10 +50,7 @@ public class PresenterImpl implements FireStoreCallBack {
        compositeDisposable.add(disposable);
     }
 
-    public FirebaseUser getCurrentUser(){
 
-        return mealsRepository.getCurrentUser();
-    }
     public void deleteCalendarMealFromFireStore(CalenderMealModel meal){
 
         fireStoreRepository.deleteCalendarMealFromFireStore(meal,this);
@@ -63,6 +60,11 @@ public class PresenterImpl implements FireStoreCallBack {
 
         fireStoreRepository.insertCalendarMealToFireStore(meal, this);
 
+    }
+
+    public FirebaseUser getCurrentUser(){
+
+        return mealsRepository.getCurrentUser();
     }
 
     @Override

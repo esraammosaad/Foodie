@@ -1,9 +1,9 @@
 package com.example.foodplannerapp.home.presenter;
 
-import android.annotation.SuppressLint;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.view.ViewInterface;
 import com.example.foodplannerapp.utilis.SingleTransformation;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 
 public class PresenterImpl {
@@ -18,10 +18,9 @@ public class PresenterImpl {
     }
 
 
-    @SuppressLint("CheckResult")
     public void getRandomMeal() {
 
-        mealsRepository.getRandomMeal().
+        Disposable disposable=mealsRepository.getRandomMeal().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals().get(0)).
                 subscribe(
@@ -29,10 +28,9 @@ public class PresenterImpl {
                         error -> viewInterface.onFailure(error.getMessage()));
     }
 
-    @SuppressLint("CheckResult")
     public void getNewRandomMeal() {
 
-        mealsRepository.getNewRandomMeal().
+        Disposable disposable=mealsRepository.getNewRandomMeal().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals().get(0)).
                 subscribe(
@@ -40,10 +38,9 @@ public class PresenterImpl {
                         error -> viewInterface.onFailure(error.getMessage()));
     }
 
-    @SuppressLint("CheckResult")
     public void getMealsByFirstLetter() {
 
-        mealsRepository.getMealsByFirstLetter().
+        Disposable disposable=mealsRepository.getMealsByFirstLetter().
                 compose(SingleTransformation.apply()).
                 map(mealModel -> mealModel.getMeals()).
                 subscribe(

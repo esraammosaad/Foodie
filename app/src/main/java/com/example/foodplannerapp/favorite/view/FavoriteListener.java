@@ -4,6 +4,6 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 
 public interface FavoriteListener {
 
-    void onClickListener(FavoriteMealModel meal);
+    void onRemoveClickListener(FavoriteMealModel meal);
     void onItemClickListener(FavoriteMealModel meal);
 }

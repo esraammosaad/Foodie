@@ -32,7 +32,7 @@
             <View
                 android:id="@+id/onboardingImgThree"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="380dp"
                 android:background="@drawable/onboardingone"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/imageView3"
@@ -70,8 +70,8 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/getStartedButton"
-                android:layout_width="170dp"
-                android:layout_height="62dp"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/button_layout"
                 android:elevation="4dp"
@@ -79,7 +79,8 @@
                 android:padding="8dp"
                 android:text="@string/get_started"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16dp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/onboardingDescriptionTextThree" />
 

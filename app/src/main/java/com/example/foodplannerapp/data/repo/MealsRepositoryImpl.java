@@ -10,13 +10,10 @@ import com.example.foodplannerapp.data.models.AllAreasResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.Ingredient;
-import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
@@ -28,7 +25,6 @@ public class MealsRepositoryImpl {
 
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
-
 
     private static MealsRepositoryImpl instance;
 
@@ -97,63 +93,6 @@ public class MealsRepositoryImpl {
 
     public Single<GetMealsByFilterResponse> getAllMealsByIngredient(String ingredientName) {
         return mealsRemoteDataSource.getAllMealsByIngredient(ingredientName);
-    }
-
-    public ArrayList<Ingredient> getIngredientsList(Meal meal) {
-        ArrayList<String> ingredients = new ArrayList<>();
-        ArrayList<String> measures = new ArrayList<>();
-        ArrayList<Ingredient> ingredientsList = new ArrayList<>();
-        ingredients.add(meal.getStrIngredient1());
-        measures.add(meal.getStrMeasure1());
-        ingredients.add(meal.getStrIngredient2());
-        measures.add(meal.getStrMeasure2());
-        ingredients.add(meal.getStrIngredient3());
-        measures.add(meal.getStrMeasure3());
-        ingredients.add(meal.getStrIngredient4());
-        measures.add(meal.getStrMeasure4());
-        ingredients.add(meal.getStrIngredient5());
-        measures.add(meal.getStrMeasure5());
-        ingredients.add(meal.getStrIngredient6());
-        measures.add(meal.getStrMeasure6());
-        ingredients.add(meal.getStrIngredient7());
-        measures.add(meal.getStrMeasure7());
-        ingredients.add(meal.getStrIngredient8());
-        measures.add(meal.getStrMeasure8());
-        ingredients.add(meal.getStrIngredient9());
-        measures.add(meal.getStrMeasure9());
-        ingredients.add(meal.getStrIngredient10());
-        measures.add(meal.getStrMeasure10());
-        ingredients.add(meal.getStrIngredient11());
-        measures.add(meal.getStrMeasure11());
-        ingredients.add(meal.getStrIngredient12());
-        measures.add(meal.getStrMeasure12());
-        ingredients.add(meal.getStrIngredient13());
-        measures.add(meal.getStrMeasure13());
-        ingredients.add(meal.getStrIngredient14());
-        measures.add(meal.getStrMeasure14());
-        ingredients.add(meal.getStrIngredient15());
-        measures.add(meal.getStrMeasure15());
-        ingredients.add(meal.getStrIngredient16());
-        measures.add(meal.getStrMeasure16());
-        ingredients.add(meal.getStrIngredient17());
-        measures.add(meal.getStrMeasure17());
-        ingredients.add(meal.getStrIngredient18());
-        measures.add(meal.getStrMeasure18());
-        ingredients.add(meal.getStrIngredient19());
-        measures.add(meal.getStrMeasure19());
-        ingredients.add(meal.getStrIngredient20());
-        measures.add(meal.getStrMeasure20());
-        for (int i = 0; i < ingredients.size(); i++) {
-
-            if (ingredients.get(i) != null && measures.get(i) != null && !ingredients.get(i).isEmpty() && !measures.get(i).isEmpty()) {
-
-                ingredientsList.add(new Ingredient("https://www.themealdb.com/images/ingredients/" + ingredients.get(i) + ".png", ingredients.get(i), measures.get(i)));
-
-            }
-        }
-
-
-        return ingredientsList;
     }
 
     public Completable addMealToFavorite(FavoriteMealModel meal) {

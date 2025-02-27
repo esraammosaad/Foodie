@@ -20,6 +20,13 @@
 
             tools:context=".search_details.view.SearchDetailsFragment">
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/internetGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="view4,noInternetIcon2,dismiss2,turnWIFI2,noInternetText2" />
+
             <EditText
                 android:id="@+id/searchTextFieldDetails"
                 style="@style/text_field"
@@ -27,7 +34,7 @@
                 android:layout_height="55dp"
                 android:layout_marginTop="40dp"
                 android:fontFamily="@font/inter"
-                android:hint="@string/search"
+                android:hint="@string/searchMeal"
                 android:inputType="text"
                 android:paddingStart="32dp"
                 android:textColor="#C2C2C2"
@@ -56,9 +63,9 @@
                 android:layout_marginTop="55dp"
                 android:backgroundTint="#C2C2C2"
                 android:src="@drawable/baseline_arrow_back_ios_24"
-                android:tint="@color/textColor"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/textColor" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline11"
@@ -77,12 +84,12 @@
             <ImageView
                 android:id="@+id/searchDetailsImage"
                 android:layout_width="wrap_content"
-                android:layout_height="140dp"
-                android:layout_marginTop="20dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline12"
-                app:layout_constraintHorizontal_bias="0.494"
+                app:layout_constraintHorizontal_bias="0.484"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
-                app:layout_constraintTop_toBottomOf="@+id/searchTextFieldDetails"
+                app:layout_constraintTop_toBottomOf="@+id/view4"
                 tools:src="@drawable/beef" />
 
             <View
@@ -123,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="20dp"
                 android:foregroundGravity="center"
                 android:paddingBottom="16dp"
@@ -137,7 +144,6 @@
                 android:id="@+id/countOfResults"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/inter_bold"
                 android:textColor="@color/primaryColor"
@@ -145,6 +151,118 @@
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
                 app:layout_constraintTop_toTopOf="@+id/view3"
                 tools:text="128 results" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/noInternetGrup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="noInternet,noWifiImg" />
+
+            <ProgressBar
+                android:id="@+id/progressBar4"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="140dp"
+                android:indeterminateTint="@color/black"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintTop_toBottomOf="@+id/countOfResults"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <View
+                android:id="@+id/view4"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/rounded_view"
+                android:backgroundTint="#FAF9F6"
+                app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintTop_toBottomOf="@+id/searchTextFieldDetails" />
+
+            <ImageView
+                android:id="@+id/noInternetIcon2"
+                android:layout_width="33dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/baseline_wifi_off_24"
+                app:layout_constraintStart_toStartOf="@+id/view4"
+                app:layout_constraintTop_toTopOf="@+id/view4" />
+
+            <TextView
+                android:id="@+id/dismiss2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/dismiss"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/turnWIFI2"
+                app:layout_constraintTop_toBottomOf="@+id/noInternetText2" />
+
+            <TextView
+                android:id="@+id/turnWIFI2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="@string/turnOnWifi"
+                android:textColor="@color/primaryColor"
+                app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toTopOf="@+id/dismiss2" />
+
+            <TextView
+                android:id="@+id/noInternetText2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/noInternetText"
+                app:layout_constraintStart_toEndOf="@+id/noInternetIcon2"
+                app:layout_constraintTop_toTopOf="@+id/noInternetIcon2" />
+
+            <TextView
+                android:id="@+id/noInternet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/inter_semibold"
+                android:gravity="center"
+                android:text="@string/no_internet_connection_please_reconnect_and_try_again"
+                android:textSize="16sp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/noWifiImg"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/noWifiImg"
+                android:layout_width="95dp"
+                android:layout_height="84dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline12"
+                app:layout_constraintHorizontal_bias="0.497"
+                app:layout_constraintStart_toStartOf="@+id/guideline11"
+                app:layout_constraintTop_toBottomOf="@+id/searchDetailsImage"
+                app:layout_constraintVertical_bias="0.496"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/nointernet" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

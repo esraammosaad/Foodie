@@ -6,7 +6,6 @@ import java.util.List;
 
 public interface ViewInterface {
     void onFavoriteListSuccess(List<FavoriteMealModel> list);
-
     void onSuccess(String message);
     void onFailure(String errorMessage);
 }

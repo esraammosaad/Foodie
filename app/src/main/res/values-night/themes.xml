@@ -4,9 +4,14 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/primaryColor</item>
+        <item name="android:windowBackground">#1C1B1F</item>
         <item name="colorSurface">@color/secondaryColor</item>
         <item name="colorAccent">@color/textColor</item>
         <item name="color">@color/white</item>
+        <item name="colorOnSurface">@color/textColor</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:dateTextAppearance">@color/black</item>
+        <item name="textAppearanceBodySmall">@color/black</item>
 
 
 

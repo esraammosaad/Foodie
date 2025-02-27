@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResult;
@@ -48,6 +50,9 @@ public class LoginFragment extends Fragment implements ViewInterface {
     Button signInWithGoogle;
     GoogleSignInClient googleSignInClient;
     Button visitAsAGuestButton;
+    ProgressBar progressBar;
+    ImageView googleIcon;
+    ImageView guestIcon;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -93,6 +98,9 @@ public class LoginFragment extends Fragment implements ViewInterface {
         passwordError = view.findViewById(R.id.passwordError);
         signInWithGoogle = view.findViewById(R.id.googleSignInButton);
         visitAsAGuestButton = view.findViewById(R.id.visitAsAGuestButton);
+        progressBar = view.findViewById(R.id.progressBar2);
+        googleIcon = view.findViewById(R.id.userImg);
+        guestIcon = view.findViewById(R.id.imageView2);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()), MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
@@ -132,6 +140,12 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
 
                 presenter.login(emailEditText.getText().toString(), passwordEditText.getText().toString());
+                progressBar.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.INVISIBLE);
+                signInWithGoogle.setVisibility(View.INVISIBLE);
+                visitAsAGuestButton.setVisibility(View.INVISIBLE);
+                googleIcon.setVisibility(View.INVISIBLE);
+                guestIcon.setVisibility(View.INVISIBLE);
 
 
             }
@@ -150,6 +164,12 @@ public class LoginFragment extends Fragment implements ViewInterface {
             if (NetworkAvailability.isNetworkAvailable(getContext())) {
                 Intent intent = googleSignInClient.getSignInIntent();
                 activityResultLauncher.launch(intent);
+                progressBar.setVisibility(View.VISIBLE);
+                loginButton.setVisibility(View.INVISIBLE);
+                signInWithGoogle.setVisibility(View.INVISIBLE);
+                visitAsAGuestButton.setVisibility(View.INVISIBLE);
+                googleIcon.setVisibility(View.INVISIBLE);
+                guestIcon.setVisibility(View.INVISIBLE);
             } else {
                 NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
             }
@@ -177,6 +197,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
                     .make(requireView(), message, Snackbar.LENGTH_LONG);
             snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
             snackbar.show();
+            progressBar.setVisibility(View.GONE);
             presenter.getFavoriteMealsFromFireStore();
             presenter.getCalendarMealsFromFireStore();
 
@@ -191,6 +212,8 @@ public class LoginFragment extends Fragment implements ViewInterface {
                 .make(requireView(), message, Snackbar.LENGTH_LONG);
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
+        progressBar.setVisibility(View.GONE);
+
 
 
     }

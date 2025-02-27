@@ -36,15 +36,15 @@ import java.util.List;
 
 public class FavoriteFragment extends Fragment implements FavoriteListener, ViewInterface {
 
-    RecyclerViewAdapter myAdapter;
-    RecyclerView recyclerView;
-    PresenterImpl presenter;
-    LiveData<List<FavoriteMealModel>> mealList;
-    LottieAnimationView lottieAnimationView;
-    TextView emptyFavText;
-    Group guestGroup;
-    TextView continueAsAGuest;
-    TextView signInText;
+    private RecyclerViewAdapter myAdapter;
+    private RecyclerView recyclerView;
+    private PresenterImpl presenter;
+    private LiveData<List<FavoriteMealModel>> mealList;
+    private LottieAnimationView lottieAnimationView;
+    private TextView emptyFavText;
+    private Group guestGroup;
+    private TextView continueAsAGuest;
+    private TextView signInText;
 
 
     public FavoriteFragment() {
@@ -83,7 +83,9 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         recyclerView.setAdapter(myAdapter);
         lottieAnimationView.setVisibility(View.VISIBLE);
         emptyFavText.setVisibility(View.VISIBLE);
-        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
+                new MealsLocalDataSource(getContext())),
+                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         if (presenter.getCurrentUser() != null) {
             presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
 
@@ -95,7 +97,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
         }
         signInText.setOnClickListener((v) -> {
-            Navigation.findNavController(getView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
+            Navigation.findNavController(requireView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
                     new NavOptions.Builder()
                             .setPopUpTo(R.id.favoriteFragment,true)
                             .setPopUpTo(R.id.homeFragment, true)
@@ -113,13 +115,14 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
 
     @Override
-    public void onClickListener(FavoriteMealModel meal) {
+    public void onRemoveClickListener(FavoriteMealModel meal) {
 
-        if(NetworkAvailability.isNetworkAvailable(getContext())){
+        if(NetworkAvailability.isNetworkAvailable(requireContext())){
             presenter.deleteMealFromFavorite(meal);
             presenter.deleteFavoriteMealFromFireStore(meal);
             Snackbar snackbar = Snackbar
-                    .make(requireView(), "Meal is removed from favorite", Snackbar.LENGTH_LONG).setActionTextColor(
+                    .make(requireView(), getString(R.string.meal_is_removed_from_favorite),
+                            Snackbar.LENGTH_LONG).setActionTextColor(
                             getResources().getColor(R.color.primaryColor)
                     ).setTextColor(getResources().getColor(R.color.white))
                     .setAction("UNDO", view -> {
@@ -140,8 +143,6 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
 
 
     }
-
-
 
     @Override
     public void onItemClickListener(FavoriteMealModel meal) {
@@ -166,7 +167,6 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         }
         myAdapter.setMealsList(list);
         myAdapter.notifyDataSetChanged();
-        recyclerView.setAdapter(myAdapter);
 
     }
 
@@ -186,6 +186,6 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
     @Override
     public void onDestroy() {
         super.onDestroy();
-        presenter.compositeDisposable.clear();
+        PresenterImpl.compositeDisposable.clear();
     }
 }

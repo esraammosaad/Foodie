@@ -32,7 +32,7 @@
             <View
                 android:id="@+id/onboardingImgThree"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="380dp"
                 android:background="@drawable/onboardingone"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/imageView3"
@@ -90,7 +90,7 @@
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.354"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/skipText"
                 app:layout_constraintTop_toTopOf="@+id/skipText" />
 
@@ -102,6 +102,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="18dp"
                 android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:layout_constraintBottom_toBottomOf="@+id/nextText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/nextText"
                 app:layout_constraintTop_toTopOf="@+id/nextText" />

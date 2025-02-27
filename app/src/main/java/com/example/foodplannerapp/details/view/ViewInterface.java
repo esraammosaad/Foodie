@@ -7,10 +7,10 @@ import com.example.foodplannerapp.data.models.Meal;
 import java.util.List;
 
 public interface ViewInterface {
-    void onSuccess(Meal meal);
     void onFavoriteDatabaseSuccess(List<FavoriteMealModel> favoriteMealModel);
     void onCalendarDatabaseSuccess(List<CalenderMealModel> calenderMealModel);
-    void onFavoriteMealAddedToFireStore(String message);
+    void onFavoriteMealSuccessfullyAddedToFireStore(String message);
     void onFavoriteMealFailedToAddedToFireStore(String errorMessage);
+    void onSuccess(Meal meal);
     void onFailure(String errorMessage);
 }

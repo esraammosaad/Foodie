@@ -12,7 +12,6 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.utilis.CompletableTransformation;
-import com.example.foodplannerapp.utilis.Transformation;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,7 +23,6 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
     MealsRepositoryImpl mealsRepository;
     ViewInterface viewInterface;
 
-//    private static PresenterImpl instance;
 
     public PresenterImpl(AuthenticationRepositoryImpl authenticationRepository, MealsRepositoryImpl mealsRepository,ViewInterface viewInterface) {
         this.authenticationRepository = authenticationRepository;
@@ -33,14 +31,7 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
 
     }
 
-//    public static PresenterImpl getInstance(AuthenticationRepositoryImpl authenticationRepository, ViewInterface viewInterface){
-//        if(instance==null){
-//            instance=new PresenterImpl(authenticationRepository, viewInterface);
-//        }
-//
-//       return instance;
-//
-//    }
+
 
     public void register(String email, String password, String name) {
 

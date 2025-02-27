@@ -18,46 +18,43 @@ public class PresenterImpl implements FireStoreCallBack {
     MealsRepositoryImpl mealsRepository;
     FireStoreRepositoryImpl fireStoreRepository;
     ViewInterface viewInterface;
-    public CompositeDisposable compositeDisposable = new CompositeDisposable();
-
-
+    public static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public PresenterImpl(MealsRepositoryImpl mealsRepository, FireStoreRepositoryImpl fireStoreRepository, ViewInterface viewInterface) {
 
         this.mealsRepository = mealsRepository;
-        this.fireStoreRepository=fireStoreRepository;
-        this.viewInterface=viewInterface;
+        this.fireStoreRepository = fireStoreRepository;
+        this.viewInterface = viewInterface;
     }
 
-
-
-    public void getAllFavoriteMeals(String userUID){
-         Disposable disposable=mealsRepository.getAllFavoriteMeals(userUID).
-                 compose(Transformation.apply()).
-                 subscribe(favoriteMealModels -> viewInterface.onFavoriteListSuccess(favoriteMealModels));
-         compositeDisposable.add(disposable);
+    public void getAllFavoriteMeals(String userUID) {
+        Disposable disposable = mealsRepository.getAllFavoriteMeals(userUID).
+                compose(Transformation.apply()).
+                subscribe(favoriteMealModels -> viewInterface.onFavoriteListSuccess(favoriteMealModels));
+        compositeDisposable.add(disposable);
     }
 
-    public void deleteMealFromFavorite(FavoriteMealModel meal){
+    public void deleteMealFromFavorite(FavoriteMealModel meal) {
 
-        Disposable disposable=mealsRepository.deleteMealFromFavorite(meal).
+        Disposable disposable = mealsRepository.deleteMealFromFavorite(meal).
                 compose(CompletableTransformation.apply())
                 .subscribe();
         compositeDisposable.add(disposable);
 
     }
-    public void addMealToFavorite(FavoriteMealModel meal){
 
-        Disposable disposable=mealsRepository.addMealToFavorite(meal).
+    public void addMealToFavorite(FavoriteMealModel meal) {
+
+        Disposable disposable = mealsRepository.addMealToFavorite(meal).
                 compose(CompletableTransformation.apply()).
                 subscribe();
         compositeDisposable.add(disposable);
 
     }
 
-    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal){
+    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal) {
 
-        fireStoreRepository.deleteFavoriteMealFromFireStore(meal,this);
+        fireStoreRepository.deleteFavoriteMealFromFireStore(meal, this);
     }
 
     public void insertCalendarMealToFireStore(FavoriteMealModel meal) {
@@ -66,11 +63,10 @@ public class PresenterImpl implements FireStoreCallBack {
 
     }
 
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
 
         return mealsRepository.getCurrentUser();
     }
-
 
     @Override
     public void onFireStoreSuccess(String message) {
