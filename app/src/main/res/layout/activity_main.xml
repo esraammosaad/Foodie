@@ -18,7 +18,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -85,9 +84,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:visibility="visible"
-        app:menu="@menu/drawer_menu"
-        app:headerLayout="@layout/drawer_header_layout"
         android:background="?attr/textAppearanceBodySmall"
-        />
+        android:visibility="visible"
+        app:headerLayout="@layout/drawer_header_layout"
+        app:menu="@menu/drawer_menu" />
 </androidx.drawerlayout.widget.DrawerLayout>

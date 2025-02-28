@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
+import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.network.database.FiresStoreServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
@@ -36,6 +37,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import io.reactivex.rxjava3.disposables.Disposable;
 
 
 public class CalenderFragment extends Fragment implements CalendarListener, ViewInterface {
@@ -52,6 +54,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
     Group guestGroup;
     TextView continueAsAGuest;
     TextView signInText;
+    Disposable mealDisposable;
 
 
     public CalenderFragment() {
@@ -97,7 +100,8 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
         if (presenter.getCurrentUser() != null) {
 
-            presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+
+            mealDisposable=presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
             calendar.set(Calendar.MONTH, mealMonth - 1);
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
             textCalendar.setText(getString(R.string.today_s_picks) + monthFormat.format(calendar.getTime()) + " " + mealDay + ", " + mealYear);
@@ -106,8 +110,9 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
             calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
                 mealDay = dayOfMonth;
                 mealMonth = month + 1;
-                mealYear = year;
-                presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+                mealYear = year;loadMeals(mealDay, mealMonth, mealYear);
+
+
                 calendar.set(Calendar.MONTH, month);
                 if (mealDay == calendar.get(Calendar.DAY_OF_MONTH) && mealMonth == calendar.get(Calendar.MONTH) + 1 && mealYear == calendar.get(Calendar.YEAR)) {
                     textCalendar.setText(getString(R.string.today_s_picks) + monthFormat.format(calendar.getTime()) + " " + dayOfMonth + ", " + year);
@@ -143,21 +148,35 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
     }
 
+    private void loadMeals(int day, int month, int year) {
+        if (mealDisposable != null && !mealDisposable.isDisposed()) {
+            mealDisposable.dispose();
+        }
+
+        mealDisposable = presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), day, month, year);
+    }
+
 
     @Override
-    public void onRemoveClickListener(CalenderMealModel meal) {
+    public void onRemoveClickListener(CalenderMealModel calenderMealModel) {
 
         if (NetworkAvailability.isNetworkAvailable(requireContext())) {
-            if (meal.getDay() == mealDay && meal.getMonth() == mealMonth && meal.getYear() == mealYear) {
-                presenter.deleteMealFromCalendar(meal);
-                presenter.deleteCalendarMealFromFireStore(meal);
+            if (calenderMealModel.getDay() == mealDay && calenderMealModel.getMonth() == mealMonth && calenderMealModel.getYear() == mealYear) {
+                Meal meal=new Meal();
+                meal.setStrMeal(calenderMealModel.getStrMeal());
+                meal.setStrInstructions(calenderMealModel.getStrInstructions());
+                presenter.deleteMealFromCalendar(calenderMealModel);
+                presenter.deleteCalendarMealFromFireStore(calenderMealModel);
+                presenter.deleteMealFromMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth(), calenderMealModel.getDay(), meal);
                 Snackbar snackbar = Snackbar
                         .make(requireView(), getString(R.string.meal_is_removed_from_calender), Snackbar.LENGTH_LONG).setActionTextColor(
                                 getResources().getColor(R.color.primaryColor)
                         ).setTextColor(getResources().getColor(R.color.white))
                         .setAction(getString(R.string.undo), view -> {
-                            presenter.addMealToCalendar(meal);
-                            presenter.insertCalendarMealToFireStore(meal);
+
+                            presenter.addMealToCalendar(calenderMealModel);
+                            presenter.insertCalendarMealToFireStore(calenderMealModel);
+                            presenter.addMealToMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth(), calenderMealModel.getDay(), meal);
 
                         });
                 snackbar.show();

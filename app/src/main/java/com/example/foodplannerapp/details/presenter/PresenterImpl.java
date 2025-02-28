@@ -194,51 +194,17 @@ public class PresenterImpl implements FireStoreCallBack {
 
     }
 
-    public void addMealToMobileCalendar(Context context,int year, int month, int day, Meal meal){
-        Cursor cursor = context.
-                getContentResolver().
-                query(
-                android.provider.CalendarContract.Calendars.CONTENT_URI, new String[]{
-                CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME}, null, null, null
-                );
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                String text = "";
+    public void addMealToMobileCalendar(int year, int month, int day, Meal meal){
+        mealsRepository.addMealToMobileCalendar(year, month, day, meal);
 
-                for (int i = 0; i < cursor.getCount(); i++) {
+    }
+    public void deleteMealToMobileCalendar(int year, int month, int day, Meal meal){
+        mealsRepository.deleteMealToMobileCalendar(year, month, day, meal);
 
-                    text += "ID: " + cursor.getInt(0) + "\n" + "Name: " + cursor.getString(1) + "\n\n";
-                    cursor.moveToNext();
-                }
-
-                Log.i("TAG", "onViewCreated: " + text);
-
-            }
-
-        }
-
-        ContentValues values = getContentValues(year, month, day,meal);
-        Uri uri=context.getContentResolver().insert(CalendarContract.Events.CONTENT_URI,values);
-        Log.i("TAG", "onViewCreated: "+uri.toString());
     }
 
-    @NonNull
-    public ContentValues getContentValues(int year, int month, int day, Meal meal) {
-        Calendar startCalendar = Calendar.getInstance();
-        startCalendar.set(year, month, day,23,59);
-        long startMillis=startCalendar.getTimeInMillis();
-        Calendar endCalendar = Calendar.getInstance();
-        endCalendar.set(year, month, day +1,23,59);
-        long endMillis=endCalendar.getTimeInMillis();
-        ContentValues values=new ContentValues();
-        values.put(CalendarContract.Events.CALENDAR_ID, 4);
-        values.put(CalendarContract.Events.DTSTART, startMillis);
-        values.put(CalendarContract.Events.DTEND, endMillis);
-        values.put(CalendarContract.Events.EVENT_TIMEZONE, "Egypt/Cairo");
-        values.put(CalendarContract.Events.TITLE, meal.getStrMeal());
-        values.put(CalendarContract.Events.DESCRIPTION, meal.getStrInstructions());
-        return values;
-    }
+
+
 
     @Override
     public void onFireStoreSuccess(String message) {

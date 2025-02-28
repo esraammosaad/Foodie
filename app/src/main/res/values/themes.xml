@@ -66,10 +66,14 @@
         <item name="colorAccent">@color/secondaryColor</item>
         <item name="android:textColor">@color/black</item>
         <item name="android:background">#F5F5F5</item>
-        <item name="android:dateTextAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:dateTextAppearance">@color/black</item>
+        <item name="android:colorFocusedHighlight">@color/black</item>
+        <item name="colorControlHighlight">@color/black</item>
         <item name="android:theme">@style/CalenderViewDateCustomText</item>
         <item name="android:weekDayTextAppearance">@style/TextAppearance.AppCompat.Body2</item>
     </style>
+
+
 
     <style name="CalenderViewDateCustomText">
         <item name="colorControlNormal">@color/secondaryColor</item>

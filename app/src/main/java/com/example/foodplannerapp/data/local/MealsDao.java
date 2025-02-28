@@ -12,6 +12,7 @@ import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 
 @Dao
@@ -29,12 +30,12 @@ public interface MealsDao {
     Completable deleteMeal(CalenderMealModel calenderMealModel);
 
     @Query("select * from meal_table where userUID= :userUID")
-    Observable<List<FavoriteMealModel>> getAllMealsFromFavorite(String userUID);
+    Flowable<List<FavoriteMealModel>> getAllMealsFromFavorite(String userUID);
     @Query("select * from meal_table where userUID= :userUID AND idMeal= :mealID")
-    Observable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID);
+    Flowable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID);
     @Query("select * from calendar_meal_table where userUID= :userUID AND idMeal= :mealID")
-    Observable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID);
+    Flowable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID);
 
     @Query("select * from calendar_meal_table where userUID= :userUID AND day= :day AND month= :month AND year= :year")
-    Observable<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID,int day , int month , int year);
+    Flowable<List<CalenderMealModel>> getAllMealsFromCalendar(String userUID,int day , int month , int year);
 }

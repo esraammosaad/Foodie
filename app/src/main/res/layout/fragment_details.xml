@@ -34,14 +34,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
+                app:layout_constraintGuide_begin="10dp"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="20dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintGuide_end="10dp" />
 
             <ImageView
                 android:id="@+id/detailsMealImage"
@@ -194,7 +197,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/video"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/detailsMealImage" />
 
@@ -205,7 +208,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/ingredients"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/webView" />
 
@@ -216,17 +219,17 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/inter_semibold"
                 android:text="@string/instructions"
-                android:textSize="22dp"
+                android:textSize="24sp"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/detailsRecyclerView" />
 
             <WebView
                 android:id="@+id/webView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="4dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -235,9 +238,9 @@
                 android:id="@+id/detailsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="16dp"
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
@@ -247,13 +250,13 @@
                 android:id="@+id/instructions"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:fontFamily="sans-serif"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/inter_medium"
                 android:paddingBottom="24dp"
                 android:textColor="@color/textColor"
-                android:textSize="16sp"
+                android:textSize="17sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintStart_toStartOf="@+id/guideline5"
                 app:layout_constraintTop_toBottomOf="@+id/textView14"
@@ -268,6 +271,7 @@
                 android:fontFamily="@font/inter_bold"
                 android:text="@string/show"
                 android:textColor="@color/primaryColor"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView14"

@@ -1,8 +1,10 @@
 package com.example.foodplannerapp;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         NavController navController = navHostFragment.getNavController();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavBar);
+        calendarPermission();
         appName = findViewById(R.id.textView9);
         menuIcon = findViewById(R.id.menuIcon);
         drawerLayout = findViewById(R.id.main);
@@ -160,6 +164,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+
+
+    }
+
+    private void calendarPermission() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+                    1);
+        }
 
 
     }

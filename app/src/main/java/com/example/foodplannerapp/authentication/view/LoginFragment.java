@@ -1,5 +1,7 @@
 package com.example.foodplannerapp.authentication.view;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -60,10 +62,23 @@ public class LoginFragment extends Fragment implements ViewInterface {
             new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result) {
-                    try {
-                        presenter.loginWithGoogle(result);
-                    } catch (ApiException e) {
-                        throw new RuntimeException(e);
+                    if (result.getResultCode() == RESULT_OK) {
+                        try {
+                            presenter.loginWithGoogle(result);
+                        } catch (ApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(requireView(), "Canceled", Snackbar.LENGTH_LONG);
+                        snackbar.setBackgroundTint(Color.RED);
+                        snackbar.show();
+                        progressBar.setVisibility(View.GONE);
+                        loginButton.setVisibility(View.VISIBLE);
+                        signInWithGoogle.setVisibility(View.VISIBLE);
+                        visitAsAGuestButton.setVisibility(View.VISIBLE);
+                        googleIcon.setVisibility(View.VISIBLE);
+                        guestIcon.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -118,49 +133,49 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
 
         loginButton.setOnClickListener((v) -> {
-            if(NetworkAvailability.isNetworkAvailable(requireContext())){
-            if (emailEditText.getText().toString().isEmpty()) {
+            if (NetworkAvailability.isNetworkAvailable(requireContext())) {
+                if (emailEditText.getText().toString().isEmpty()) {
 
-                emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
-                emailError.setVisibility(View.VISIBLE);
+                    emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                    emailError.setVisibility(View.VISIBLE);
 
 
+                }
+
+                if (passwordEditText.getText().toString().isEmpty()) {
+                    passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
+                    passwordError.setVisibility(View.VISIBLE);
+                }
+
+                if (!emailEditText.getText().toString().isEmpty()) {
+                    emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                    emailError.setVisibility(View.GONE);
+                }
+
+                if (!passwordEditText.getText().toString().isEmpty()) {
+                    passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
+                    passwordError.setVisibility(View.GONE);
+                }
+
+                if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()) {
+
+
+                    presenter.login(emailEditText.getText().toString(), passwordEditText.getText().toString());
+                    progressBar.setVisibility(View.VISIBLE);
+                    loginButton.setVisibility(View.INVISIBLE);
+                    signInWithGoogle.setVisibility(View.INVISIBLE);
+                    visitAsAGuestButton.setVisibility(View.INVISIBLE);
+                    googleIcon.setVisibility(View.INVISIBLE);
+                    guestIcon.setVisibility(View.INVISIBLE);
+
+
+                }
+            } else {
+
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
             }
 
-            if (passwordEditText.getText().toString().isEmpty()) {
-                passwordEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
-                passwordError.setVisibility(View.VISIBLE);
-            }
-
-            if (!emailEditText.getText().toString().isEmpty()) {
-                emailEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                emailError.setVisibility(View.GONE);
-            }
-
-            if (!passwordEditText.getText().toString().isEmpty()) {
-                passwordEditText.setBackgroundResource(R.drawable.rounded_edit_text);
-                passwordError.setVisibility(View.GONE);
-            }
-
-            if (!emailEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()) {
-
-
-                presenter.login(emailEditText.getText().toString(), passwordEditText.getText().toString());
-                progressBar.setVisibility(View.VISIBLE);
-                loginButton.setVisibility(View.INVISIBLE);
-                signInWithGoogle.setVisibility(View.INVISIBLE);
-                visitAsAGuestButton.setVisibility(View.INVISIBLE);
-                googleIcon.setVisibility(View.INVISIBLE);
-                guestIcon.setVisibility(View.INVISIBLE);
-
-
-            }
-            }else {
-
-            NoInternetDialog.showNoInternetDialog(getContext(),getString(R.string.no_internet_connection_please_reconnect_and_try_again));
-        }
-
-    });
+        });
         registerText.setOnClickListener((v) -> {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_registerFragment);
 
@@ -195,9 +210,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
     }
 
-    @Override
-    public void onSuccess(String message) {
-
+    private void navigateToHome(String message) {
         if (presenter.getCurrentUser() != null) {
             Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeFragment);
             Snackbar snackbar = Snackbar
@@ -215,6 +228,19 @@ public class LoginFragment extends Fragment implements ViewInterface {
 
 
         }
+    }
+
+    @Override
+    public void onGoogleLoginSuccess(String message) {
+        navigateToHome(message);
+
+
+    }
+
+    @Override
+    public void onSuccess(String message) {
+        navigateToHome(message);
+
 
     }
 
@@ -230,7 +256,6 @@ public class LoginFragment extends Fragment implements ViewInterface {
         visitAsAGuestButton.setVisibility(View.VISIBLE);
         googleIcon.setVisibility(View.VISIBLE);
         guestIcon.setVisibility(View.VISIBLE);
-
 
 
     }

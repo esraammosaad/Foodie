@@ -1,5 +1,7 @@
 package com.example.foodplannerapp.authentication.view;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -64,10 +66,24 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
+                    if(result.getResultCode()==RESULT_OK){
+
                     try {
                         presenter.loginWithGoogle(result);
                     } catch (ApiException e) {
                         throw new RuntimeException(e);
+                    }
+                    }else {
+                        Snackbar snackbar = Snackbar
+                                .make(requireView(), "Canceled", Snackbar.LENGTH_LONG);
+                        snackbar.setBackgroundTint(Color.RED);
+                        snackbar.show();
+                        progressBar.setVisibility(View.GONE);
+                        registerButton.setVisibility(View.VISIBLE);
+                        signInWithGoogle.setVisibility(View.VISIBLE);
+                        visitAsAGuestButton.setVisibility(View.VISIBLE);
+                        googleIcon.setVisibility(View.VISIBLE);
+                        guestIcon.setVisibility(View.VISIBLE);
                     }
 
                 }
@@ -178,14 +194,15 @@ public class RegisterFragment extends Fragment implements ViewInterface {
             if (NetworkAvailability.isNetworkAvailable(getContext())) {
                 Intent intent = googleSignInClient.getSignInIntent();
                 activityResultLauncher.launch(intent);
-            } else {
-                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
                 progressBar.setVisibility(View.VISIBLE);
                 registerButton.setVisibility(View.INVISIBLE);
                 signInWithGoogle.setVisibility(View.INVISIBLE);
                 visitAsAGuestButton.setVisibility(View.INVISIBLE);
                 googleIcon.setVisibility(View.INVISIBLE);
                 guestIcon.setVisibility(View.INVISIBLE);
+            } else {
+                NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+
             }
 
 
@@ -204,10 +221,8 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     }
 
     @Override
-    public void onSuccess(String message) {
-
+    public void onGoogleLoginSuccess(String message) {
         if (presenter.getCurrentUser() != null) {
-            Navigation.findNavController(requireView()).navigateUp();
             Snackbar snackbar = Snackbar
                     .make(requireView(), message, Snackbar.LENGTH_LONG);
             snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
@@ -218,6 +233,31 @@ public class RegisterFragment extends Fragment implements ViewInterface {
             visitAsAGuestButton.setVisibility(View.VISIBLE);
             googleIcon.setVisibility(View.VISIBLE);
             guestIcon.setVisibility(View.VISIBLE);
+            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+            presenter.getCalendarMealsFromFireStore();
+            presenter.getFavoriteMealsFromFireStore();
+
+
+        }
+
+    }
+
+    @Override
+    public void onSuccess(String message) {
+
+        if (presenter.getCurrentUser() != null) {
+            Snackbar snackbar = Snackbar
+                    .make(requireView(), message, Snackbar.LENGTH_LONG);
+            snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+            snackbar.show();
+            progressBar.setVisibility(View.GONE);
+            registerButton.setVisibility(View.VISIBLE);
+            signInWithGoogle.setVisibility(View.VISIBLE);
+            visitAsAGuestButton.setVisibility(View.VISIBLE);
+            googleIcon.setVisibility(View.VISIBLE);
+            guestIcon.setVisibility(View.VISIBLE);
+            Navigation.findNavController(requireView()).navigateUp();
+
         }
 
 

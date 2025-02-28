@@ -87,6 +87,11 @@ public class ForgetPasswordFragment extends Fragment implements ViewInterface {
     }
 
     @Override
+    public void onGoogleLoginSuccess(String message) {
+
+    }
+
+    @Override
     public void onSuccess(String message) {
         Snackbar snackbar = Snackbar
                 .make(requireView(), message, Snackbar.LENGTH_LONG);

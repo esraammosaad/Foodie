@@ -206,6 +206,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             showMore.setVisibility(View.GONE);
         }
     }
+
     public void updateRecyclerView(List<Ingredient> ingredients) {
 
         myAdapter.setIngredientList(ingredients);
@@ -221,7 +222,8 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
             Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.homeFragment, true)
+                            .setPopUpTo(R.id.detailsFragment, true)
+                            .setPopUpTo(R.id.profileFragment, true)
                             .build());
 
         });
@@ -245,7 +247,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
                 (view1, selectedYear, selectedMonth, selectedDay) -> {
 
                     CalenderMealModel calenderMeal = convertMealToCalendarMeal(selectedYear, selectedMonth, selectedDay);
-                    presenter.addMealToMobileCalendar(requireContext(), selectedYear, selectedMonth, selectedDay, meal);
+                    presenter.addMealToMobileCalendar(selectedYear, selectedMonth, selectedDay, meal);
                     presenter.addMealToCalendar(calenderMeal);
                     presenter.addCalendarMealToFireStore(calenderMeal);
 
@@ -256,6 +258,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
                             .setAction(R.string.undo, view2 -> {
                                 presenter.deleteMealFromCalendar(calenderMeal);
                                 presenter.deleteCalendarMealFromFireStore(calenderMeal);
+                                presenter.deleteMealToMobileCalendar(selectedYear, selectedMonth, selectedDay, meal);
 
                             });
 
@@ -307,19 +310,19 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             isFav = false;
         }
     }
-    private void calendarPermission(){
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.READ_CALENDAR}, 1);
 
-        }
+    private void calendarPermission() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
 
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.WRITE_CALENDAR}, 2);
-
+            ActivityCompat.requestPermissions(requireActivity(),
+                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+                    1);
         }
 
 
     }
+
     public void loadFlagImage(String area) {
         if (isAdded()) {
             Map<String, String> countryCodeMap = CountryCodeMapper.getCountryCodeMap();
@@ -327,12 +330,14 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             Glide.with(requireContext()).load("https://flagsapi.com/" + countryCode.toUpperCase() + "/flat/64.png").into(flagIcon);
         }
     }
+
     ArrayList<Ingredient> convertRoomList(List<Ingredient> ingredients) {
         Gson gson = new Gson();
         Type type = new TypeToken<List<Ingredient>>() {
         }.getType();
         return gson.fromJson(gson.toJson(ingredients), type);
     }
+
     public void showSnackBar(String text) {
         if (getView() != null) {
             Snackbar snackbar = Snackbar
@@ -341,6 +346,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
             snackbar.show();
         }
     }
+
     public void loadVideo(String youtubeUrl) {
         mealVideo.loadData(presenter.loadVideo(youtubeUrl), "text/html", "utf-8");
         mealVideo.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
@@ -462,7 +468,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         presenter.getMealByID(mealID);
 
     }
-
 
     @Override
     public void onDestroyView() {

@@ -48,7 +48,6 @@ public class ProfileFragment extends Fragment implements NetworkListener {
     private ImageView linkedinIcon;
     private ImageView googleIcon;
     private MaterialSwitch darkModeSwitch;
-    private ImageView editProfileIcon;
     private ImageView shareAppIcon;
     private Group guestGroup;
     private Group guestSecondGroup;
@@ -87,7 +86,6 @@ public class ProfileFragment extends Fragment implements NetworkListener {
         linkedinIcon = view.findViewById(R.id.linkedinIcon);
         googleIcon = view.findViewById(R.id.googleIcon);
         darkModeSwitch = view.findViewById(R.id.darkModeSwitch);
-        editProfileIcon = view.findViewById(R.id.editProfileIcon);
         shareAppIcon = view.findViewById(R.id.shareAppIcon);
         guestGroup = view.findViewById(R.id.calendarGuestGroup);
         guestSecondGroup = view.findViewById(R.id.guestGroupProfile);
@@ -200,12 +198,15 @@ public class ProfileFragment extends Fragment implements NetworkListener {
     @Override
     public void onLostConnection() {
 
+        if(isAdded()){
+
         NoInternetSnackBar.showSnackBar(requireView());
         guestGroup.setVisibility(View.VISIBLE);
         noInternetIcon.setImageResource(R.drawable.baseline_wifi_off_24);
         noInternetText.setText(R.string.noInternetText);
         guest.setText(R.string.dismiss);
         login.setText(R.string.turnOnWifi);
+        }
 
 
     }

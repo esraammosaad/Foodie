@@ -1,7 +1,6 @@
 package com.example.foodplannerapp.data.repo;
 
 
-
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
@@ -10,6 +9,7 @@ import com.example.foodplannerapp.data.models.AllAreasResponse;
 import com.example.foodplannerapp.data.models.AllIngredientsResponse;
 import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
 import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.models.Meal;
 import com.example.foodplannerapp.data.models.MealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.google.firebase.auth.FirebaseUser;
@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
@@ -105,7 +106,7 @@ public class MealsRepositoryImpl {
         return mealsLocalDataSource.deleteMealFromDB(meal);
     }
 
-    public Observable<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID) {
+    public Flowable<List<FavoriteMealModel>> getAllFavoriteMeals(String userUID) {
         return mealsLocalDataSource.getAllMeals(userUID);
     }
 
@@ -120,22 +121,30 @@ public class MealsRepositoryImpl {
     public Completable deleteMealFromCalender(CalenderMealModel meal) {
 
 
-       return mealsLocalDataSource.deleteMealFromCalendar(meal);
+        return mealsLocalDataSource.deleteMealFromCalendar(meal);
 
 
     }
 
-    public Observable<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day, int month, int year) {
+    public Flowable<List<CalenderMealModel>> getAllCalendarMeals(String userUID, int day, int month, int year) {
 
         return mealsLocalDataSource.getAllMealsFromCalendar(userUID, day, month, year);
     }
 
-    public Observable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID) {
+    public Flowable<List<FavoriteMealModel>> getMealByIDFromFavorite(String userUID, String mealID) {
         return mealsLocalDataSource.getMealByIDFromFavorite(userUID, mealID);
     }
 
-    public Observable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID) {
+    public Flowable<List<CalenderMealModel>> getMealByIDFromCalendar(String userUID, String mealID) {
         return mealsLocalDataSource.getMealByIDFromCalendar(userUID, mealID);
+    }
+
+    public void addMealToMobileCalendar(int year, int month, int day, Meal meal) {
+        mealsLocalDataSource.addMealToMobileCalendar(year, month, day, meal);
+    }
+
+    public void deleteMealToMobileCalendar(int year, int month, int day, Meal meal) {
+        mealsLocalDataSource.deleteMealFromMobileCalendar(year, month, day, meal);
     }
 
 

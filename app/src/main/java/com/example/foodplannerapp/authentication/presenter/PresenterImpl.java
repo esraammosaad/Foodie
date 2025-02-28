@@ -84,6 +84,11 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
     }
 
     @Override
+    public void onGoogleLoginSuccess(String message) {
+        viewInterface.onGoogleLoginSuccess(message);
+    }
+
+    @Override
     public void onSuccess(String message) {
         viewInterface.onSuccess(message);
 

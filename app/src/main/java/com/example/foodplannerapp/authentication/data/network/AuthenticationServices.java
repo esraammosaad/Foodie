@@ -155,7 +155,7 @@ public class AuthenticationServices {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             currentUser = firebaseAuth.getCurrentUser();
-                            authenticationCallBack.onSuccess("Login Done Successfully");
+                            authenticationCallBack.onGoogleLoginSuccess("Login Done Successfully");
                             Log.i("TAG", "onComplete: ");
 
                         } else {
@@ -163,6 +163,9 @@ public class AuthenticationServices {
                             authenticationCallBack.onFailure(task.getException().getMessage());
                         }
                     }
+                }).addOnFailureListener(command -> {
+
+                    authenticationCallBack.onFailure(command.getMessage());
                 });
             } catch (ApiException e) {
                 e.printStackTrace();
