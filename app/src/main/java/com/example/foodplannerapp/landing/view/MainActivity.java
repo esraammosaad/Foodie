@@ -1,4 +1,4 @@
-package com.example.foodplannerapp;
+package com.example.foodplannerapp.landing.view;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -21,7 +21,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.bumptech.glide.Glide;
+import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
+import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.landing.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.example.foodplannerapp.utilis.ShareApp;
@@ -39,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView appName;
     private TextView userName;
     private TextView userEmail;
-    ImageView userImg;
-    NavigationView navView;
-    View headerView;
-    FirebaseUser currentUser;
+    private ImageView userImg;
+    private NavigationView navView;
+    private View headerView;
+    private FirebaseUser currentUser;
+    private PresenterImpl presenter;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +55,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(this);
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
-        NavController navController = navHostFragment.getNavController();
+        navController = navHostFragment.getNavController();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavBar);
+        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(this)));
         calendarPermission();
         appName = findViewById(R.id.textView9);
         menuIcon = findViewById(R.id.menuIcon);
@@ -61,11 +67,8 @@ public class MainActivity extends AppCompatActivity {
         userEmail = headerView.findViewById(R.id.userEmail);
         userName = headerView.findViewById(R.id.userName);
         userImg = headerView.findViewById(R.id.userImg);
-
         menuIcon.setOnClickListener((v) -> {
             drawerLayout.openDrawer(GravityCompat.START);
-
-
         });
         NavigationUI.setupWithNavController(bottomNav, navController);
         bottomNav.setVisibility(View.GONE);
@@ -99,70 +102,37 @@ public class MainActivity extends AppCompatActivity {
             int id = item.getItemId();
             if (id == R.id.darkMode) {
 
-                if (!SharedPreferencesManager.getInstance(this).getThemeState()) {
-                    SharedPreferencesManager.getInstance(this).saveThemeState(true);
+                if (!presenter.getThemeState()) {
+                    presenter.setThemeState(true);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-
                 } else {
-                    SharedPreferencesManager.getInstance(this).saveThemeState(false);
+                    presenter.setThemeState(false);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
 
                 }
                 drawerLayout.closeDrawer(GravityCompat.START);
 
-                return false;
-
-            } else if (id == R.id.share) {
-
-                startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
-
-                drawerLayout.closeDrawer(GravityCompat.START);
-
-                return false;
-
             } else {
-
-
-                if (NetworkAvailability.isNetworkAvailable(this)) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage("Are you sure you want to sign out ?");
-                    builder.setTitle(R.string.alert);
-                    builder.setCancelable(false);
-                    builder.setNegativeButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
-                        AuthenticationServices.getInstance().signOut();
-                        userImg = null;
-                        navController.navigate(R.id.loginFragment, null, new NavOptions.Builder()
-                                .setPopUpTo(R.id.homeFragment, true)
-                                .setPopUpTo(R.id.searchFragment, true)
-                                .setPopUpTo(R.id.favoriteFragment, true)
-                                .setPopUpTo(R.id.calenderFragment, true)
-                                .setLaunchSingleTop(true)
-                                .build());
-                        drawerLayout.closeDrawer(GravityCompat.START);
-
-                    });
-                    builder.setPositiveButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
-                        dialog.cancel();
-                    });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-
-
+                if (id == R.id.share) {
+                    startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
+                    drawerLayout.closeDrawer(GravityCompat.START);
                 } else {
-                    NoInternetDialog.showNoInternetDialog(this, getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+                    if (NetworkAvailability.isNetworkAvailable(this)) {
+                        signOut();
+
+                    } else {
+
+                        NoInternetDialog.showNoInternetDialog(this, getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+
+
+                    }
 
 
                 }
-
-
-                return false;
-
-
             }
-
-
+            return false;
         });
 
 
@@ -176,6 +146,33 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
                     1);
         }
+
+
+    }
+
+    private void signOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.are_you_sure_you_want_to_sign_out);
+        builder.setTitle(R.string.alert);
+        builder.setCancelable(false);
+        builder.setNegativeButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
+            AuthenticationServices.getInstance().signOut();
+            userImg = null;
+            navController.navigate(R.id.loginFragment, null, new NavOptions.Builder()
+                    .setPopUpTo(R.id.homeFragment, true)
+                    .setPopUpTo(R.id.searchFragment, true)
+                    .setPopUpTo(R.id.favoriteFragment, true)
+                    .setPopUpTo(R.id.calenderFragment, true)
+                    .setLaunchSingleTop(true)
+                    .build());
+            drawerLayout.closeDrawer(GravityCompat.START);
+
+        });
+        builder.setPositiveButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
+            dialog.cancel();
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
 
     }

@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.onboarding.view;
+package com.example.foodplannerapp.landing.view;
 
 import android.os.Bundle;
 
@@ -16,8 +16,8 @@ import android.view.ViewGroup;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.utilis.SharedPreferencesManager;
-import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
-import com.example.foodplannerapp.onboarding.presenter.PresenterImpl;
+import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.landing.presenter.PresenterImpl;
 
 
 public class SplashFragment extends Fragment {

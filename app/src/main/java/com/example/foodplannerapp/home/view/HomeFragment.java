@@ -1,10 +1,9 @@
 package com.example.foodplannerapp.home.view;
 
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -58,6 +57,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
     private TextView dismiss;
     private TextView turnWIFI;
     private NetworkChangeListener networkChangeListener;
+    private TextView seeAll;
 
 
     public HomeFragment() {
@@ -89,6 +89,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         flagIcon = view.findViewById(R.id.randomMealFlagIcon);
         progressBar = view.findViewById(R.id.progressBar);
         noInternetBanner = view.findViewById(R.id.noInternetBanner);
+        seeAll = view.findViewById(R.id.seeAllText);
         dismiss=view.findViewById(R.id.dismiss);
         turnWIFI=view.findViewById(R.id.turnWIFI);
         networkChangeListener = new NetworkChangeListener(this);
@@ -119,10 +120,13 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
         turnWIFI.setOnClickListener((v)->{
 
-            WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-            wifi.setWifiEnabled(true);
-            wifi.reconnect();
+            Intent panelIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+            getContext().startActivity(panelIntent);
 
+
+        });
+        seeAll.setOnClickListener((v)->{
+        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_seeAllFragment);
 
         });
 
@@ -191,6 +195,11 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onFailure(String errorMessage) {
+        if(!NetworkAvailability.isNetworkAvailable(getContext())){
+
+            NoInternetSnackBar.showSnackBar(requireView());
+
+        }
 
     }
 

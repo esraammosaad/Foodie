@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.foodplannerapp.onboarding.view.SplashFragment"
+        android:name="com.example.foodplannerapp.landing.view.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/viewPagerFragment"
-        android:name="com.example.foodplannerapp.onboarding.view.ViewPagerFragment"
+        android:name="com.example.foodplannerapp.landing.view.ViewPagerFragment"
         android:label="fragment_view_pager"
         tools:layout="@layout/fragment_view_pager" >
         <action
@@ -78,6 +78,9 @@
         <action
             android:id="@+id/action_homeFragment_to_DetailsFragment"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllFragment"
+            app:destination="@id/seeAllFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -163,4 +166,13 @@
         android:name="com.example.foodplannerapp.authentication.view.ForgetPasswordFragment"
         android:label="fragment_forget_password"
         tools:layout="@layout/fragment_forget_password" />
+    <fragment
+        android:id="@+id/seeAllFragment"
+        android:name="com.example.foodplannerapp.home.view.SeeAllFragment"
+        android:label="fragment_see_all"
+        tools:layout="@layout/fragment_see_all" >
+        <action
+            android:id="@+id/action_seeAllFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
 </navigation>

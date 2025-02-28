@@ -2,6 +2,7 @@ package com.example.foodplannerapp.search.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -68,6 +69,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     ImageView noWifiImg;
     TextView noInternetText;
     ProgressBar progressBar;
+    private String item;
 
 
     public SearchFragment() {
@@ -120,20 +122,10 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String item = parent.getItemAtPosition(position).toString();
-                if (item.equals(getString(R.string.categories))) {
+                item = parent.getItemAtPosition(position).toString();
+                loadList();
+                searchField.setText("");
 
-                    presenter.getAllCategories();
-
-
-                } else if (item.equals(getString(R.string.areas))) {
-                    presenter.getAllAreas();
-
-                } else {
-                    presenter.getAllIngredients();
-
-
-                }
 
 
             }
@@ -153,6 +145,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         ingredientAdapter = new RecyclerViewIngredientAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(categoryAdapter);
         list = List.of();
+        item=getString(R.string.categories);
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -179,11 +172,26 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             noInternetGroup.setVisibility(View.GONE);
         });
         turnWIFI.setOnClickListener((v) -> {
-            WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-            wifi.setWifiEnabled(true);
-            wifi.reconnect();
+            Intent panelIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+            getContext().startActivity(panelIntent);
 
         });
+    }
+
+    private void loadList(){
+        if (item.equals(getString(R.string.categories))) {
+
+            presenter.getAllCategories();
+
+
+        } else if (item.equals(getString(R.string.areas))) {
+            presenter.getAllAreas();
+
+        } else {
+            presenter.getAllIngredients();
+
+
+        }
     }
 
     @Override
@@ -314,6 +322,9 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onLostConnection() {
         noInternetGroup.setVisibility(View.VISIBLE);
+        noInternetText.setVisibility(View.VISIBLE);
+        noWifiImg.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
         NoInternetSnackBar.showSnackBar(requireView());
 
 
@@ -321,11 +332,11 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
     @Override
     public void onConnectionReturned() {
+        progressBar.setVisibility(View.VISIBLE);
         noInternetGroup.setVisibility(View.GONE);
         noInternetText.setVisibility(View.GONE);
         noWifiImg.setVisibility(View.GONE);
-        presenter.getAllCategories();
-
+        loadList();
     }
 
     @Override

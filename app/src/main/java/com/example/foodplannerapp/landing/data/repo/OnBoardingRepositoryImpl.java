@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.onboarding.data.repo;
+package com.example.foodplannerapp.landing.data.repo;
 
 import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 
@@ -31,6 +31,10 @@ public class OnBoardingRepositoryImpl {
 
     public boolean getThemeState() {
         return sharedPreferencesManager.getThemeState();
+    }
+    public void setThemeState(boolean themeState){
+
+        sharedPreferencesManager.saveThemeState(themeState);
     }
 
 }

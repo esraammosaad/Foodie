@@ -1,66 +1,131 @@
 package com.example.foodplannerapp.home.view;
 
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.data.local.MealsLocalDataSource;
+import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
+import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
+import com.example.foodplannerapp.home.presenter.PresenterImpl;
+import com.example.foodplannerapp.utilis.NetworkAvailability;
+import com.example.foodplannerapp.utilis.NetworkChangeListener;
+import com.example.foodplannerapp.utilis.NetworkListener;
+import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SeeAllFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class SeeAllFragment extends Fragment {
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class SeeAllFragment extends Fragment implements ViewInterface, HomeListener, NetworkListener {
+
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter myAdapter;
+    private PresenterImpl presenter;
+    private ImageView backIcon;
+    private NetworkChangeListener networkChangeListener;
+
 
     public SeeAllFragment() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SeeAllFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SeeAllFragment newInstance(String param1, String param2) {
-        SeeAllFragment fragment = new SeeAllFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_see_all, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = view.findViewById(R.id.seeAllRecyclerView);
+        backIcon = view.findViewById(R.id.backIcon);
+        recyclerView.setHasFixedSize(true);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        gridLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        recyclerView.setLayoutManager(gridLayoutManager);
+        myAdapter = new RecyclerViewAdapter(getContext(), List.of(), this);
+        recyclerView.setAdapter(myAdapter);
+        presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
+                new MealsLocalDataSource(getContext())), this);
+        presenter.getMealsByFirstLetter();
+        backIcon.setOnClickListener(v -> Navigation.findNavController(v).navigateUp());
+        networkChangeListener = new NetworkChangeListener(this);
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        requireActivity().registerReceiver(networkChangeListener, filter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        requireActivity().unregisterReceiver(networkChangeListener);
+    }
+
+    @Override
+    public void getRandomMeal(Meal meal) {
+
+    }
+
+    @Override
+    public void getMealsByFirstLetter(List<Meal> mealList) {
+        myAdapter.setMealsList(mealList);
+        myAdapter.notifyDataSetChanged();
+
+    }
+
+    @Override
+    public void onFailure(String errorMessage) {
+        if (!NetworkAvailability.isNetworkAvailable(getContext())) {
+            NoInternetSnackBar.showSnackBar(requireView());
+
+        }
+
+    }
+
+    @Override
+    public void onClickListener(Meal meal) {
+        SeeAllFragmentDirections.ActionSeeAllFragmentToDetailsFragment action =
+                SeeAllFragmentDirections.actionSeeAllFragmentToDetailsFragment(Integer.parseInt(meal.getIdMeal()));
+        Navigation.findNavController(requireView()).navigate(action);
+
+    }
+
+    @Override
+    public void onLostConnection() {
+        NoInternetSnackBar.showSnackBar(requireView());
+
+
+    }
+
+    @Override
+    public void onConnectionReturned() {
+
     }
 }

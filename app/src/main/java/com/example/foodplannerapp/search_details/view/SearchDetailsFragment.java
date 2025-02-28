@@ -1,6 +1,7 @@
 package com.example.foodplannerapp.search_details.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -104,18 +105,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setAdapter(myAdapter);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()), new MealsLocalDataSource(getContext())), this);
-        if (selectedItem.equals(getString(R.string.categories))) {
-            presenter.getMealsByCategory(textView.getText().toString());
-
-        } else if (selectedItem.equals(getString(R.string.areas))) {
-            presenter.getMealsByArea(textView.getText().toString());
-
-
-        } else {
-
-            presenter.getMealsByIngredient(textView.getText().toString());
-        }
-
+        loadList();
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -143,12 +133,27 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
             internetGroup.setVisibility(View.GONE);
         });
         turnOnWIFI.setOnClickListener((v) -> {
-            WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
-            wifi.setWifiEnabled(true);
-            wifi.reconnect();
+            Intent panelIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+            getContext().startActivity(panelIntent);
 
         });
 
+
+    }
+
+
+    public void loadList(){
+        if (selectedItem.equals(getString(R.string.categories))) {
+            presenter.getMealsByCategory(textView.getText().toString());
+
+        } else if (selectedItem.equals(getString(R.string.areas))) {
+            presenter.getMealsByArea(textView.getText().toString());
+
+
+        } else {
+
+            presenter.getMealsByIngredient(textView.getText().toString());
+        }
 
     }
 
@@ -219,6 +224,7 @@ public class SearchDetailsFragment extends Fragment implements SearchDetailsList
     public void onConnectionReturned() {
         internetGroup.setVisibility(View.GONE);
         noInternetGroup.setVisibility(View.GONE);
+        loadList();
 
     }
 

@@ -1,6 +1,6 @@
-package com.example.foodplannerapp.onboarding.presenter;
+package com.example.foodplannerapp.landing.presenter;
 
-import com.example.foodplannerapp.onboarding.data.repo.OnBoardingRepositoryImpl;
+import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
 
 public class PresenterImpl {
 
@@ -31,6 +31,10 @@ public class PresenterImpl {
     public boolean getThemeState(){
 
         return onBoardingRepository.getThemeState();
+    }
+    public void setThemeState(boolean themeState){
+
+         onBoardingRepository.setThemeState(themeState);
     }
 
 

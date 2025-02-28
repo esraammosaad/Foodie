@@ -100,13 +100,8 @@ public class ProfileFragment extends Fragment implements NetworkListener {
             guestSecondGroup.setVisibility(View.VISIBLE);
             profileGroup.setVisibility(View.GONE);
 
-            login.setOnClickListener((v) -> {
-                Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment, null,
-                        new NavOptions.Builder()
-                                .setPopUpTo(R.id.profileFragment, true)
-                                .setPopUpTo(R.id.homeFragment, true)
-                                .build());
-            });
+
+
 
         } else {
             userName.setText(presenter.getCurrentUser().getDisplayName());
@@ -138,9 +133,7 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
 
             });
-            guest.setOnClickListener((v) -> {
-                guestGroup.setVisibility(View.GONE);
-            });
+
 
             if (presenter.getCurrentUser().getPhotoUrl() != null) {
                 Glide.with(requireContext()).load(presenter.getCurrentUser().getPhotoUrl()).into(userImg);
@@ -188,6 +181,25 @@ public class ProfileFragment extends Fragment implements NetworkListener {
             });
         }
 
+        login.setOnClickListener((v) -> {
+
+            if (login.getText().toString().equals(getString(R.string.turnOnWifi))) {
+
+                Intent panelIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
+                getContext().startActivity(panelIntent);
+            } else {
+                Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment, null,
+                        new NavOptions.Builder()
+                                .setPopUpTo(R.id.profileFragment, true)
+                                .setPopUpTo(R.id.homeFragment, true)
+                                .build());
+            }
+
+        });
+        guest.setOnClickListener((v) -> {
+            guestGroup.setVisibility(View.GONE);
+        });
+
     }
 
     public void openWebView(String url) {
@@ -198,14 +210,14 @@ public class ProfileFragment extends Fragment implements NetworkListener {
     @Override
     public void onLostConnection() {
 
-        if(isAdded()){
+        if (isAdded()) {
 
-        NoInternetSnackBar.showSnackBar(requireView());
-        guestGroup.setVisibility(View.VISIBLE);
-        noInternetIcon.setImageResource(R.drawable.baseline_wifi_off_24);
-        noInternetText.setText(R.string.noInternetText);
-        guest.setText(R.string.dismiss);
-        login.setText(R.string.turnOnWifi);
+            NoInternetSnackBar.showSnackBar(requireView());
+            guestGroup.setVisibility(View.VISIBLE);
+            noInternetIcon.setImageResource(R.drawable.baseline_wifi_off_24);
+            noInternetText.setText(R.string.noInternetText);
+            guest.setText(R.string.dismiss);
+            login.setText(R.string.turnOnWifi);
         }
 
 

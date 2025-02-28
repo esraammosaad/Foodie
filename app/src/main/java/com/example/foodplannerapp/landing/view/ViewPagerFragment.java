@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.onboarding.view;
+package com.example.foodplannerapp.landing.view;
 
 import android.os.Bundle;
 
