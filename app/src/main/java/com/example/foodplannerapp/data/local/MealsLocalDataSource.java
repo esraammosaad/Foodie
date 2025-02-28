@@ -1,11 +1,15 @@
 package com.example.foodplannerapp.data.local;
 
+import android.Manifest;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.util.Log;
+
+import androidx.core.app.ActivityCompat;
 
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
@@ -69,38 +73,47 @@ public class MealsLocalDataSource {
     }
 
     public void addMealToMobileCalendar(int year, int month, int day, Meal meal) {
-        Cursor cursor = context.
-                getContentResolver().
-                query(
-                        android.provider.CalendarContract.Calendars.CONTENT_URI, new String[]{
-                                CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME}, null, null, null
-                );
-        if (cursor != null) {
-            if (cursor.moveToFirst()) {
-                String text = "";
 
-                for (int i = 0; i < cursor.getCount(); i++) {
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            Cursor cursor = context.
+                    getContentResolver().
+                    query(
+                            android.provider.CalendarContract.Calendars.CONTENT_URI, new String[]{
+                                    CalendarContract.Calendars._ID, CalendarContract.Calendars.NAME}, null, null, null
+                    );
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    String text = "";
 
-                    text += "ID: " + cursor.getInt(0) + "\n" + "Name: " + cursor.getString(1) + "\n\n";
-                    cursor.moveToNext();
+                    for (int i = 0; i < cursor.getCount(); i++) {
+
+                        text += "ID: " + cursor.getInt(0) + "\n" + "Name: " + cursor.getString(1) + "\n\n";
+                        cursor.moveToNext();
+                    }
+
+                    Log.i("TAG", "onViewCreated: " + text);
+
                 }
-
-                Log.i("TAG", "onViewCreated: " + text);
 
             }
 
-        }
+            ContentValues values = getContentValues(year, month, day, meal);
+            Uri uri = context.getContentResolver().insert(CalendarContract.Events.CONTENT_URI, values);
+            Log.i("TAG", "onViewCreated: " + uri.toString());
 
-        ContentValues values = getContentValues(year, month, day, meal);
-        Uri uri = context.getContentResolver().insert(CalendarContract.Events.CONTENT_URI, values);
-        Log.i("TAG", "onViewCreated: " + uri.toString());
+        }
     }
 
     public void deleteMealFromMobileCalendar(int year, int month, int day, Meal meal) {
-        String selection = CalendarContract.Events.CALENDAR_ID + " = ? AND "+CalendarContract.Events.TITLE + " = ? ";
-        String[] selectionArgs = new String[]{String.valueOf(4),meal.getStrMeal()};
-        int result = context.getContentResolver().delete(CalendarContract.Events.CONTENT_URI, selection, selectionArgs);
-        Log.i("TAG", result > 0 ? "deleteMealFromMobileCalendar: success" : "deleteMealFromMobileCalendar: failed");
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            String selection = CalendarContract.Events.CALENDAR_ID + " = ? AND " + CalendarContract.Events.TITLE + " = ? ";
+            String[] selectionArgs = new String[]{String.valueOf(4), meal.getStrMeal()};
+            int result = context.getContentResolver().delete(CalendarContract.Events.CONTENT_URI, selection, selectionArgs);
+            Log.i("TAG", result > 0 ? "deleteMealFromMobileCalendar: success" : "deleteMealFromMobileCalendar: failed");
+        }
     }
 
     public ContentValues getContentValues(int year, int month, int day, Meal meal) {
