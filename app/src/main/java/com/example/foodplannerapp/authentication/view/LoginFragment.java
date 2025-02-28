@@ -53,6 +53,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
     private ProgressBar progressBar;
     private ImageView googleIcon;
     private ImageView guestIcon;
+    TextView forgotPassword;
 
 
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
@@ -99,8 +100,12 @@ public class LoginFragment extends Fragment implements ViewInterface {
         progressBar = view.findViewById(R.id.progressBar2);
         googleIcon = view.findViewById(R.id.userImg);
         guestIcon = view.findViewById(R.id.imageView2);
+        forgotPassword = view.findViewById(R.id.forgotPassText);
         emailError.setVisibility(View.GONE);
         passwordError.setVisibility(View.GONE);
+        forgotPassword.setOnClickListener((v) -> {
+            Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgetPasswordFragment);
+        });
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(),
                 FiresStoreServices.getInstance()),
                 MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
@@ -169,9 +174,9 @@ public class LoginFragment extends Fragment implements ViewInterface {
                 progressBar.setVisibility(View.VISIBLE);
                 loginButton.setVisibility(View.INVISIBLE);
                 signInWithGoogle.setVisibility(View.INVISIBLE);
-                visitAsAGuestButton.setVisibility(View.INVISIBLE);
-                googleIcon.setVisibility(View.INVISIBLE);
-                guestIcon.setVisibility(View.INVISIBLE);
+                visitAsAGuestButton.setVisibility(View.GONE);
+                googleIcon.setVisibility(View.GONE);
+                guestIcon.setVisibility(View.GONE);
             } else {
                 NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
             }
@@ -200,6 +205,11 @@ public class LoginFragment extends Fragment implements ViewInterface {
             snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
             snackbar.show();
             progressBar.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+            signInWithGoogle.setVisibility(View.VISIBLE);
+            visitAsAGuestButton.setVisibility(View.VISIBLE);
+            googleIcon.setVisibility(View.VISIBLE);
+            guestIcon.setVisibility(View.VISIBLE);
             presenter.getFavoriteMealsFromFireStore();
             presenter.getCalendarMealsFromFireStore();
 
@@ -215,6 +225,11 @@ public class LoginFragment extends Fragment implements ViewInterface {
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
         progressBar.setVisibility(View.GONE);
+        loginButton.setVisibility(View.VISIBLE);
+        signInWithGoogle.setVisibility(View.VISIBLE);
+        visitAsAGuestButton.setVisibility(View.VISIBLE);
+        googleIcon.setVisibility(View.VISIBLE);
+        guestIcon.setVisibility(View.VISIBLE);
 
 
 

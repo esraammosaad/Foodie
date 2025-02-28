@@ -42,9 +42,9 @@ import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 import com.google.android.material.snackbar.Snackbar;
+
 import java.util.List;
 import java.util.Map;
-
 
 
 public class SearchFragment extends Fragment implements SearchListener, ViewInterface, NetworkListener {
@@ -70,7 +70,6 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     ProgressBar progressBar;
 
 
-
     public SearchFragment() {
     }
 
@@ -90,19 +89,19 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        networkChangeListener=new NetworkChangeListener(this);
+        networkChangeListener = new NetworkChangeListener(this);
         selectedItem = view.findViewById(R.id.selectedItemText);
         filter = view.findViewById(R.id.filterIcon);
         filterIcon = view.findViewById(R.id.filterSmallIcon);
         searchField = view.findViewById(R.id.searchTextField);
-        noInternetGroup=view.findViewById(R.id.internetGroup);
-        turnWIFI=view.findViewById(R.id.turnWIFI2);
-        dismiss=view.findViewById(R.id.dismiss2);
-        noWifiImg=view.findViewById(R.id.noWifiImg);
-        noInternetText=view.findViewById(R.id.noInternet);
+        noInternetGroup = view.findViewById(R.id.internetGroup);
+        turnWIFI = view.findViewById(R.id.turnWIFI2);
+        dismiss = view.findViewById(R.id.dismiss2);
+        noWifiImg = view.findViewById(R.id.noWifiImg);
+        noInternetText = view.findViewById(R.id.noInternet);
         recyclerView = view.findViewById(R.id.searchRecyclerView);
         spinner = view.findViewById(R.id.spinner);
-        progressBar=view.findViewById(R.id.progressBar3);
+        progressBar = view.findViewById(R.id.progressBar3);
         String[] items = {getString(R.string.categories), getString(R.string.ingredients), getString(R.string.areas)};
 
         ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>
@@ -122,23 +121,19 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String item = parent.getItemAtPosition(position).toString();
-                    if (item.equals(getString(R.string.categories))) {
+                if (item.equals(getString(R.string.categories))) {
 
-                        presenter.getAllCategories();
-
-
-                    } else if (item.equals(getString(R.string.areas))) {
-                        presenter.getAllAreas();
-
-                    } else {
-                        presenter.getAllIngredients();
+                    presenter.getAllCategories();
 
 
+                } else if (item.equals(getString(R.string.areas))) {
+                    presenter.getAllAreas();
 
-                    }
+                } else {
+                    presenter.getAllIngredients();
 
 
-
+                }
 
 
             }
@@ -169,7 +164,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
 
-                   presenter.search(s, list);
+                presenter.search(s, list);
 
             }
 
@@ -179,11 +174,11 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             }
         };
         searchField.addTextChangedListener(textWatcher);
-        dismiss.setOnClickListener((v)->{
+        dismiss.setOnClickListener((v) -> {
 
             noInternetGroup.setVisibility(View.GONE);
         });
-        turnWIFI.setOnClickListener((v)->{
+        turnWIFI.setOnClickListener((v) -> {
             WifiManager wifi = (WifiManager) getContext().getSystemService(Context.WIFI_SERVICE);
             wifi.setWifiEnabled(true);
             wifi.reconnect();
@@ -195,7 +190,8 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     public void onStart() {
         super.onStart();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        requireActivity().registerReceiver(networkChangeListener, filter);    }
+        requireActivity().registerReceiver(networkChangeListener, filter);
+    }
 
     @Override
     public void onStop() {
@@ -206,6 +202,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onSuccess(List list) {
         this.list = list;
+        if(!list.isEmpty()){
         if (list.get(0) instanceof Category) {
             searchField.setHint("Search Category");
             selectedItem.setText(R.string.categories);
@@ -228,8 +225,9 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
 
         }
+        }
 
-        if(!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()){
+        if (!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()) {
 
             noInternetText.setVisibility(View.VISIBLE);
             noWifiImg.setVisibility(View.VISIBLE);
@@ -244,24 +242,26 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
 
     @Override
     public void onSearch(List list) {
-        if (list.get(0) instanceof Category) {
+        if (!list.isEmpty()) {
+            if (list.get(0) instanceof Category) {
 
-            categoryAdapter.setCategoryList(list);
-            categoryAdapter.notifyDataSetChanged();
-
-
-        } else if (list.get(0) instanceof Area) {
+                categoryAdapter.setCategoryList(list);
+                categoryAdapter.notifyDataSetChanged();
 
 
-            areaAdapter.setAreaList(list);
-            areaAdapter.notifyDataSetChanged();
-
-        } else {
-
-            ingredientAdapter.setIngredientList(list);
-            ingredientAdapter.notifyDataSetChanged();
+            } else if (list.get(0) instanceof Area) {
 
 
+                areaAdapter.setAreaList(list);
+                areaAdapter.notifyDataSetChanged();
+
+            } else {
+
+                ingredientAdapter.setIngredientList(list);
+                ingredientAdapter.notifyDataSetChanged();
+
+
+            }
         }
 
     }
@@ -269,7 +269,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onFailure(String errorMessage) {
 
-        if(!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()){
+        if (!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()) {
 
             noInternetText.setVisibility(View.VISIBLE);
             noWifiImg.setVisibility(View.VISIBLE);

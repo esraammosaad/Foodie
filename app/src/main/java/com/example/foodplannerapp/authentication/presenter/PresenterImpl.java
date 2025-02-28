@@ -45,6 +45,10 @@ public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebas
 
         authenticationRepository.login(email, password, this);
     }
+    public void forgetPassword(String email) {
+
+        authenticationRepository.forgetPassword(email, this);
+    }
 
     public void loginWithGoogle(ActivityResult result) throws ApiException {
 

@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
                 android:background="?attr/colorOnSurface"
                 android:dateTextAppearance="@style/TextAppearance.AppCompat.Small"
@@ -36,20 +36,7 @@
                 android:weekDayTextAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/view5" />
-
-            <TextView
-                android:id="@+id/textView17"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="@string/appName"
-                android:textColor="@color/primaryColor"
-                android:textSize="34sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/guest" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline9"
@@ -64,17 +51,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="20dp" />
-
-            <ImageView
-                android:id="@+id/menuIcon2"
-                android:layout_width="32dp"
-                android:layout_height="34dp"
-                android:layout_marginTop="56dp"
-                android:src="@drawable/baseline_menu_24"
-                app:layout_constraintEnd_toStartOf="@+id/textView17"
-                app:layout_constraintHorizontal_bias="0.033"
-                app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/calendarRecyclerView"
@@ -109,18 +85,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
                 android:backgroundTint="#FAF9F6"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/noInternetText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="260dp"
+                android:layout_height="22dp"
                 android:layout_marginTop="24dp"
                 android:text="@string/please_sign_in_to_can_schedule_your_meals"
                 app:layout_constraintStart_toEndOf="@+id/noInternetIcon"

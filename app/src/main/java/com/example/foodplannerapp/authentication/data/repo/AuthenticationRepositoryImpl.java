@@ -19,33 +19,39 @@ public class AuthenticationRepositoryImpl {
     private final FiresStoreServices firesStoreServices;
     private static AuthenticationRepositoryImpl instance;
 
-    private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices){
+    private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices) {
         this.authenticationServices = authenticationServices;
-        this.firesStoreServices=firesStoreServices;
+        this.firesStoreServices = firesStoreServices;
     }
 
-    public static AuthenticationRepositoryImpl getInstance(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices){
+    public static AuthenticationRepositoryImpl getInstance(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices) {
 
-        if(instance==null){
-            instance=new AuthenticationRepositoryImpl(authenticationServices, firesStoreServices);
+        if (instance == null) {
+            instance = new AuthenticationRepositoryImpl(authenticationServices, firesStoreServices);
         }
 
         return instance;
 
     }
 
-    public void register(String email , String password, String name,AuthenticationCallBack authenticationCallBack){
-        authenticationServices.register(email, password, name,authenticationCallBack );
+    public void register(String email, String password, String name, AuthenticationCallBack authenticationCallBack) {
+        authenticationServices.register(email, password, name, authenticationCallBack);
 
     }
 
-    public void login(String email , String password, AuthenticationCallBack authenticationCallBack){
+    public void login(String email, String password, AuthenticationCallBack authenticationCallBack) {
 
         authenticationServices.login(email, password, authenticationCallBack);
 
     }
-    public void loginWithGoogle(ActivityResult result, AuthenticationCallBack authenticationCallBack) throws ApiException {
 
+    public void forgetPassword(String email, AuthenticationCallBack authenticationCallBack) {
+
+        authenticationServices.forgetPassword(email, authenticationCallBack);
+
+    }
+
+    public void loginWithGoogle(ActivityResult result, AuthenticationCallBack authenticationCallBack) throws ApiException {
 
 
         authenticationServices.loginWithGoogle(result, authenticationCallBack);
@@ -53,50 +59,50 @@ public class AuthenticationRepositoryImpl {
 
     }
 
-    public GoogleSignInClient initGoogleSignIn(Context context){
+    public GoogleSignInClient initGoogleSignIn(Context context) {
 
         return authenticationServices.initGoogleSignIn(context);
     }
 
-    public GoogleSignInClient getGoogleSignInClient(){
+    public GoogleSignInClient getGoogleSignInClient() {
 
         return authenticationServices.getGoogleSignInClient();
     }
 
 
-    public FirebaseUser getCurrentUser(){
+    public FirebaseUser getCurrentUser() {
 
         return authenticationServices.getCurrentUser();
     }
 
-    public void signOut(){
+    public void signOut() {
 
         authenticationServices.signOut();
 
 
     }
 
-    public void getFavoriteMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack){
+    public void getFavoriteMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
 
-        firesStoreServices.getFavoriteMealsFromFireStore(getCurrentUser().getUid(),getDataFromFirebaseCallBack);
+        firesStoreServices.getFavoriteMealsFromFireStore(getCurrentUser().getUid(), getDataFromFirebaseCallBack);
     }
 
-    public void getCalendarMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack){
+    public void getCalendarMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
 
-        firesStoreServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(),getDataFromFirebaseCallBack);
+        firesStoreServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(), getDataFromFirebaseCallBack);
     }
 
-    public void saveThemeState(Context context, boolean state){
+    public void saveThemeState(Context context, boolean state) {
 
         SharedPreferencesManager.getInstance(context).saveThemeState(state);
 
     }
 
-    public boolean getThemeState(Context context){
+    public boolean getThemeState(Context context) {
 
         return SharedPreferencesManager.getInstance(context).getThemeState();
 
     }
 
 
-    }
+}

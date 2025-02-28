@@ -33,6 +33,7 @@ import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
+import com.example.foodplannerapp.utilis.ShareApp;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 
@@ -182,16 +183,9 @@ public class ProfileFragment extends Fragment implements NetworkListener {
 
             });
             shareAppIcon.setOnClickListener((v) -> {
-                try {
-                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                    shareIntent.setType("text/plain");
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Foodie");
-                    String shareMessage = "\nLet me recommend you this application\n\n";
-                    shareMessage += "https://drive.google.com/drive/folders/1EQSISR97_Ym3OGLvyP8iv8KwizbRMxht?usp=drive_link";
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
-                    startActivity(Intent.createChooser(shareIntent, "choose one"));
-                } catch (Exception e) {
-                }
+
+                startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
+
 
             });
         }

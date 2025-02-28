@@ -207,13 +207,18 @@ public class RegisterFragment extends Fragment implements ViewInterface {
     public void onSuccess(String message) {
 
         if (presenter.getCurrentUser() != null) {
-        Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
-        Snackbar snackbar = Snackbar
-                .make(requireView(), message, Snackbar.LENGTH_LONG);
-        snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
-        snackbar.show();
-        progressBar.setVisibility(View.GONE);}
-
+            Navigation.findNavController(requireView()).navigateUp();
+            Snackbar snackbar = Snackbar
+                    .make(requireView(), message, Snackbar.LENGTH_LONG);
+            snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
+            snackbar.show();
+            progressBar.setVisibility(View.GONE);
+            registerButton.setVisibility(View.VISIBLE);
+            signInWithGoogle.setVisibility(View.VISIBLE);
+            visitAsAGuestButton.setVisibility(View.VISIBLE);
+            googleIcon.setVisibility(View.VISIBLE);
+            guestIcon.setVisibility(View.VISIBLE);
+        }
 
 
     }
@@ -225,6 +230,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         snackbar.setBackgroundTint(Color.RED);
         snackbar.show();
         progressBar.setVisibility(View.GONE);
+        registerButton.setVisibility(View.VISIBLE);
+        signInWithGoogle.setVisibility(View.VISIBLE);
+        visitAsAGuestButton.setVisibility(View.VISIBLE);
+        googleIcon.setVisibility(View.VISIBLE);
+        guestIcon.setVisibility(View.VISIBLE);
 
 
     }

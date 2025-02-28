@@ -32,30 +32,6 @@
                 app:layout_constraintTop_toTopOf="@+id/textView19"
                 tools:text="Dessert" />
 
-            <ImageView
-                android:id="@+id/menuIcon"
-                android:layout_width="32dp"
-                android:layout_height="34dp"
-                android:layout_marginTop="56dp"
-                android:src="@drawable/baseline_menu_24"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="@string/appName"
-                android:textColor="@color/primaryColor"
-                android:textSize="34sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
             <TextView
                 android:id="@+id/textView10"
                 android:layout_width="wrap_content"
@@ -292,7 +268,7 @@
                 android:id="@+id/noInternetBanner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:constraint_referenced_ids="view5,noInternetIcon,noInternetText,dismiss,turnWIFI" />
 
             <View
@@ -300,14 +276,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
                 android:backgroundTint="#FAF9F6"
+                android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/guideline4"
                 app:layout_constraintHorizontal_bias="0.951"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:id="@+id/noInternetIcon"

@@ -59,6 +59,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
     private TextView turnWIFI;
     private NetworkChangeListener networkChangeListener;
 
+
     public HomeFragment() {
     }
 
@@ -103,6 +104,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
                 new MealsLocalDataSource(getContext())), this);
         presenter.getMealsByFirstLetter();
         presenter.getRandomMeal();
+
         refreshButton.setOnClickListener((v) -> {
             if (NetworkAvailability.isNetworkAvailable(getContext())) {
 

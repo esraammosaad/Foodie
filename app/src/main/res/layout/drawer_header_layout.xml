@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+
+
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/userImg"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:background="?attr/colorPrimaryFixed"
+        android:backgroundTint="?attr/colorPrimaryContainer"
+        android:padding="7dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:shapeAppearance="@style/circleImageView"
+        app:srcCompat="@drawable/img"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp"
+
+        />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/inter_semibold"
+        android:textSize="18dp"
+        app:layout_constraintEnd_toEndOf="@+id/userImg"
+        app:layout_constraintStart_toStartOf="@+id/userImg"
+        app:layout_constraintTop_toBottomOf="@+id/userImg"
+        tools:text="Albert Stevano Bajefski" />
+
+    <TextView
+        android:id="@+id/userEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="3dp"
+        android:fontFamily="@font/inter"
+        android:textColor="#878787"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/userName"
+        app:layout_constraintStart_toStartOf="@+id/userName"
+        app:layout_constraintTop_toBottomOf="@+id/userName"
+        tools:text="Albertstevano@gmail.com"
+
+        />
+
+
+</LinearLayout>

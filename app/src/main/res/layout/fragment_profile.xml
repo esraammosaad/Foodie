@@ -39,13 +39,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
                 android:backgroundTint="#FAF9F6"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/noInternetText"
@@ -105,30 +105,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.94910944" />
-
-            <ImageView
-                android:id="@+id/menuIcon"
-                android:layout_width="32dp"
-                android:layout_height="34dp"
-                android:layout_marginTop="56dp"
-                android:src="@drawable/baseline_menu_24"
-                app:layout_constraintEnd_toStartOf="@+id/textView9"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
-                android:fontFamily="@font/inter_semibold"
-                android:text="@string/appName"
-                android:textColor="@color/primaryColor"
-                android:textSize="34sp"
-                app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                app:layout_constraintStart_toStartOf="@+id/guideline"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/editProfileCard"
@@ -273,7 +249,7 @@
                 android:id="@+id/userImg"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="20dp"
                 android:background="?attr/colorPrimaryFixed"
                 android:backgroundTint="?attr/colorPrimaryContainer"
                 android:padding="7dp"

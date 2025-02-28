@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group1">
+        <item
+            android:id="@+id/darkMode"
+            android:icon="@drawable/moon"
+            android:title="@string/dark_mode" />
+
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/baseline_share_24"
+            android:title="@string/share_app"
+
+            />
+    </group>
+
+    <group android:id="@+id/group2">
+        <item
+            android:id="@+id/logout"
+            android:icon="@drawable/baseline_logout_24"
+            android:title="@string/logout"
+            
+
+            />
+    </group>
+
+</menu>

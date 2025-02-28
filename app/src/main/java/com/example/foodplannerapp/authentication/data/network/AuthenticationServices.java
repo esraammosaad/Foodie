@@ -1,10 +1,13 @@
 package com.example.foodplannerapp.authentication.data.network;
 
 import static android.app.Activity.RESULT_OK;
+
 import android.content.Context;
 import android.util.Log;
+
 import androidx.activity.result.ActivityResult;
 import androidx.annotation.NonNull;
+
 import com.example.foodplannerapp.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -61,10 +64,17 @@ public class AuthenticationServices {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             currentUser = firebaseAuth.getCurrentUser();
-                            authenticationCallBack.onSuccess("Register Done Successfully");
-                            if (currentUser != null)
-                                currentUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).build());
+                            currentUser.sendEmailVerification().addOnCompleteListener(task2 -> {
+                                if (task2.isSuccessful()) {
+                                    authenticationCallBack.onSuccess("Register Done Successfully, Verification Email Sent");
+                                    if (currentUser != null)
+                                        currentUser.updateProfile(new UserProfileChangeRequest.Builder().setDisplayName(name).build());
+
+                                }
+                            });
+
 
                         } else {
 
@@ -84,13 +94,34 @@ public class AuthenticationServices {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+
                             currentUser = firebaseAuth.getCurrentUser();
-                            authenticationCallBack.onSuccess("Login Done Successfully");
+                            if (currentUser.isEmailVerified()) {
+                                authenticationCallBack.onSuccess("Login Done Successfully");
+                            } else {
+
+                                authenticationCallBack.onFailure("Please Verify Your Email");
+                            }
                         } else {
                             authenticationCallBack.onFailure(task.getException().getMessage());
 
 
                         }
+                    }
+                });
+
+
+    }
+
+    public void forgetPassword(String email, AuthenticationCallBack authenticationCallBack) {
+        firebaseAuth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        authenticationCallBack.onSuccess("Password Reset Link Sent");
+
+                    } else {
+
+                        authenticationCallBack.onFailure(task.getException().getMessage());
                     }
                 });
 
@@ -141,13 +172,13 @@ public class AuthenticationServices {
 
     }
 
-    public void signOut(){
+    public void signOut() {
 
-            firebaseAuth.signOut();
-            currentUser=null;
+        firebaseAuth.signOut();
+        currentUser = null;
 
-        }
     }
+}
 
 
 

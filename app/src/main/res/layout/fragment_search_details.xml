@@ -32,7 +32,7 @@
                 style="@style/text_field"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="@font/inter"
                 android:hint="@string/searchMeal"
                 android:inputType="text"
@@ -42,7 +42,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/guideline12"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
-                app:layout_constraintTop_toBottomOf="@+id/backIconSearch" />
+                app:layout_constraintTop_toBottomOf="@+id/view4" />
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -85,11 +85,11 @@
                 android:id="@+id/searchDetailsImage"
                 android:layout_width="wrap_content"
                 android:layout_height="120dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="12dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline12"
                 app:layout_constraintHorizontal_bias="0.484"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
-                app:layout_constraintTop_toBottomOf="@+id/view4"
+                app:layout_constraintTop_toBottomOf="@+id/searchTextFieldDetails"
                 tools:src="@drawable/beef" />
 
             <View
@@ -179,13 +179,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rounded_view"
                 android:backgroundTint="#FAF9F6"
                 app:layout_constraintEnd_toStartOf="@+id/guideline12"
                 app:layout_constraintStart_toStartOf="@+id/guideline11"
-                app:layout_constraintTop_toBottomOf="@+id/searchTextFieldDetails" />
+                app:layout_constraintTop_toBottomOf="@+id/mealNameDetails" />
 
             <ImageView
                 android:id="@+id/noInternetIcon2"
