@@ -49,29 +49,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="20dp" />
+                app:layout_constraintGuide_begin="15dp" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guideline10"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_end="20dp" />
+                app:layout_constraintGuide_end="15dp" />
 
             <EditText
                 android:id="@+id/searchTextField"
                 style="@style/text_field"
-                android:layout_width="280dp"
+                android:layout_width="255dp"
                 android:layout_height="55dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginStart="0dp"
                 android:fontFamily="@font/inter"
                 android:hint="@string/search"
                 android:inputType="text"
                 android:paddingStart="32dp"
                 android:textColor="#C2C2C2"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toBottomOf="@+id/dismiss2" />
 
             <ImageView
@@ -89,10 +89,11 @@
             <View
                 android:id="@+id/filterIcon"
                 style="@style/text_field"
-                android:layout_width="60dp"
+                android:layout_width="55dp"
                 android:layout_height="55dp"
+                android:layout_marginEnd="0dp"
                 app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toStartOf="@+id/guideline10" />
 
             <ImageView
                 android:id="@+id/filterSmallIcon"

@@ -176,7 +176,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
                             presenter.addMealToCalendar(calenderMealModel);
                             presenter.insertCalendarMealToFireStore(calenderMealModel);
-                            presenter.addMealToMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth(), calenderMealModel.getDay(), meal);
+                            presenter.addMealToMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth()-1, calenderMealModel.getDay(), meal);
 
                         });
                 snackbar.show();

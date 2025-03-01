@@ -1,7 +1,10 @@
 package com.example.foodplannerapp.landing.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.viewpager2.widget.ViewPager2;
@@ -45,6 +48,7 @@ public class OnboardingFragmentOne extends Fragment {
         nextBtn=view.findViewById(R.id.nextText);
         skipBtn=view.findViewById(R.id.skipText);
         viewPager=getActivity().findViewById(R.id.viewPager2);
+        calendarPermission();
         presenter= PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
         nextBtn.setOnClickListener((v)->{
 
@@ -62,4 +66,17 @@ public class OnboardingFragmentOne extends Fragment {
 
         return view;
     }
+
+    private void calendarPermission() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
+                    1);
+        }
+
+
+    }
+
 }

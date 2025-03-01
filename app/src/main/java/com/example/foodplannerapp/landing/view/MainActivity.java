@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavBar);
         presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(this)));
-        calendarPermission();
         appName = findViewById(R.id.textView9);
         menuIcon = findViewById(R.id.menuIcon);
         drawerLayout = findViewById(R.id.main);
@@ -120,11 +119,17 @@ public class MainActivity extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else {
                     if (NetworkAvailability.isNetworkAvailable(this)) {
-                        signOut();
+                        if (AuthenticationServices.getInstance().getCurrentUser() != null) {
+                            signOut();
+                        }
+                        drawerLayout.closeDrawer(GravityCompat.START);
+
 
                     } else {
 
                         NoInternetDialog.showNoInternetDialog(this, getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+                        drawerLayout.closeDrawer(GravityCompat.START);
+
 
 
                     }
@@ -138,17 +143,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void calendarPermission() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CALENDAR) != PackageManager.PERMISSION_GRANTED ||
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR},
-                    1);
-        }
-
-
-    }
 
     private void signOut() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
