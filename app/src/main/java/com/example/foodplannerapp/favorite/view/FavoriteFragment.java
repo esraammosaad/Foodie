@@ -93,13 +93,16 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
             lottieAnimationView.setVisibility(View.VISIBLE);
             emptyFavText.setVisibility(View.VISIBLE);
             guestGroup.setVisibility(View.VISIBLE);
+            emptyFavText.setText(R.string.signInNow);
 
 
         }
         signInText.setOnClickListener((v) -> {
-            Navigation.findNavController(requireView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
+            Navigation.findNavController(getView()).navigate(R.id.action_favoriteFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.favoriteFragment,true)
+                            .setPopUpTo(R.id.favoriteFragment, true)
+                            .setPopUpTo(R.id.calenderFragment, true)
+                            .setPopUpTo(R.id.searchFragment, true)
                             .setPopUpTo(R.id.homeFragment, true)
                             .build());
         });

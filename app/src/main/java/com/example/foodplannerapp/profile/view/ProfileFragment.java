@@ -97,10 +97,20 @@ public class ProfileFragment extends Fragment implements NetworkListener {
         networkChangeListener = new NetworkChangeListener(this);
         if (presenter.getCurrentUser() == null) {
             guestGroup.setVisibility(View.VISIBLE);
-            guestSecondGroup.setVisibility(View.VISIBLE);
-            profileGroup.setVisibility(View.GONE);
 
-
+            userName.setText("Guest");
+            userEmail.setText("Sign in to see your profile");
+            signOutButton.setText("Sign In");
+            signOutButton.setOnClickListener((v) -> {
+                Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment, null,
+                        new NavOptions.Builder()
+                                .setPopUpTo(R.id.profileFragment, true)
+                                .setPopUpTo(R.id.favoriteFragment, true)
+                                .setPopUpTo(R.id.calenderFragment, true)
+                                .setPopUpTo(R.id.searchFragment, true)
+                                .setPopUpTo(R.id.homeFragment, true)
+                                .build());
+            });
 
 
         } else {
@@ -113,12 +123,12 @@ public class ProfileFragment extends Fragment implements NetworkListener {
                     builder.setMessage("Are you sure you want to sign out ?");
                     builder.setTitle(R.string.alert);
                     builder.setCancelable(false);
-                    builder.setNegativeButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
+                    builder.setPositiveButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
                         presenter.signOut();
                         Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_loginFragment);
 
                     });
-                    builder.setPositiveButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
+                    builder.setNegativeButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
                         dialog.cancel();
                     });
                     AlertDialog alertDialog = builder.create();
@@ -138,48 +148,51 @@ public class ProfileFragment extends Fragment implements NetworkListener {
             if (presenter.getCurrentUser().getPhotoUrl() != null) {
                 Glide.with(requireContext()).load(presenter.getCurrentUser().getPhotoUrl()).into(userImg);
             }
-            darkModeSwitch.setChecked(presenter.getThemeState(getContext()));
-            darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    presenter.saveThemeState(requireContext(), true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
 
-
-                } else {
-                    presenter.saveThemeState(requireContext(), false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-
-                }
-            });
-            githubIcon.setOnClickListener((v) -> {
-                openWebView("https://github.com/esraammosaad");
-
-
-            });
-            linkedinIcon.setOnClickListener((v) -> {
-
-                openWebView("https://www.linkedin.com/in/esraa-mosaad-b8ba2724a/");
-            });
-            googleIcon.setOnClickListener((v) -> {
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setData(Uri.parse("mailto:"));
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"esraa.m.mosaad@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Foodie App");
-
-                if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-                    startActivity(intent);
-                }
-
-
-            });
-            shareAppIcon.setOnClickListener((v) -> {
-
-                startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
-
-
-            });
         }
+
+
+        darkModeSwitch.setChecked(presenter.getThemeState(getContext()));
+        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                presenter.saveThemeState(requireContext(), true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
+
+            } else {
+                presenter.saveThemeState(requireContext(), false);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
+
+            }
+        });
+        githubIcon.setOnClickListener((v) -> {
+            openWebView("https://github.com/esraammosaad");
+
+
+        });
+        linkedinIcon.setOnClickListener((v) -> {
+
+            openWebView("https://www.linkedin.com/in/esraa-mosaad-b8ba2724a/");
+        });
+        googleIcon.setOnClickListener((v) -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:"));
+            intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"esraa.m.mosaad@gmail.com"});
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Foodie App");
+
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+
+        });
+        shareAppIcon.setOnClickListener((v) -> {
+
+            startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
+
+
+        });
 
         login.setOnClickListener((v) -> {
 
@@ -191,6 +204,9 @@ public class ProfileFragment extends Fragment implements NetworkListener {
                 Navigation.findNavController(getView()).navigate(R.id.action_profileFragment_to_loginFragment, null,
                         new NavOptions.Builder()
                                 .setPopUpTo(R.id.profileFragment, true)
+                                .setPopUpTo(R.id.favoriteFragment, true)
+                                .setPopUpTo(R.id.calenderFragment, true)
+                                .setPopUpTo(R.id.searchFragment, true)
                                 .setPopUpTo(R.id.homeFragment, true)
                                 .build());
             }

@@ -126,15 +126,16 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         } else {
 
             guestGroup.setVisibility(View.VISIBLE);
-            textCalendar.setText(R.string.sign_in_now_to_scheduler_your_meals);
+            textCalendar.setText(R.string.sign_in_now_to_schedule_your_meals);
 
 
         }
         signInText.setOnClickListener((v) -> {
 
-            Navigation.findNavController(requireView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
+            Navigation.findNavController(getView()).navigate(R.id.action_calenderFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.calendarView, true)
+                            .setPopUpTo(R.id.calenderFragment, true)
+                            .setPopUpTo(R.id.searchFragment, true)
                             .setPopUpTo(R.id.homeFragment, true)
                             .build());
         });

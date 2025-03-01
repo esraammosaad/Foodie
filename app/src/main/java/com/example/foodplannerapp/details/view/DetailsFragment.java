@@ -222,8 +222,11 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
             Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment, null,
                     new NavOptions.Builder()
-                            .setPopUpTo(R.id.detailsFragment, true)
-                            .setPopUpTo(R.id.profileFragment, true)
+                            .setPopUpTo(R.id.favoriteFragment, true)
+                            .setPopUpTo(R.id.calenderFragment, true)
+                            .setPopUpTo(R.id.searchDetailsFragment,true)
+                            .setPopUpTo(R.id.searchFragment, true)
+                            .setPopUpTo(R.id.homeFragment, true)
                             .build());
 
         });

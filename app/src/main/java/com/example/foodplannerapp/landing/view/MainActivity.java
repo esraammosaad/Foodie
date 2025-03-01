@@ -81,9 +81,12 @@ public class MainActivity extends AppCompatActivity {
                         Glide.with(this).load(currentUser.getPhotoUrl()).into(userImg);
 
                     } else {
-
                         userImg.setImageResource(R.drawable.img);
                     }
+                } else {
+                    userName.setText("Guest");
+                    userEmail.setText("Sign in to see your profile");
+
                 }
 
                 bottomNav.setVisibility(View.VISIBLE);
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
         navView.setNavigationItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.darkMode) {
@@ -104,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 if (!presenter.getThemeState()) {
                     presenter.setThemeState(true);
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+
 
                 } else {
                     presenter.setThemeState(false);
@@ -131,7 +136,6 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
 
 
-
                     }
 
 
@@ -145,11 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void signOut() {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.are_you_sure_you_want_to_sign_out);
         builder.setTitle(R.string.alert);
         builder.setCancelable(false);
-        builder.setNegativeButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
+        builder.setPositiveButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
             AuthenticationServices.getInstance().signOut();
             userImg = null;
             navController.navigate(R.id.loginFragment, null, new NavOptions.Builder()
@@ -162,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
 
         });
-        builder.setPositiveButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
+        builder.setNegativeButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
             dialog.cancel();
         });
         AlertDialog alertDialog = builder.create();
