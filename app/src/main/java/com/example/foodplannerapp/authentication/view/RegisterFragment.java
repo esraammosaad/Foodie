@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -66,14 +67,14 @@ public class RegisterFragment extends Fragment implements ViewInterface {
                 @Override
                 public void onActivityResult(ActivityResult result) {
 
-                    if(result.getResultCode()==RESULT_OK){
+                    if (result.getResultCode() == RESULT_OK) {
 
-                    try {
-                        presenter.loginWithGoogle(result);
-                    } catch (ApiException e) {
-                        throw new RuntimeException(e);
-                    }
-                    }else {
+                        try {
+                            presenter.loginWithGoogle(result);
+                        } catch (ApiException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
                         Snackbar snackbar = Snackbar
                                 .make(requireView(), "Canceled", Snackbar.LENGTH_LONG);
                         snackbar.setBackgroundTint(Color.RED);
@@ -233,7 +234,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
             visitAsAGuestButton.setVisibility(View.VISIBLE);
             googleIcon.setVisibility(View.VISIBLE);
             guestIcon.setVisibility(View.VISIBLE);
-            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment);
+            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment, null,
+                    new NavOptions.Builder()
+                            .setPopUpTo(R.id.loginFragment, true)
+                            .setLaunchSingleTop(true)
+                            .build());
             presenter.getCalendarMealsFromFireStore();
             presenter.getFavoriteMealsFromFireStore();
 

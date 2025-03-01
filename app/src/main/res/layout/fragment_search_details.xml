@@ -32,7 +32,7 @@
                 style="@style/text_field"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:fontFamily="@font/inter"
                 android:hint="@string/searchMeal"
                 android:inputType="text"

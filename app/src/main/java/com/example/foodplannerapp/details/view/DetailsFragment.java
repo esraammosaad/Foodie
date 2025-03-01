@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 
-import android.content.DialogInterface;
 import android.content.IntentFilter;
 
 import android.content.pm.PackageManager;
@@ -134,7 +133,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         recyclerView.setAdapter(myAdapter);
         backIcon.setOnClickListener((v) -> Navigation.findNavController(view).navigateUp());
         favIcon.setOnClickListener((v) -> {
-
             if (presenter.getCurrentUser() != null) {
                 if (meal != null || favMeal != null || calMeal != null) {
                     if (NetworkAvailability.isNetworkAvailable(getContext())) {
@@ -145,15 +143,10 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
                     }
                 }
             } else {
-
                 showDialog(getString(R.string.you_can_t_add_meal_to_favorite_until_you_sign_in));
-
-
             }
-
         });
         addToCalendarButton.setOnClickListener(v -> {
-
             if (presenter.getCurrentUser() != null) {
 
                 if (meal != null || favMeal != null || calMeal != null) {
@@ -167,11 +160,8 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
                     }
                 }
             } else {
-
                 showDialog(getString(R.string.you_can_t_scheduler_the_meal_until_you_sign_in));
-
             }
-
         });
 
         if (presenter.getCurrentUser() != null) {
@@ -180,7 +170,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
         } else {
             presenter.getMealByID(mealID);
-
         }
     }
 
@@ -189,15 +178,12 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         if (mealInstructions.length() > 150) {
             instructions.setText(String.format("%s ....", mealInstructions.substring(0, 150)));
             showMore.setOnClickListener((v) -> {
-
                 if (instructions.getText().length() < 160) {
-
                     instructions.setText(mealInstructions);
                     showMore.setText(R.string.show_less);
                 } else {
                     instructions.setText(String.format("%s....", mealInstructions.substring(0, 150)));
                     showMore.setText(R.string.show_more);
-
                 }
             });
 
@@ -208,7 +194,6 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
     }
 
     public void updateRecyclerView(List<Ingredient> ingredients) {
-
         myAdapter.setIngredientList(ingredients);
         myAdapter.notifyDataSetChanged();
     }
@@ -218,26 +203,26 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         builder.setMessage(text);
         builder.setTitle(R.string.alert);
         builder.setCancelable(false);
-        builder.setPositiveButton(R.string.sign_in, (DialogInterface.OnClickListener) (dialog, which) -> {
-
-            Navigation.findNavController(getView()).navigate(R.id.action_DetailsFragment_to_loginFragment, null,
-                    new NavOptions.Builder()
-                            .setPopUpTo(R.id.favoriteFragment, true)
-                            .setPopUpTo(R.id.calenderFragment, true)
-                            .setPopUpTo(R.id.searchDetailsFragment,true)
-                            .setPopUpTo(R.id.searchFragment, true)
-                            .setPopUpTo(R.id.homeFragment, true)
-                            .build());
-
+        builder.setPositiveButton(R.string.sign_in, (dialog, which) -> {
+            navigateToLogin();
         });
-
-
-        builder.setNegativeButton(R.string.continue_as_a_guest, (DialogInterface.OnClickListener) (dialog, which) -> {
+        builder.setNegativeButton(R.string.continue_as_a_guest, (dialog, which) -> {
             dialog.cancel();
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+    }
+
+    private void navigateToLogin() {
+        Navigation.findNavController(requireView()).navigate(R.id.action_DetailsFragment_to_loginFragment, null,
+                new NavOptions.Builder()
+                        .setPopUpTo(R.id.favoriteFragment, true)
+                        .setPopUpTo(R.id.calenderFragment, true)
+                        .setPopUpTo(R.id.searchDetailsFragment, true)
+                        .setPopUpTo(R.id.searchFragment, true)
+                        .setPopUpTo(R.id.homeFragment, true)
+                        .build());
     }
 
     public void addToCalendar() {
@@ -248,12 +233,10 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
 
         DatePickerDialog dialog = new DatePickerDialog(requireContext(), R.style.dialog_theme,
                 (view1, selectedYear, selectedMonth, selectedDay) -> {
-
                     CalenderMealModel calenderMeal = convertMealToCalendarMeal(selectedYear, selectedMonth, selectedDay);
                     presenter.addMealToMobileCalendar(selectedYear, selectedMonth, selectedDay, meal);
                     presenter.addMealToCalendar(calenderMeal);
                     presenter.addCalendarMealToFireStore(calenderMeal);
-
                     Snackbar snackbar = Snackbar
                             .make(requireView(), getString(R.string.meal_is_added_to_calendar), Snackbar.LENGTH_LONG).setActionTextColor(
                                     getResources().getColor(R.color.primaryColor)

@@ -125,7 +125,16 @@ public class ProfileFragment extends Fragment implements NetworkListener {
                     builder.setCancelable(false);
                     builder.setPositiveButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
                         presenter.signOut();
-                        Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_loginFragment);
+                        Navigation
+                                .findNavController(view)
+                                .navigate(R.id.action_profileFragment_to_loginFragment, null,new NavOptions.Builder()
+                                        .setPopUpTo(R.id.profileFragment, true)
+                                        .setPopUpTo(R.id.searchFragment, true)
+                                        .setPopUpTo(R.id.favoriteFragment, true)
+                                        .setPopUpTo(R.id.calenderFragment, true)
+                                        .setPopUpTo(R.id.homeFragment, true)
+                                        .setLaunchSingleTop(true)
+                                        .build());
 
                     });
                     builder.setNegativeButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {

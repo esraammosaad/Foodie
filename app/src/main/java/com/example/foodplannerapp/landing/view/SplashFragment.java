@@ -45,7 +45,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
+        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext()), AuthenticationServices.getInstance()));
         if (presenter.getThemeState()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
@@ -57,7 +57,7 @@ public class SplashFragment extends Fragment {
 
 
                         presenter.getOnBoardingState() ?
-                                AuthenticationServices.getInstance().getCurrentUser() != null ?
+                                presenter.getCurrentUser() != null ?
                                         R.id.action_splashFragment_to_homeFragment : R.id.action_splashFragment_to_loginFragment :
                                 R.id.action_splashFragment_to_viewPagerFragment
                 );

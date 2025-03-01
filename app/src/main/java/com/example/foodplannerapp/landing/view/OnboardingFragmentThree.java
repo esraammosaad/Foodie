@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.foodplannerapp.R;
+import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.utilis.SharedPreferencesManager;
 import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.landing.presenter.PresenterImpl;
@@ -23,11 +24,8 @@ public class OnboardingFragmentThree extends Fragment {
     private PresenterImpl presenter;
 
 
-
     public OnboardingFragmentThree() {
     }
-
-
 
 
     @Override
@@ -45,10 +43,13 @@ public class OnboardingFragmentThree extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getStartedBtn=view.findViewById(R.id.getStartedButton);
-        presenter=PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext())));
-        getStartedBtn.setOnClickListener((v)->{
+        getStartedBtn = view.findViewById(R.id.getStartedButton);
 
+        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl
+                .getInstance(SharedPreferencesManager
+                        .getInstance(getContext()), AuthenticationServices.getInstance()));
+
+        getStartedBtn.setOnClickListener((v) -> {
             Navigation.findNavController(view).navigate(R.id.action_viewPagerFragment_to_loginFragment2);
             presenter.setOnOnBoardingState();
 

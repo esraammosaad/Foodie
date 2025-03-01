@@ -84,7 +84,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         signInText = view.findViewById(R.id.login);
         presenter = new PresenterImpl(
                 MealsRepositoryImpl.getInstance(
-                        new MealsRemoteDataSource(getContext()),
+                        new MealsRemoteDataSource(requireContext()),
                         new MealsLocalDataSource(getContext())),
                 FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
         recyclerView.setHasFixedSize(true);
@@ -101,7 +101,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
         if (presenter.getCurrentUser() != null) {
 
 
-            mealDisposable=presenter.getAllMealsFromCalendar(presenter.getCurrentUser().getUid(), mealDay, mealMonth, mealYear);
+            loadMeals(mealDay, mealMonth, mealYear);
             calendar.set(Calendar.MONTH, mealMonth - 1);
             SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", Locale.ENGLISH);
             textCalendar.setText(getString(R.string.today_s_picks) + monthFormat.format(calendar.getTime()) + " " + mealDay + ", " + mealYear);
@@ -110,7 +110,8 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
             calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
                 mealDay = dayOfMonth;
                 mealMonth = month + 1;
-                mealYear = year;loadMeals(mealDay, mealMonth, mealYear);
+                mealYear = year;
+                loadMeals(mealDay, mealMonth, mealYear);
 
 
                 calendar.set(Calendar.MONTH, month);
@@ -163,12 +164,13 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
         if (NetworkAvailability.isNetworkAvailable(requireContext())) {
             if (calenderMealModel.getDay() == mealDay && calenderMealModel.getMonth() == mealMonth && calenderMealModel.getYear() == mealYear) {
-                Meal meal=new Meal();
+                Meal meal = new Meal();
                 meal.setStrMeal(calenderMealModel.getStrMeal());
                 meal.setStrInstructions(calenderMealModel.getStrInstructions());
                 presenter.deleteMealFromCalendar(calenderMealModel);
                 presenter.deleteCalendarMealFromFireStore(calenderMealModel);
                 presenter.deleteMealFromMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth(), calenderMealModel.getDay(), meal);
+                loadMeals(mealDay, mealMonth, mealYear);
                 Snackbar snackbar = Snackbar
                         .make(requireView(), getString(R.string.meal_is_removed_from_calender), Snackbar.LENGTH_LONG).setActionTextColor(
                                 getResources().getColor(R.color.primaryColor)
@@ -177,7 +179,9 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
 
                             presenter.addMealToCalendar(calenderMealModel);
                             presenter.insertCalendarMealToFireStore(calenderMealModel);
-                            presenter.addMealToMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth()-1, calenderMealModel.getDay(), meal);
+                            presenter.addMealToMobileCalendar(calenderMealModel.getYear(), calenderMealModel.getMonth() - 1, calenderMealModel.getDay(), meal);
+                            loadMeals(mealDay, mealMonth, mealYear);
+
 
                         });
                 snackbar.show();

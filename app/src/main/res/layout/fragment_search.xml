@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".search.view.SearchFragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    tools:context=".search.view.SearchFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -12,12 +12,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
 
             <TextView
@@ -58,53 +57,106 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_end="15dp" />
 
-            <EditText
-                android:id="@+id/searchTextField"
-                style="@style/text_field"
-                android:layout_width="258dp"
-                android:layout_height="55dp"
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="24dp"
-                android:layout_marginStart="0dp"
-                android:fontFamily="@font/inter"
-                android:hint="@string/search"
-                android:inputType="text"
-                android:paddingStart="32dp"
-                android:textColor="#C2C2C2"
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/dismiss2" />
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="2dp"
-                android:src="@drawable/s"
-                app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
-                app:layout_constraintStart_toStartOf="@+id/searchTextField"
-                app:layout_constraintTop_toTopOf="@+id/searchTextField"
-                app:layout_constraintVertical_bias="0.466" />
-
-            <View
-                android:id="@+id/filterIcon"
-                style="@style/text_field"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_marginEnd="0dp"
-                app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
-                app:layout_constraintEnd_toStartOf="@+id/guideline10" />
-
-            <ImageView
-                android:id="@+id/filterSmallIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/fi"
-                app:layout_constraintBottom_toBottomOf="@+id/filterIcon"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:weightSum="5"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintStart_toStartOf="@+id/filterIcon"
-                app:layout_constraintTop_toTopOf="@+id/filterIcon"
-                app:layout_constraintVertical_bias="0.533" />
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/dismiss2"
+
+                >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:layout_marginRight="5dp"
+
+                    >
+
+                    <EditText
+                        android:id="@+id/searchTextField"
+                        style="@style/text_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="57dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:fontFamily="@font/inter"
+                        android:hint="@string/search"
+                        android:inputType="text"
+                        android:foregroundGravity="left"
+                        android:paddingStart="32dp"
+                        android:textColor="#C2C2C2"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:layout_editor_absoluteX="19dp" />
+
+                    <ImageView
+                        android:id="@+id/imageView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/s"
+                        app:layout_constraintBottom_toBottomOf="@+id/searchTextField"
+                        app:layout_constraintStart_toStartOf="@+id/searchTextField"
+                        app:layout_constraintTop_toTopOf="@+id/searchTextField"
+                        app:layout_constraintVertical_bias="0.466" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|end"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="0dp"
+                    android:layout_weight="0.8"
+                    android:foregroundGravity="right">
+
+                    <View
+                        android:id="@+id/filterIcon"
+                        style="@style/text_field"
+                        android:layout_width="wrap_content"
+                        android:layout_height="55dp"
+                        android:layout_marginStart="0dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="0dp"
+                        android:layout_weight="2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/filterSmallIcon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/fi"
+                        app:layout_constraintBottom_toBottomOf="@+id/filterIcon"
+                        app:layout_constraintEnd_toEndOf="@+id/filterIcon"
+                        app:layout_constraintStart_toStartOf="@+id/filterIcon"
+                        app:layout_constraintTop_toTopOf="@+id/filterIcon"
+                        app:layout_constraintVertical_bias="0.6" />
+
+                    <Spinner
+                        android:id="@+id/spinner"
+                        android:layout_width="50dp"
+                        android:layout_height="49dp"
+                        android:backgroundTint="#00FFFFFF"
+                        app:layout_constraintBottom_toBottomOf="@+id/filterIcon"
+                        app:layout_constraintEnd_toEndOf="@+id/filterIcon"
+                        app:layout_constraintStart_toStartOf="@+id/filterIcon"
+                        app:layout_constraintTop_toTopOf="@+id/filterIcon" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/searchRecyclerView"
@@ -127,17 +179,8 @@
                 android:text="@string/categories"
                 android:textSize="24dp"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
-                app:layout_constraintTop_toBottomOf="@+id/searchTextField" />
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="45dp"
-                android:layout_height="49dp"
-                android:backgroundTint="#00FFFFFF"
-                app:layout_constraintBottom_toBottomOf="@+id/filterIcon"
-                app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintStart_toStartOf="@+id/filterIcon"
-                app:layout_constraintTop_toTopOf="@+id/filterIcon" />
 
             <View
                 android:id="@+id/view4"

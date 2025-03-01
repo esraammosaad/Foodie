@@ -98,4 +98,6 @@
     <string name="resetPassword">Reset Your Password</string>
     <string name="resetPasswordFoodie">Reset Your Password Foodie!</string>
     <string name="are_you_sure_you_want_to_sign_out">Are you sure you want to sign out ?</string>
+    <string name="guest">Guest</string>
+    <string name="sign_in_to_see_your_profile">Sign in to see your profile</string>
 </resources>

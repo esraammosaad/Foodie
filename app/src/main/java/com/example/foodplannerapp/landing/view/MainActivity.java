@@ -1,18 +1,15 @@
 package com.example.foodplannerapp.landing.view;
 
-import android.Manifest;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -43,8 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView userName;
     private TextView userEmail;
     private ImageView userImg;
-    private NavigationView navView;
-    private View headerView;
     private FirebaseUser currentUser;
     private PresenterImpl presenter;
     private NavController navController;
@@ -57,12 +52,14 @@ public class MainActivity extends AppCompatActivity {
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.fragmentContainerView);
         navController = navHostFragment.getNavController();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavBar);
-        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(this)));
+        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl
+                .getInstance(SharedPreferencesManager
+                        .getInstance(this), AuthenticationServices.getInstance()));
         appName = findViewById(R.id.textView9);
         menuIcon = findViewById(R.id.menuIcon);
         drawerLayout = findViewById(R.id.main);
-        navView = findViewById(R.id.navView);
-        headerView = navView.getHeaderView(0);
+        NavigationView navView = findViewById(R.id.navView);
+        View headerView = navView.getHeaderView(0);
         userEmail = headerView.findViewById(R.id.userEmail);
         userName = headerView.findViewById(R.id.userName);
         userImg = headerView.findViewById(R.id.userImg);
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNav.setVisibility(View.GONE);
         navController.addOnDestinationChangedListener((navController1, navDestination, bundle) -> {
             if (navDestination.getId() == R.id.homeFragment || navDestination.getId() == R.id.searchFragment || navDestination.getId() == R.id.calenderFragment || navDestination.getId() == R.id.favoriteFragment || navDestination.getId() == R.id.profileFragment) {
-                currentUser = AuthenticationServices.getInstance().getCurrentUser();
+                currentUser = presenter.getCurrentUser();
                 if (currentUser != null) {
                     userName.setText(currentUser.getDisplayName());
                     userEmail.setText(currentUser.getEmail());
@@ -84,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
                         userImg.setImageResource(R.drawable.img);
                     }
                 } else {
-                    userName.setText("Guest");
-                    userEmail.setText("Sign in to see your profile");
-
+                    userName.setText(R.string.guest);
+                    userEmail.setText(R.string.sign_in_to_see_your_profile);
+                    userImg.setImageResource(R.drawable.img);
                 }
 
                 bottomNav.setVisibility(View.VISIBLE);
@@ -101,80 +98,64 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        navView.setNavigationItemSelectedListener(item -> {
-            int id = item.getItemId();
-            if (id == R.id.darkMode) {
-
-                if (!presenter.getThemeState()) {
-                    presenter.setThemeState(true);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-
-
-                } else {
-                    presenter.setThemeState(false);
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
-
-                }
-                drawerLayout.closeDrawer(GravityCompat.START);
-
-            } else {
-                if (id == R.id.share) {
-                    startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    if (NetworkAvailability.isNetworkAvailable(this)) {
-                        if (AuthenticationServices.getInstance().getCurrentUser() != null) {
-                            signOut();
-                        }
-                        drawerLayout.closeDrawer(GravityCompat.START);
-
-
-                    } else {
-
-                        NoInternetDialog.showNoInternetDialog(this, getString(R.string.no_internet_connection_please_reconnect_and_try_again));
-                        drawerLayout.closeDrawer(GravityCompat.START);
-
-
-                    }
-
-
-                }
-            }
-            return false;
-        });
+        navView.setNavigationItemSelectedListener(item -> onNavigationItemSelected(item));
 
 
     }
 
 
     private void signOut() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.are_you_sure_you_want_to_sign_out);
         builder.setTitle(R.string.alert);
         builder.setCancelable(false);
-        builder.setPositiveButton(R.string.yes, (DialogInterface.OnClickListener) (dialog, which) -> {
-            AuthenticationServices.getInstance().signOut();
-            userImg = null;
-            navController.navigate(R.id.loginFragment, null, new NavOptions.Builder()
-                    .setPopUpTo(R.id.homeFragment, true)
-                    .setPopUpTo(R.id.searchFragment, true)
-                    .setPopUpTo(R.id.favoriteFragment, true)
-                    .setPopUpTo(R.id.calenderFragment, true)
-                    .setLaunchSingleTop(true)
-                    .build());
+        builder.setPositiveButton(R.string.yes, (dialog, which) -> {
+            presenter.signOut();
+            navigateToLogin();
             drawerLayout.closeDrawer(GravityCompat.START);
-
         });
-        builder.setNegativeButton(R.string.no, (DialogInterface.OnClickListener) (dialog, which) -> {
-            dialog.cancel();
-        });
+        builder.setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
-
     }
 
 
+    private boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.darkMode) {
+            changeTheme();
+        } else if (id == R.id.share) {
+            startActivity(Intent.createChooser(ShareApp.shareApp(), "choose one"));
+        } else {
+            if (NetworkAvailability.isNetworkAvailable(this)) {
+                if (AuthenticationServices.getInstance().getCurrentUser() != null) {
+                    signOut();
+                }
+            } else {
+                NoInternetDialog.showNoInternetDialog(this, getString(R.string.no_internet_connection_please_reconnect_and_try_again));
+            }
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    private void navigateToLogin() {
+        navController.navigate(R.id.loginFragment, null, new NavOptions.Builder()
+                .setPopUpTo(R.id.homeFragment, true)
+                .setPopUpTo(R.id.searchFragment, true)
+                .setPopUpTo(R.id.favoriteFragment, true)
+                .setPopUpTo(R.id.calenderFragment, true)
+                .setLaunchSingleTop(true)
+                .build());
+    }
+
+    private void changeTheme() {
+        if (!presenter.getThemeState()) {
+            presenter.setThemeState(true);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            presenter.setThemeState(false);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
 }
