@@ -21,7 +21,7 @@
             <View
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
-                android:layout_height="800dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/onboarding_view_layout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -32,8 +32,8 @@
             <View
                 android:id="@+id/onboardingImgThree"
                 android:layout_width="match_parent"
-                android:layout_height="380dp"
-                android:background="@drawable/onboardingone"
+                android:layout_height="400dp"
+                android:background="@drawable/onboarding"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toTopOf="@+id/imageView3"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,16 +70,19 @@
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/getStartedButton"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/button_layout"
+                android:layout_marginEnd="8dp"
+                android:background="#00FFFFFF"
+                android:backgroundTint="#00FFFFFF"
+                android:drawableEnd="@drawable/baseline_arrow_forward_ios_24"
                 android:elevation="4dp"
-                android:fontFamily="@font/inter_semibold"
+                android:fontFamily="@font/inter_bold"
                 android:padding="8dp"
                 android:text="@string/get_started"
                 android:textColor="@color/white"
-                android:textSize="16dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/onboardingDescriptionTextThree" />

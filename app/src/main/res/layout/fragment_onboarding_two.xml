@@ -21,7 +21,7 @@
             <View
                 android:id="@+id/imageView3"
                 android:layout_width="match_parent"
-                android:layout_height="800dp"
+                android:layout_height="500dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/onboarding_view_layout"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="84dp"
+                android:layout_marginTop="94dp"
                 android:fontFamily="@font/fredoka_one"
                 android:text="@string/skip"
                 android:textColor="@color/white"
