@@ -213,7 +213,11 @@ public class RegisterFragment extends Fragment implements ViewInterface {
 
             if (NetworkAvailability.isNetworkAvailable(getContext())) {
 
-                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment);
+                Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment, null,
+                        new NavOptions.Builder()
+                                .setPopUpTo(R.id.loginFragment, true)
+                                .setLaunchSingleTop(true)
+                                .build());
             } else {
                 NoInternetDialog.showNoInternetDialog(getContext(), getString(R.string.no_internet_connection_please_reconnect_and_try_again));
             }
@@ -221,9 +225,13 @@ public class RegisterFragment extends Fragment implements ViewInterface {
         });
     }
 
-    @Override
-    public void onGoogleLoginSuccess(String message) {
+    private void navigateToHome(String message) {
         if (presenter.getCurrentUser() != null) {
+            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment, null,
+                    new NavOptions.Builder()
+                            .setPopUpTo(R.id.loginFragment, true)
+                            .setLaunchSingleTop(true)
+                            .build());
             Snackbar snackbar = Snackbar
                     .make(requireView(), message, Snackbar.LENGTH_LONG);
             snackbar.setBackgroundTint(Color.rgb(60, 176, 67));
@@ -234,16 +242,16 @@ public class RegisterFragment extends Fragment implements ViewInterface {
             visitAsAGuestButton.setVisibility(View.VISIBLE);
             googleIcon.setVisibility(View.VISIBLE);
             guestIcon.setVisibility(View.VISIBLE);
-            Navigation.findNavController(requireView()).navigate(R.id.action_registerFragment_to_homeFragment, null,
-                    new NavOptions.Builder()
-                            .setPopUpTo(R.id.loginFragment, true)
-                            .setLaunchSingleTop(true)
-                            .build());
-            presenter.getCalendarMealsFromFireStore();
             presenter.getFavoriteMealsFromFireStore();
+            presenter.getCalendarMealsFromFireStore();
 
 
         }
+    }
+
+    @Override
+    public void onGoogleLoginSuccess(String message) {
+        navigateToHome(message);
 
     }
 

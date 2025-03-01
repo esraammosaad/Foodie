@@ -90,8 +90,8 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         progressBar = view.findViewById(R.id.progressBar);
         noInternetBanner = view.findViewById(R.id.noInternetBanner);
         seeAll = view.findViewById(R.id.seeAllText);
-        dismiss=view.findViewById(R.id.dismiss);
-        turnWIFI=view.findViewById(R.id.turnWIFI);
+        dismiss = view.findViewById(R.id.dismiss);
+        turnWIFI = view.findViewById(R.id.turnWIFI);
         networkChangeListener = new NetworkChangeListener(this);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
@@ -107,44 +107,50 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         presenter.getRandomMeal();
 
         refreshButton.setOnClickListener((v) -> {
+
+            presenter.getNewRandomMeal();
             if (NetworkAvailability.isNetworkAvailable(getContext())) {
 
-                presenter.getNewRandomMeal();
-
-            }else {
 
                 noInternetBanner.setVisibility(View.VISIBLE);
+
             }
 
-        });
 
-        turnWIFI.setOnClickListener((v)->{
+        });
+        if (NetworkAvailability.isNetworkAvailable(getContext())) {
+
+
+            noInternetBanner.setVisibility(View.VISIBLE);
+
+        }
+
+        turnWIFI.setOnClickListener((v) -> {
 
             Intent panelIntent = new Intent(android.provider.Settings.ACTION_WIFI_SETTINGS);
             getContext().startActivity(panelIntent);
 
 
         });
-        seeAll.setOnClickListener((v)->{
-        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_seeAllFragment);
+        seeAll.setOnClickListener((v) -> {
+            Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_seeAllFragment);
 
         });
 
-        dismiss.setOnClickListener((v)->{
+        dismiss.setOnClickListener((v) -> {
             noInternetBanner.setVisibility(View.GONE);
         });
 
         viewRecipeButton.setOnClickListener((v) -> {
             if (randomMeal != null) {
 
-               navigateToDetailsScreen();
+                navigateToDetailsScreen();
             }
 
         });
 
-        randomMealImg.setOnClickListener((v)->{
+        randomMealImg.setOnClickListener((v) -> {
             navigateToDetailsScreen();
-
 
 
         });
@@ -152,7 +158,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     }
 
-    private void navigateToDetailsScreen(){
+    private void navigateToDetailsScreen() {
         HomeFragmentDirections.ActionHomeFragmentToDetailsFragment action =
                 HomeFragmentDirections.actionHomeFragmentToDetailsFragment(Integer.parseInt(randomMeal.getIdMeal()));
         Navigation.findNavController(requireView()).navigate(action);
@@ -195,7 +201,7 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
 
     @Override
     public void onFailure(String errorMessage) {
-        if(!NetworkAvailability.isNetworkAvailable(getContext())){
+        if (!NetworkAvailability.isNetworkAvailable(getContext())) {
 
             NoInternetSnackBar.showSnackBar(requireView());
 

@@ -127,7 +127,6 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
                 searchField.setText("");
 
 
-
             }
 
             @Override
@@ -145,7 +144,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         ingredientAdapter = new RecyclerViewIngredientAdapter(getContext(), List.of(), this);
         recyclerView.setAdapter(categoryAdapter);
         list = List.of();
-        item=getString(R.string.categories);
+        item = getString(R.string.categories);
         textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -178,7 +177,7 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
         });
     }
 
-    private void loadList(){
+    private void loadList() {
         if (item.equals(getString(R.string.categories))) {
 
             presenter.getAllCategories();
@@ -210,29 +209,29 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onSuccess(List list) {
         this.list = list;
-        if(!list.isEmpty()){
-        if (list.get(0) instanceof Category) {
-            searchField.setHint("Search Category");
-            selectedItem.setText(R.string.categories);
-            categoryAdapter.setCategoryList(list);
-            recyclerView.setAdapter(categoryAdapter);
+        if (!list.isEmpty()) {
+            if (list.get(0) instanceof Category) {
+                searchField.setHint("Search Category");
+                selectedItem.setText(R.string.categories);
+                categoryAdapter.setCategoryList(list);
+                recyclerView.setAdapter(categoryAdapter);
 
 
-        } else if (list.get(0) instanceof Area) {
+            } else if (list.get(0) instanceof Area) {
 
-            searchField.setHint("Search Area");
-            selectedItem.setText(R.string.areas);
-            areaAdapter.setAreaList(list);
-            recyclerView.setAdapter(areaAdapter);
+                searchField.setHint("Search Area");
+                selectedItem.setText(R.string.areas);
+                areaAdapter.setAreaList(list);
+                recyclerView.setAdapter(areaAdapter);
 
-        } else {
-            searchField.setHint("Search Ingredient");
-            selectedItem.setText(R.string.ingredients);
-            ingredientAdapter.setIngredientList(list);
-            recyclerView.setAdapter(ingredientAdapter);
+            } else {
+                searchField.setHint("Search Ingredient");
+                selectedItem.setText(R.string.ingredients);
+                ingredientAdapter.setIngredientList(list);
+                recyclerView.setAdapter(ingredientAdapter);
 
 
-        }
+            }
         }
 
         if (!NetworkAvailability.isNetworkAvailable(getContext()) && list.isEmpty()) {
@@ -284,7 +283,6 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
             noInternetGroup.setVisibility(View.VISIBLE);
 
 
-
         }
         progressBar.setVisibility(View.GONE);
 
@@ -322,8 +320,6 @@ public class SearchFragment extends Fragment implements SearchListener, ViewInte
     @Override
     public void onLostConnection() {
         noInternetGroup.setVisibility(View.VISIBLE);
-        noInternetText.setVisibility(View.VISIBLE);
-        noWifiImg.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
         NoInternetSnackBar.showSnackBar(requireView());
 

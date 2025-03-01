@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="52dp"
                 android:layout_marginEnd="20dp"
                 android:fontFamily="@font/inter_semibold"
                 android:gravity="center"
@@ -40,7 +40,7 @@
                 android:id="@+id/internetGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:constraint_referenced_ids="view4,noInternetIcon2,dismiss2,turnWIFI2,noInternetText2" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -241,14 +241,13 @@
                 android:id="@+id/noWifiImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="120dp"
                 android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="@+id/searchRecyclerView"
+                app:layout_constraintBottom_toBottomOf="@+id/progressBar3"
                 app:layout_constraintEnd_toStartOf="@+id/guideline10"
-                app:layout_constraintHorizontal_bias="0.497"
                 app:layout_constraintStart_toStartOf="@+id/guideline9"
                 app:layout_constraintTop_toBottomOf="@+id/selectedItemText"
-                app:layout_constraintVertical_bias="0.765"
+                app:layout_constraintVertical_bias="0.03"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true"
                 app:lottie_rawRes="@raw/nointernet" />

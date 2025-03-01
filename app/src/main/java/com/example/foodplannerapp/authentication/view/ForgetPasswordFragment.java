@@ -69,7 +69,7 @@ public class ForgetPasswordFragment extends Fragment implements ViewInterface {
                 MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
                         new MealsLocalDataSource(getContext())), this);
         resetPassword.setOnClickListener((v) -> {
-            if (NetworkAvailability.isNetworkAvailable(getContext())) {
+            if (NetworkAvailability.isNetworkAvailable(requireContext())) {
                 if (emailEditText.getText().toString().isEmpty()) {
                     emailEditText.setBackgroundResource(R.drawable.error_edit_text_layout);
                     emailErrorResetPass.setVisibility(View.VISIBLE);
