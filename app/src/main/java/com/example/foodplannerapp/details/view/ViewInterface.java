@@ -2,7 +2,7 @@ package com.example.foodplannerapp.details.view;
 
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.model.Meal;
 
 import java.util.List;
 

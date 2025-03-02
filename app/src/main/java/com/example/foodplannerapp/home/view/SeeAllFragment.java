@@ -18,7 +18,7 @@ import android.widget.ImageView;
 
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
-import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.model.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.home.presenter.PresenterImpl;

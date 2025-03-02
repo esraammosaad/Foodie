@@ -1,6 +1,6 @@
-package com.example.foodplannerapp.data.models;
+package com.example.foodplannerapp.data.model;
 
-public class CategoryMeal {
+public class AreaMeal {
     private String strMealThumb;
     private String idMeal;
     private String strMeal;

@@ -25,7 +25,7 @@ import com.example.foodplannerapp.landing.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.example.foodplannerapp.utilis.ShareApp;
-import com.example.foodplannerapp.utilis.SharedPreferencesManager;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         navController = navHostFragment.getNavController();
         BottomNavigationView bottomNav = findViewById(R.id.bottomNavBar);
         presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl
-                .getInstance(SharedPreferencesManager
+                .getInstance(LocalStorageDataSource
                         .getInstance(this), AuthenticationServices.getInstance()));
         appName = findViewById(R.id.textView9);
         menuIcon = findViewById(R.id.menuIcon);

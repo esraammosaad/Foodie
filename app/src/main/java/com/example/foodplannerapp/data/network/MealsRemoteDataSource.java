@@ -2,25 +2,21 @@ package com.example.foodplannerapp.data.network;
 
 import android.content.Context;
 
-import com.example.foodplannerapp.data.models.AllAreasResponse;
-import com.example.foodplannerapp.data.models.AllIngredientsResponse;
-import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.MealModel;
+import com.example.foodplannerapp.data.model.AllAreasResponse;
+import com.example.foodplannerapp.data.model.AllIngredientsResponse;
+import com.example.foodplannerapp.data.model.GetAllCategoriesResponse;
+import com.example.foodplannerapp.data.model.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.model.MealModel;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 
 import java.io.File;
 import java.io.IOException;
 
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;

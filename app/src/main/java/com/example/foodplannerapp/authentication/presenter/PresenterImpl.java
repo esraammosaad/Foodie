@@ -9,7 +9,7 @@ import com.example.foodplannerapp.authentication.data.repo.AuthenticationReposit
 import com.example.foodplannerapp.authentication.view.ViewInterface;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
+import com.example.foodplannerapp.data.network.database.GetDataFromRemoteDatabaseCallBack;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.utilis.CompletableTransformation;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-public class PresenterImpl implements AuthenticationCallBack, GetDataFromFirebaseCallBack {
+public class PresenterImpl implements AuthenticationCallBack, GetDataFromRemoteDatabaseCallBack {
     private final AuthenticationRepositoryImpl authenticationRepository;
     private final MealsRepositoryImpl mealsRepository;
     private final ViewInterface viewInterface;

@@ -1,8 +1,8 @@
 package com.example.foodplannerapp.calender.presenter;
 
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
+import com.example.foodplannerapp.data.model.Meal;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseCallBack;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.view.ViewInterface;
@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseUser;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class PresenterImpl implements FireStoreCallBack {
+public class PresenterImpl implements RemoteDatabaseCallBack {
 
     MealsRepositoryImpl mealsRepository;
     FireStoreRepositoryImpl fireStoreRepository;

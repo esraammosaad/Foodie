@@ -22,7 +22,7 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.presenter.PresenterImpl;
@@ -85,7 +85,7 @@ public class FavoriteFragment extends Fragment implements FavoriteListener, View
         emptyFavText.setVisibility(View.VISIBLE);
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
                 new MealsLocalDataSource(getContext())),
-                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+                FireStoreRepositoryImpl.getInstance(RemoteDatabaseServices.getInstance()), this);
         if (presenter.getCurrentUser() != null) {
             presenter.getAllFavoriteMeals(presenter.getCurrentUser().getUid());
 

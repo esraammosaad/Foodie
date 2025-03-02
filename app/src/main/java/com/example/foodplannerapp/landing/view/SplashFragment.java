@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
-import com.example.foodplannerapp.utilis.SharedPreferencesManager;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.landing.presenter.PresenterImpl;
 
@@ -45,7 +45,7 @@ public class SplashFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(SharedPreferencesManager.getInstance(getContext()), AuthenticationServices.getInstance()));
+        presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl.getInstance(LocalStorageDataSource.getInstance(getContext()), AuthenticationServices.getInstance()));
         if (presenter.getThemeState()) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {

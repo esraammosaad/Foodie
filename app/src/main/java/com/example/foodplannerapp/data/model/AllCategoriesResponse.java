@@ -1,6 +1,6 @@
 
 
-package com.example.foodplannerapp.data.models;
+package com.example.foodplannerapp.data.model;
 import java.util.List;
 
 public class AllCategoriesResponse {

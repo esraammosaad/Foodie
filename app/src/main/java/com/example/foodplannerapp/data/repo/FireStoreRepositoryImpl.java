@@ -2,49 +2,47 @@ package com.example.foodplannerapp.data.repo;
 
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseCallBack;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 
 public class FireStoreRepositoryImpl {
 
-    FiresStoreServices firesStoreServices;
-
-
+    RemoteDatabaseServices remoteDatabaseServices;
     private static FireStoreRepositoryImpl instance;
 
 
-    private FireStoreRepositoryImpl(FiresStoreServices firesStoreServices) {
-        this.firesStoreServices = firesStoreServices;
+    private FireStoreRepositoryImpl(RemoteDatabaseServices remoteDatabaseServices) {
+        this.remoteDatabaseServices = remoteDatabaseServices;
     }
 
-    public static FireStoreRepositoryImpl getInstance(FiresStoreServices firesStoreServices) {
+    public static FireStoreRepositoryImpl getInstance(RemoteDatabaseServices remoteDatabaseServices) {
         if (instance == null) {
 
-            instance = new FireStoreRepositoryImpl(firesStoreServices);
+            instance = new FireStoreRepositoryImpl(remoteDatabaseServices);
         }
 
         return instance;
 
     }
 
-    public void insertFavoriteMealToFireStore(FavoriteMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void insertFavoriteMealToFireStore(FavoriteMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
 
-        firesStoreServices.insertFavoriteMealToFireStore(meal, fireStoreCallBack);
-
-    }
-    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal, FireStoreCallBack fireStoreCallBack) {
-
-        firesStoreServices.deleteFavoriteMealFromFireStore(meal, fireStoreCallBack);
+        remoteDatabaseServices.insertFavoriteMealToFireStore(meal, fireStoreCallBack);
 
     }
-    public void insertCalendarMealToFireStore(CalenderMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
 
-        firesStoreServices.insertMealInTheCalendarToFireStore(meal, fireStoreCallBack);
+        remoteDatabaseServices.deleteFavoriteMealFromFireStore(meal, fireStoreCallBack);
 
     }
-    public void deleteCalendarMealFromFireStore(CalenderMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void insertCalendarMealToFireStore(CalenderMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
 
-        firesStoreServices.deleteMealInTheCalendarFromFireStore(meal, fireStoreCallBack);
+        remoteDatabaseServices.insertMealInTheCalendarToFireStore(meal, fireStoreCallBack);
+
+    }
+    public void deleteCalendarMealFromFireStore(CalenderMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
+
+        remoteDatabaseServices.deleteMealInTheCalendarFromFireStore(meal, fireStoreCallBack);
 
     }
 }

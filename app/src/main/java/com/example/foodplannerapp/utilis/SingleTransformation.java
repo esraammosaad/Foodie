@@ -8,12 +8,9 @@ public class SingleTransformation {
 
     static public <T> SingleTransformer<T,T> apply(){
 
-        return upstream -> {
-
-            return upstream.
-                    subscribeOn(Schedulers.io()).
-                    observeOn(AndroidSchedulers.mainThread());
-        };
+        return upstream -> upstream.
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread());
 
 
     }

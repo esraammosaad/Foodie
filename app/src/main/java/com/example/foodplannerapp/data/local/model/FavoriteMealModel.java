@@ -2,10 +2,8 @@ package com.example.foodplannerapp.data.local.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
-import com.example.foodplannerapp.data.models.Ingredient;
+import com.example.foodplannerapp.data.model.Ingredient;
 import java.util.ArrayList;
 import java.util.List;
 

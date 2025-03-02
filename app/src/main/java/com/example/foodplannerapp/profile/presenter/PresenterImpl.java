@@ -27,9 +27,9 @@ public class PresenterImpl {
         authenticationRepository.saveThemeState(context, state);
     }
 
-    public boolean getThemeState(Context context){
+    public boolean getThemeState(){
 
-        return authenticationRepository.getThemeState(context);
+        return authenticationRepository.getThemeState();
 
     }
 }

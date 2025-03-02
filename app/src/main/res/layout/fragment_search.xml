@@ -40,7 +40,7 @@
                 android:id="@+id/internetGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:constraint_referenced_ids="view4,noInternetIcon2,dismiss2,turnWIFI2,noInternetText2" />
 
             <androidx.constraintlayout.widget.Guideline

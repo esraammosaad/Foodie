@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
-import com.example.foodplannerapp.data.models.Ingredient;
+import com.example.foodplannerapp.data.model.Ingredient;
 
 import java.util.List;
 

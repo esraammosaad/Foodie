@@ -1,11 +1,9 @@
 package com.example.foodplannerapp.search.view;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -31,9 +29,9 @@ import android.widget.TextView;
 
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
-import com.example.foodplannerapp.data.models.Area;
-import com.example.foodplannerapp.data.models.Category;
-import com.example.foodplannerapp.data.models.IngredientMeal;
+import com.example.foodplannerapp.data.model.Area;
+import com.example.foodplannerapp.data.model.Category;
+import com.example.foodplannerapp.data.model.IngredientMeal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.search.presenter.PresenterImpl;
@@ -42,7 +40,6 @@ import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
 import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 import java.util.Map;

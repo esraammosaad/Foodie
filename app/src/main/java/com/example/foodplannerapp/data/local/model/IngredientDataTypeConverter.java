@@ -1,7 +1,7 @@
 package com.example.foodplannerapp.data.local.model;
 
 import androidx.room.TypeConverter;
-import com.example.foodplannerapp.data.models.Ingredient;
+import com.example.foodplannerapp.data.model.Ingredient;
 import com.google.gson.Gson;
 
 public class IngredientDataTypeConverter {

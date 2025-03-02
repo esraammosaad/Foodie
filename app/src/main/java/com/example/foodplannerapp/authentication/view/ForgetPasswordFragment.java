@@ -23,10 +23,11 @@ import com.example.foodplannerapp.authentication.data.repo.AuthenticationReposit
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.android.material.snackbar.Snackbar;
 
 
@@ -65,7 +66,7 @@ public class ForgetPasswordFragment extends Fragment implements ViewInterface {
         progressBar = view.findViewById(R.id.progressBar5);
         backIcon.setOnClickListener((v) -> Navigation.findNavController(requireView()).navigateUp());
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(),
-                FiresStoreServices.getInstance()),
+                RemoteDatabaseServices.getInstance(), LocalStorageDataSource.getInstance(getContext())),
                 MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
                         new MealsLocalDataSource(getContext())), this);
         resetPassword.setOnClickListener((v) -> {

@@ -3,8 +3,6 @@ package com.example.foodplannerapp.utilis;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-
-import com.airbnb.lottie.animation.content.Content;
 import com.example.foodplannerapp.R;
 
 public class NoInternetDialog {

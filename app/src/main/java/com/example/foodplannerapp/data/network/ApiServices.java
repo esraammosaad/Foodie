@@ -1,14 +1,12 @@
 package com.example.foodplannerapp.data.network;
 
-import com.example.foodplannerapp.data.models.AllAreasResponse;
-import com.example.foodplannerapp.data.models.AllIngredientsResponse;
-import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.MealModel;
+import com.example.foodplannerapp.data.model.AllAreasResponse;
+import com.example.foodplannerapp.data.model.AllIngredientsResponse;
+import com.example.foodplannerapp.data.model.GetAllCategoriesResponse;
+import com.example.foodplannerapp.data.model.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.model.MealModel;
 
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 

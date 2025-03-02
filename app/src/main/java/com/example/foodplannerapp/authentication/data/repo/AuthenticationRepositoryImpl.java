@@ -6,9 +6,9 @@ import androidx.activity.result.ActivityResult;
 
 import com.example.foodplannerapp.authentication.data.network.AuthenticationCallBack;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
-import com.example.foodplannerapp.data.network.database.GetDataFromFirebaseCallBack;
-import com.example.foodplannerapp.utilis.SharedPreferencesManager;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
+import com.example.foodplannerapp.data.network.database.GetDataFromRemoteDatabaseCallBack;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.common.api.ApiException;
 import com.google.firebase.auth.FirebaseUser;
@@ -16,18 +16,20 @@ import com.google.firebase.auth.FirebaseUser;
 public class AuthenticationRepositoryImpl {
 
     private final AuthenticationServices authenticationServices;
-    private final FiresStoreServices firesStoreServices;
+    private final RemoteDatabaseServices remoteDatabaseServices;
+    private final LocalStorageDataSource localStorageDataSource;
     private static AuthenticationRepositoryImpl instance;
 
-    private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices) {
+    private AuthenticationRepositoryImpl(AuthenticationServices authenticationServices, RemoteDatabaseServices remoteDatabaseServices, LocalStorageDataSource localStorageDataSource) {
         this.authenticationServices = authenticationServices;
-        this.firesStoreServices = firesStoreServices;
+        this.remoteDatabaseServices = remoteDatabaseServices;
+        this.localStorageDataSource = localStorageDataSource;
     }
 
-    public static AuthenticationRepositoryImpl getInstance(AuthenticationServices authenticationServices, FiresStoreServices firesStoreServices) {
+    public static AuthenticationRepositoryImpl getInstance(AuthenticationServices authenticationServices, RemoteDatabaseServices remoteDatabaseServices, LocalStorageDataSource localStorageDataSource) {
 
         if (instance == null) {
-            instance = new AuthenticationRepositoryImpl(authenticationServices, firesStoreServices);
+            instance = new AuthenticationRepositoryImpl(authenticationServices, remoteDatabaseServices, localStorageDataSource);
         }
 
         return instance;
@@ -82,25 +84,25 @@ public class AuthenticationRepositoryImpl {
 
     }
 
-    public void getFavoriteMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
+    public void getFavoriteMealsFromFireStore(GetDataFromRemoteDatabaseCallBack getDataFromRemoteDatabaseCallBack) {
 
-        firesStoreServices.getFavoriteMealsFromFireStore(getCurrentUser().getUid(), getDataFromFirebaseCallBack);
+        remoteDatabaseServices.getFavoriteMealsFromFireStore(getCurrentUser().getUid(), getDataFromRemoteDatabaseCallBack);
     }
 
-    public void getCalendarMealsFromFireStore(GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
+    public void getCalendarMealsFromFireStore(GetDataFromRemoteDatabaseCallBack getDataFromRemoteDatabaseCallBack) {
 
-        firesStoreServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(), getDataFromFirebaseCallBack);
+        remoteDatabaseServices.getCalendarMealsFromFireStore(getCurrentUser().getUid(), getDataFromRemoteDatabaseCallBack);
     }
 
     public void saveThemeState(Context context, boolean state) {
 
-        SharedPreferencesManager.getInstance(context).saveThemeState(state);
+        LocalStorageDataSource.getInstance(context).saveThemeState(state);
 
     }
 
-    public boolean getThemeState(Context context) {
+    public boolean getThemeState() {
 
-        return SharedPreferencesManager.getInstance(context).getThemeState();
+        return localStorageDataSource.getThemeState();
 
     }
 

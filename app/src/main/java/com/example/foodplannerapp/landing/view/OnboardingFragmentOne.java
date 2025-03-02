@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
-import com.example.foodplannerapp.utilis.SharedPreferencesManager;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.example.foodplannerapp.landing.data.repo.OnBoardingRepositoryImpl;
 import com.example.foodplannerapp.landing.presenter.PresenterImpl;
 
@@ -49,7 +49,7 @@ public class OnboardingFragmentOne extends Fragment {
         viewPager = getActivity().findViewById(R.id.viewPager2);
         calendarPermission();
         presenter = PresenterImpl.getInstance(OnBoardingRepositoryImpl
-                .getInstance(SharedPreferencesManager
+                .getInstance(LocalStorageDataSource
                                 .getInstance(getContext()),
                         AuthenticationServices.getInstance()));
         nextBtn.setOnClickListener((v) -> {

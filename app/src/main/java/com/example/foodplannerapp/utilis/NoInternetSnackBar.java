@@ -8,8 +8,7 @@ import com.google.android.material.snackbar.Snackbar;
 public class NoInternetSnackBar {
     public static void showSnackBar(View view){
         Snackbar snackbar = Snackbar
-                .make(view, R.string.no_internet_connection, Snackbar.LENGTH_SHORT)
-                ;
+                .make(view, R.string.no_internet_connection, Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
 }

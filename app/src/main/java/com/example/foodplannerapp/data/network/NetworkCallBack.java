@@ -1,6 +1,6 @@
 package com.example.foodplannerapp.data.network;
 
-import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.model.Meal;
 
 import java.util.List;
 

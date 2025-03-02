@@ -1,4 +1,4 @@
-package com.example.foodplannerapp.data.models;
+package com.example.foodplannerapp.data.model;
 
 import androidx.room.TypeConverters;
 

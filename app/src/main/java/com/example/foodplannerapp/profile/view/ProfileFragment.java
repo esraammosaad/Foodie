@@ -26,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.authentication.data.repo.AuthenticationRepositoryImpl;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.profile.presenter.PresenterImpl;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NetworkChangeListener;
@@ -34,6 +34,7 @@ import com.example.foodplannerapp.utilis.NetworkListener;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
 import com.example.foodplannerapp.utilis.NoInternetSnackBar;
 import com.example.foodplannerapp.utilis.ShareApp;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 
@@ -77,7 +78,8 @@ public class ProfileFragment extends Fragment implements NetworkListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(), FiresStoreServices.getInstance()));
+        presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(),
+                RemoteDatabaseServices.getInstance(), LocalStorageDataSource.getInstance(getContext())));
         signOutButton = view.findViewById(R.id.signOutButton);
         userName = view.findViewById(R.id.userName);
         userEmail = view.findViewById(R.id.userEmail);
@@ -161,7 +163,7 @@ public class ProfileFragment extends Fragment implements NetworkListener {
         }
 
 
-        darkModeSwitch.setChecked(presenter.getThemeState(getContext()));
+        darkModeSwitch.setChecked(presenter.getThemeState());
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 presenter.saveThemeState(requireContext(), true);

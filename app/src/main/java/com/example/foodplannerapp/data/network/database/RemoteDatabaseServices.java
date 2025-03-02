@@ -4,7 +4,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
 import com.example.foodplannerapp.utilis.Strings;
@@ -13,34 +12,30 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.gson.Gson;
 
-import java.util.List;
-
-public class FiresStoreServices {
+public class RemoteDatabaseServices {
 
     FirebaseFirestore firebaseFirestore;
-    private static FiresStoreServices instance;
+    private static RemoteDatabaseServices instance;
 
-    private FiresStoreServices() {
+    private RemoteDatabaseServices() {
 
         firebaseFirestore = FirebaseFirestore.getInstance();
     }
 
-    public static FiresStoreServices getInstance() {
+    public static RemoteDatabaseServices getInstance() {
 
         if (instance == null) {
 
-            instance = new FiresStoreServices();
+            instance = new RemoteDatabaseServices();
         }
 
         return instance;
     }
 
 
-    public void insertFavoriteMealToFireStore(FavoriteMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void insertFavoriteMealToFireStore(FavoriteMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
 
 
         firebaseFirestore.collection(Strings.FAV_COLLECTION).document(meal.getUserUID()+meal.getIdMeal())
@@ -60,7 +55,7 @@ public class FiresStoreServices {
 
 
     }
-    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void deleteFavoriteMealFromFireStore(FavoriteMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
         firebaseFirestore.collection(Strings.FAV_COLLECTION).document(meal.getUserUID()+meal.getIdMeal())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -79,7 +74,7 @@ public class FiresStoreServices {
 
     }
 
-    public void getFavoriteMealsFromFireStore(String userUID, GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
+    public void getFavoriteMealsFromFireStore(String userUID, GetDataFromRemoteDatabaseCallBack getDataFromRemoteDatabaseCallBack) {
 
         firebaseFirestore.collection(Strings.FAV_COLLECTION)
                 .whereEqualTo("userUID", userUID)
@@ -89,7 +84,7 @@ public class FiresStoreServices {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            getDataFromFirebaseCallBack.onGetFavoriteMeals(task.getResult());
+                            getDataFromRemoteDatabaseCallBack.onGetFavoriteMeals(task.getResult());
 
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -100,7 +95,7 @@ public class FiresStoreServices {
 
     }
 
-    public void deleteMealInTheCalendarFromFireStore(CalenderMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void deleteMealInTheCalendarFromFireStore(CalenderMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
         firebaseFirestore.collection(Strings.CALENDAR_COLLECTION).document(meal.getUserUID()+meal.getIdMeal()+meal.getDay()+meal.getMonth()+meal.getYear())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -119,7 +114,7 @@ public class FiresStoreServices {
 
     }
 
-    public void getCalendarMealsFromFireStore(String userUID,GetDataFromFirebaseCallBack getDataFromFirebaseCallBack) {
+    public void getCalendarMealsFromFireStore(String userUID, GetDataFromRemoteDatabaseCallBack getDataFromRemoteDatabaseCallBack) {
 
         firebaseFirestore.collection(Strings.CALENDAR_COLLECTION)
                 .whereEqualTo("userUID", userUID)
@@ -129,7 +124,7 @@ public class FiresStoreServices {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
-                            getDataFromFirebaseCallBack.onGetCalendarMeals(task.getResult());
+                            getDataFromRemoteDatabaseCallBack.onGetCalendarMeals(task.getResult());
 
                         } else {
                             Log.d("TAG", "Error getting documents: ", task.getException());
@@ -140,7 +135,7 @@ public class FiresStoreServices {
 
     }
 
-    public void insertMealInTheCalendarToFireStore(CalenderMealModel meal, FireStoreCallBack fireStoreCallBack) {
+    public void insertMealInTheCalendarToFireStore(CalenderMealModel meal, RemoteDatabaseCallBack fireStoreCallBack) {
 
 
         firebaseFirestore.collection(Strings.CALENDAR_COLLECTION).document(meal.getUserUID()+meal.getIdMeal()+meal.getDay()+meal.getMonth()+meal.getYear())

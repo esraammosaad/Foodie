@@ -1,9 +1,9 @@
 package com.example.foodplannerapp.search.presenter;
 
 import android.util.Log;
-import com.example.foodplannerapp.data.models.Area;
-import com.example.foodplannerapp.data.models.Category;
-import com.example.foodplannerapp.data.models.IngredientMeal;
+import com.example.foodplannerapp.data.model.Area;
+import com.example.foodplannerapp.data.model.Category;
+import com.example.foodplannerapp.data.model.IngredientMeal;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.search.view.ViewInterface;
 import com.example.foodplannerapp.utilis.SingleTransformation;

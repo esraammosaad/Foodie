@@ -2,7 +2,7 @@ package com.example.foodplannerapp.favorite.presenter;
 
 
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseCallBack;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.favorite.view.ViewInterface;
@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
-public class PresenterImpl implements FireStoreCallBack {
+public class PresenterImpl implements RemoteDatabaseCallBack {
     MealsRepositoryImpl mealsRepository;
     FireStoreRepositoryImpl fireStoreRepository;
     ViewInterface viewInterface;

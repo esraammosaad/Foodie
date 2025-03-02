@@ -29,10 +29,11 @@ import com.example.foodplannerapp.authentication.data.repo.AuthenticationReposit
 import com.example.foodplannerapp.authentication.presenter.PresenterImpl;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.utilis.NetworkAvailability;
 import com.example.foodplannerapp.utilis.NoInternetDialog;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -122,7 +123,7 @@ public class LoginFragment extends Fragment implements ViewInterface {
             Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_forgetPasswordFragment);
         });
         presenter = new PresenterImpl(AuthenticationRepositoryImpl.getInstance(AuthenticationServices.getInstance(),
-                FiresStoreServices.getInstance()),
+                RemoteDatabaseServices.getInstance(), LocalStorageDataSource.getInstance(getContext())),
                 MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(requireContext()),
                         new MealsLocalDataSource(getContext())), this);
         GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

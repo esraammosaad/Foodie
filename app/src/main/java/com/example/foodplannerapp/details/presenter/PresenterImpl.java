@@ -2,18 +2,11 @@ package com.example.foodplannerapp.details.presenter;
 
 
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.net.Uri;
-import android.provider.CalendarContract;
-import android.util.Log;
-import androidx.annotation.NonNull;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.models.Ingredient;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.network.database.FireStoreCallBack;
+import com.example.foodplannerapp.data.model.Ingredient;
+import com.example.foodplannerapp.data.model.Meal;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseCallBack;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.view.ViewInterface;
@@ -22,14 +15,13 @@ import com.example.foodplannerapp.utilis.SingleTransformation;
 import com.example.foodplannerapp.utilis.Transformation;
 import com.google.firebase.auth.FirebaseUser;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 
 
-public class PresenterImpl implements FireStoreCallBack {
+public class PresenterImpl implements RemoteDatabaseCallBack {
 
     MealsRepositoryImpl mealsRepository;
     FireStoreRepositoryImpl fireStoreRepository;

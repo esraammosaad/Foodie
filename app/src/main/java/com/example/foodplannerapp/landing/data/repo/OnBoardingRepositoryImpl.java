@@ -1,45 +1,45 @@
 package com.example.foodplannerapp.landing.data.repo;
 
 import com.example.foodplannerapp.authentication.data.network.AuthenticationServices;
-import com.example.foodplannerapp.utilis.SharedPreferencesManager;
+import com.example.foodplannerapp.data.local.LocalStorageDataSource;
 import com.google.firebase.auth.FirebaseUser;
 
 public class OnBoardingRepositoryImpl {
-    private final SharedPreferencesManager sharedPreferencesManager;
+    private final LocalStorageDataSource localStorageDataSource;
     private static OnBoardingRepositoryImpl instance;
     private AuthenticationServices authenticationServices;
 
 
-    private OnBoardingRepositoryImpl(SharedPreferencesManager sharedPreferencesManager, AuthenticationServices authenticationServices) {
-        this.sharedPreferencesManager = sharedPreferencesManager;
+    private OnBoardingRepositoryImpl(LocalStorageDataSource localStorageDataSource, AuthenticationServices authenticationServices) {
+        this.localStorageDataSource = localStorageDataSource;
         this.authenticationServices=authenticationServices;
 
     }
 
-    public static OnBoardingRepositoryImpl getInstance(SharedPreferencesManager sharedPreferencesManager, AuthenticationServices authenticationServices) {
+    public static OnBoardingRepositoryImpl getInstance(LocalStorageDataSource localStorageDataSource, AuthenticationServices authenticationServices) {
         if (instance == null) {
 
-            instance = new OnBoardingRepositoryImpl(sharedPreferencesManager, authenticationServices);
+            instance = new OnBoardingRepositoryImpl(localStorageDataSource, authenticationServices);
         }
 
         return instance;
     }
 
     public void setOnBoardingState() {
-        sharedPreferencesManager.saveOnBoardingState();
+        localStorageDataSource.saveOnBoardingState();
 
     }
 
     public boolean getOnBoardingState() {
-        return sharedPreferencesManager.getOnBoardingState();
+        return localStorageDataSource.getOnBoardingState();
     }
 
     public boolean getThemeState() {
-        return sharedPreferencesManager.getThemeState();
+        return localStorageDataSource.getThemeState();
     }
     public void setThemeState(boolean themeState){
 
-        sharedPreferencesManager.saveThemeState(themeState);
+        localStorageDataSource.saveThemeState(themeState);
     }
 
     public FirebaseUser getCurrentUser(){

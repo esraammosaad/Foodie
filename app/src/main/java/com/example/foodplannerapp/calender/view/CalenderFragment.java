@@ -22,9 +22,9 @@ import android.widget.TextView;
 import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
-import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.model.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.calender.presenter.PresenterImpl;
@@ -86,7 +86,7 @@ public class CalenderFragment extends Fragment implements CalendarListener, View
                 MealsRepositoryImpl.getInstance(
                         new MealsRemoteDataSource(requireContext()),
                         new MealsLocalDataSource(getContext())),
-                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+                FireStoreRepositoryImpl.getInstance(RemoteDatabaseServices.getInstance()), this);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);

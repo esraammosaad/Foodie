@@ -5,12 +5,12 @@ import com.example.foodplannerapp.authentication.data.network.AuthenticationServ
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.models.AllAreasResponse;
-import com.example.foodplannerapp.data.models.AllIngredientsResponse;
-import com.example.foodplannerapp.data.models.GetAllCategoriesResponse;
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.Meal;
-import com.example.foodplannerapp.data.models.MealModel;
+import com.example.foodplannerapp.data.model.AllAreasResponse;
+import com.example.foodplannerapp.data.model.AllIngredientsResponse;
+import com.example.foodplannerapp.data.model.GetAllCategoriesResponse;
+import com.example.foodplannerapp.data.model.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.model.Meal;
+import com.example.foodplannerapp.data.model.MealModel;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,7 +18,6 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 
 
@@ -26,7 +25,6 @@ public class MealsRepositoryImpl {
 
     MealsRemoteDataSource mealsRemoteDataSource;
     MealsLocalDataSource mealsLocalDataSource;
-
     private static MealsRepositoryImpl instance;
 
 

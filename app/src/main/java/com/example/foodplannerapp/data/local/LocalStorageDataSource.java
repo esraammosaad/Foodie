@@ -1,23 +1,25 @@
-package com.example.foodplannerapp.utilis;
+package com.example.foodplannerapp.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class SharedPreferencesManager {
+import com.example.foodplannerapp.utilis.Strings;
 
-    private static SharedPreferencesManager instance;
+public class LocalStorageDataSource {
+
+    private static LocalStorageDataSource instance;
     SharedPreferences prefs;
     public SharedPreferences.Editor editor;
 
-    private SharedPreferencesManager(Context context) {
+    private LocalStorageDataSource(Context context) {
         prefs = context.getSharedPreferences(Strings.SHARED_PREF_NAME, Context.MODE_PRIVATE);
         editor=prefs.edit();
     }
 
-    public static SharedPreferencesManager getInstance(Context context){
+    public static LocalStorageDataSource getInstance(Context context){
 
         if(instance==null){
-            instance=new SharedPreferencesManager(context);
+            instance=new LocalStorageDataSource(context);
         }
 
         return instance;

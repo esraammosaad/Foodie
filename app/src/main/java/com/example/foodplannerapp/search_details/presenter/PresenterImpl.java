@@ -1,9 +1,8 @@
 package com.example.foodplannerapp.search_details.presenter;
 
-import android.annotation.SuppressLint;
 
-import com.example.foodplannerapp.data.models.GetMealsByFilterResponse;
-import com.example.foodplannerapp.data.models.MealByFilter;
+import com.example.foodplannerapp.data.model.GetMealsByFilterResponse;
+import com.example.foodplannerapp.data.model.MealByFilter;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.search_details.view.ViewInterface;
 

@@ -36,10 +36,10 @@ import com.example.foodplannerapp.R;
 import com.example.foodplannerapp.data.local.MealsLocalDataSource;
 import com.example.foodplannerapp.data.local.model.CalenderMealModel;
 import com.example.foodplannerapp.data.local.model.FavoriteMealModel;
-import com.example.foodplannerapp.data.models.Ingredient;
-import com.example.foodplannerapp.data.models.Meal;
+import com.example.foodplannerapp.data.model.Ingredient;
+import com.example.foodplannerapp.data.model.Meal;
 import com.example.foodplannerapp.data.network.MealsRemoteDataSource;
-import com.example.foodplannerapp.data.network.database.FiresStoreServices;
+import com.example.foodplannerapp.data.network.database.RemoteDatabaseServices;
 import com.example.foodplannerapp.data.repo.FireStoreRepositoryImpl;
 import com.example.foodplannerapp.data.repo.MealsRepositoryImpl;
 import com.example.foodplannerapp.details.presenter.PresenterImpl;
@@ -122,7 +122,7 @@ public class DetailsFragment extends Fragment implements ViewInterface, NetworkL
         calendarPermission();
         presenter = new PresenterImpl(MealsRepositoryImpl.getInstance(new MealsRemoteDataSource(getContext()),
                 new MealsLocalDataSource(getContext())),
-                FireStoreRepositoryImpl.getInstance(FiresStoreServices.getInstance()), this);
+                FireStoreRepositoryImpl.getInstance(RemoteDatabaseServices.getInstance()), this);
         networkChangeListener = new NetworkChangeListener(this);
         mealID = DetailsFragmentArgs.fromBundle(getArguments()).getMealID();
         recyclerView.setHasFixedSize(true);
