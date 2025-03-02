@@ -109,20 +109,14 @@ public class HomeFragment extends Fragment implements ViewInterface, HomeListene
         refreshButton.setOnClickListener((v) -> {
 
             presenter.getNewRandomMeal();
-            if (NetworkAvailability.isNetworkAvailable(getContext())) {
-
-
+            if (!NetworkAvailability.isNetworkAvailable(requireContext())) {
                 noInternetBanner.setVisibility(View.VISIBLE);
-
             }
 
 
         });
-        if (NetworkAvailability.isNetworkAvailable(getContext())) {
-
-
+        if (!NetworkAvailability.isNetworkAvailable(requireContext())) {
             noInternetBanner.setVisibility(View.VISIBLE);
-
         }
 
         turnWIFI.setOnClickListener((v) -> {
