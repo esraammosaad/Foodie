@@ -48,8 +48,6 @@
 # Mockup
 ![Mockup 04](https://github.com/user-attachments/assets/815ac5ac-bda9-4768-b38d-6b2b74c9f927)
 # Demo
-https://github.com/user-attachments/assets/56e502ce-b3ed-4b59-b7ff-0bf0ba479f92
+https://github.com/user-attachments/assets/5ffb510c-d222-40a2-a347-d2122407c8ac
 
-
- 
 
